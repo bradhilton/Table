@@ -130,6 +130,10 @@ class Delegate : NSObject, UITableViewDelegate, UITableViewDataSource {
         return table[indexPath].commitMove != nil
     }
     
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return table._indexTitles
+    }
+    
 //    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
 //        return table._indexTitles
 //    }
