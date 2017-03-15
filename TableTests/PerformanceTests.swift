@@ -1,15 +1,15 @@
 //
-//  TableTests.swift
-//  TableTests
+//  PerformanceTests.swift
+//  Table
 //
-//  Created by Bradley Hilton on 11/22/16.
-//  Copyright © 2016 Brad Hilton. All rights reserved.
+//  Created by Bradley Hilton on 1/19/17.
+//  Copyright © 2017 Brad Hilton. All rights reserved.
 //
 
 import XCTest
 @testable import Table
 
-class TableTests: XCTestCase {
+class PerformanceTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
