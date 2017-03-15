@@ -130,26 +130,26 @@ class Delegate : NSObject, UITableViewDelegate, UITableViewDataSource {
         return table[indexPath].commitMove != nil
     }
     
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return table._indexTitles
-    }
-    
-    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        var indexLookup: [String: Int] = [:]
-        for (index, section) in table.sections.enumerated() {
-            guard let indexTitle = section.indexTitle else { continue }
-            if indexTitle == title {
-                return index
-            }
-            indexLookup[indexTitle] = index
-        }
-        let indexTitles = table._indexTitles ?? []
-        for title in indexTitles[index..<indexTitles.endIndex] {
-            guard let index = indexLookup[title] else { continue }
-            return index
-        }
-        return max(table.sections.endIndex - 1, 0)
-    }
+//    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+//        return table._indexTitles
+//    }
+//    
+//    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+//        var indexLookup: [String: Int] = [:]
+//        for (index, section) in table.sections.enumerated() {
+//            guard let indexTitle = section.indexTitle else { continue }
+//            if indexTitle == title {
+//                return index
+//            }
+//            indexLookup[indexTitle] = index
+//        }
+//        let indexTitles = table._indexTitles ?? []
+//        for title in indexTitles[index..<indexTitles.endIndex] {
+//            guard let index = indexLookup[title] else { continue }
+//            return index
+//        }
+//        return max(table.sections.endIndex - 1, 0)
+//    }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
@@ -204,9 +204,9 @@ class Delegate : NSObject, UITableViewDelegate, UITableViewDataSource {
         return table[indexPath].editingStyle
     }
     
-    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-        return table[indexPath].deleteConfirmationButtonTitle
-    }
+//    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+//        return table[indexPath].deleteConfirmationButtonTitle
+//    }
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return table[indexPath].editingStyle != .none
