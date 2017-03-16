@@ -204,9 +204,10 @@ class Delegate : NSObject, UITableViewDelegate, UITableViewDataSource {
         return table[indexPath].editingStyle
     }
     
-//    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
-//        return table[indexPath].deleteConfirmationButtonTitle
-//    }
+    @available(iOS 9.0, *)
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return table[indexPath].deleteConfirmationButtonTitle
+    }
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return table[indexPath].editingStyle != .none
