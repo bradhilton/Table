@@ -88,7 +88,7 @@
 		A2BDB6331DE4A3E8008FE471 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2C691821E624B94004B545A /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		A2C9108220221959001AEF2A /* SectionsDelta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionsDelta.swift; sourceTree = "<group>"; };
-		A2C9108420221A17001AEF2A /* XTable.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = XTable.podspec; sourceTree = "<group>"; };
+		A2C9108420221A17001AEF2A /* XTable.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = XTable.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleController.swift; sourceTree = "<group>"; };
 		A2E4048C2019409600253EB6 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
