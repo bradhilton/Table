@@ -92,18 +92,27 @@ class ScheduleController : UITableViewController {
         "Louis": Student(class: "Calculus", grade: .F),
         "Larry": Student(class: "English", grade: .C),
         "Max": Student(class: "Seminary", grade: .F)
-        ]
+    ]
     
     var schedule: [(String, Class, [(String, Student)])] = [] {
         didSet {
+            print("\n")
+            for (className, `class`, students) in schedule {
+                print("\n\(className): \(`class`.period)")
+                for (studentName, student) in students {
+                    print("\(studentName): \(student.grade)")
+                }
+            }
             tableView.sections = schedule.map { (className, `class`, students) in
                 Section { section in
-                    section.identifier = className
+                    section.key = className
+                    section.sortKey = `class`.period
                     section.headerTitle = "\(className): \(`class`.period)"
-                    section.children = students.map { (studentName, student) in
+                    section.rows = students.map { (studentName, student) in
                         Row { row in
-                            row.identifier = studentName
-                            row.cell = Cell(reloadKey: "\(student.grade)") { cell in
+                            row.key = studentName
+                            row.sortKey = student.grade
+                            row.cell = Cell { cell in
                                 cell.textLabel?.text = "\(studentName): \(student.grade)"
                             }
                             row.deleteConfirmationButtonTitle = "Remove"
@@ -112,7 +121,7 @@ class ScheduleController : UITableViewController {
                                 self.updateSchedule()
                             }
                             row.commitMove = { [unowned self] `class`, _ in
-                                self.students[studentName]?.class = `class`
+                                self.students[studentName]?.class = (`class`.base as? String) ?? ""
                                 self.updateSchedule()
                             }
                         }
@@ -135,10 +144,11 @@ class ScheduleController : UITableViewController {
         super.viewDidLoad()
         tableView.rowHeight = 44
         tableView.estimatedRowHeight = 44
+        tableView.estimatedSectionHeaderHeight = 0
         navigationItem.rightBarButtonItems = [editButtonItem, UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh))]
     }
     
-    func refresh() {
+    @objc func refresh() {
         randomize()
         updateSchedule()
     }
@@ -151,7 +161,9 @@ class ScheduleController : UITableViewController {
     }
     
     func updateSchedule() {
-        schedule = classes.filter { $0.value.active }.sorted { lhs, rhs in lhs.value.period.rawValue < rhs.value.period.rawValue }.map { className, `class` in
+        schedule = (classes.filter { $1.active } as [(String, Class)])
+            .sorted { $0.1.period.rawValue < $1.1.period.rawValue }
+            .map { className, `class` in
             var students = [(String, Student)]()
             for (studentName, student) in self.students.sorted(by: { lhs, rhs in
                 lhs.value.grade.rawValue < rhs.value.grade.rawValue

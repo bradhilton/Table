@@ -14,21 +14,27 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Menu"
-        tableView.rows = [
+        let viewControllers = [
             ScheduleController(),
             TodoListController(),
-            AccountViewController()
-        ].map { controller in
-            Row { row in
-                row.cell = Cell { cell in
-                    cell.textLabel?.text = controller.title
-                    cell.accessoryType = .disclosureIndicator
-                }
-                row.didSelect = { [unowned self] in
-                    self.navigationController?.pushViewController(controller, animated: true)
+            AccountViewController(),
+            FormViewController()
+        ]
+        tableView.sections = [
+            Section { (section: inout Section) in
+                section.rows = viewControllers.map { controller in
+                    Row { row in
+                        row.cell = Cell { cell in
+                            cell.textLabel?.text = controller.title
+                            cell.accessoryType = .disclosureIndicator
+                        }
+                        row.didSelect = { [unowned self] in
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
+                    }
                 }
             }
-        }
+        ]
     }
     
 }

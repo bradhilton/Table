@@ -9,23 +9,39 @@
 import UIKit
 import Table
 
+class SwitchCell : UITableViewCell {
+    
+    let `switch` = UISwitch()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(self.switch)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+}
+
 struct Account {
     let name: String
     let email: String
     let phoneNumber: String
     var babies: [Baby]
-    struct Baby {
-        let name: String
-        let age: Int
-    }
 }
 
-var babiesList: [Account.Baby] = [
-    .init(name: "Brad", age: 8),
-    .init(name: "Lorraine", age: 6),
-    .init(name: "Evan", age: 10),
-    .init(name: "Jesse", age: 2),
-    .init(name: "Kendra", age: 14)
+struct Baby {
+    let name: String
+    let age: Int
+}
+
+var babiesList = [
+    Baby(name: "Brad", age: 8),
+    Baby(name: "Lorraine", age: 6),
+    Baby(name: "Evan", age: 10),
+    Baby(name: "Jesse", age: 2),
+    Baby(name: "Kendra", age: 14)
 ]
 
 class AccountViewController : UITableViewController {
@@ -48,7 +64,7 @@ class AccountViewController : UITableViewController {
         render()
     }
     
-    func addBaby() {
+    @objc func addBaby() {
         if let baby = babiesList.popLast() {
             account.babies.append(baby)
         }
@@ -61,10 +77,10 @@ class AccountViewController : UITableViewController {
     }
     
     func render() {
-        tableView.table = Table(
+        tableView.sections = [
             Section { section in
                 section.headerTitle = "Info"
-                section.children = [
+                section.rows = [
                     row(text: self.account.name),
                     row(text: self.account.email),
                     row(text: self.account.phoneNumber)
@@ -72,14 +88,11 @@ class AccountViewController : UITableViewController {
             },
             Section { section in
                 section.headerTitle = "Babies"
-                guard self.account.babies.count > 0 else {
-                    return section.children = [
-                        row(text: "No babies here...")
-                    ]
-                }
-                section.children = self.account.babies.map { baby in
+                section.rows = self.account.babies.isEmpty ? [
+                    row(text: "No babies here...")
+                ] : self.account.babies.map { baby in
                     return Row { row in
-                        row.identifier = baby.name
+                        row.key = baby.name
                         row.cell = Cell { $0.textLabel?.text = "\(baby.name) - \(baby.age) months old" }
                         row.commitDelete = {
                             if let index = self.account.babies.index(where: { $0.name == baby.name }) {
@@ -89,12 +102,12 @@ class AccountViewController : UITableViewController {
                     }
                 }
             }
-        )
+        ]
     }
     
     func row(text: String) -> Row {
         return Row { row in
-            row.identifier = text
+            row.key = text
             row.cell = Cell { $0.textLabel?.text = text }
         }
     }

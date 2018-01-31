@@ -1,62 +1,42 @@
 
-var _delegateKey = "_delegate"
-var _registeredReuseIdentifiersKey = "_registeredReuseIdentifiers"
+var sourceKey = "source"
+var registeredReuseIdentifiersKey = "registeredReuseIdentifiers"
 
 extension UITableView {
     
-    public var table: TableRepresentable? {
+    public var sections: [Section] {
         get {
-            return _delegate?.table
+            return source?.data.sections ?? []
         }
         set {
-            guard let table = newValue else {
-                _delegate = nil
-                return reloadData()
+            let data = Data(sections: newValue)
+            if let source = source {
+                source.setData(data, animated: true)
+            } else {
+                self.source = Source(tableView: self, data: data)
             }
-            if let _delegate = _delegate {
-                return _delegate.table = table.table
-            }
-            _delegate = Delegate(tableView: self, table: table.table)
         }
     }
     
-    public var sections: [SectionsRepresentable?]? {
+    var source: Source? {
         get {
-            return nil
+            return objc_getAssociatedObject(self, &sourceKey) as? Source
         }
         set {
-            table = newValue.map { Table($0) }
+            objc_setAssociatedObject(self, &sourceKey, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
     
-    public var rows: [RowsRepresentable?]? {
+    var registeredReuseIdentifiers: Set<String> {
         get {
-            return nil
-        }
-        set {
-            table = newValue.map { Section($0) }
-        }
-    }
-    
-    var _delegate: Delegate? {
-        get {
-            return objc_getAssociatedObject(self, &_delegateKey) as? Delegate
-        }
-        set {
-            objc_setAssociatedObject(self, &_delegateKey, newValue, .OBJC_ASSOCIATION_RETAIN)
-        }
-    }
-    
-    var _registeredReuseIdentifiers: Set<String> {
-        get {
-            if let set = objc_getAssociatedObject(self, &_registeredReuseIdentifiersKey) as? Set<String> {
+            if let set = objc_getAssociatedObject(self, &registeredReuseIdentifiersKey) as? Set<String> {
                 return set
             }
-            self._registeredReuseIdentifiers = Set<String>()
-            return self._registeredReuseIdentifiers
+            self.registeredReuseIdentifiers = Set<String>()
+            return self.registeredReuseIdentifiers
         }
         set {
-            objc_setAssociatedObject(self, &_registeredReuseIdentifiersKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, &registeredReuseIdentifiersKey, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
     }
     

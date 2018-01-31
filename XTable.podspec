@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "Table"
+  s.name         = "XTable"
   s.version      = "0.0.4"
   s.summary      = "Declaritive Tables"
   s.description  = <<-DESC

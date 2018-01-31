@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Table
+import Table
 
 class InternalTests: XCTestCase {
     

@@ -42,7 +42,7 @@ class TextFieldCell : UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func editingDidEnd(textField: UITextField) {
+    @objc func editingDidEnd(textField: UITextField) {
         editingDidEnd(textField.text ?? "")
     }
     
@@ -67,10 +67,10 @@ class TodoListController : UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        isEditing = true
         tableView.rowHeight = 44
         tableView.estimatedRowHeight = 44
         tableView.allowsSelectionDuringEditing = true
-        navigationItem.rightBarButtonItem = editButtonItem
         todos = []
     }
     
@@ -80,49 +80,43 @@ class TodoListController : UITableViewController {
     }
     
     func render() {
-        tableView.table = Table(
-            Section { section in
-                section.identifier = "todos"
-                section.children = todos.map { todo in
+        tableView.sections = [
+            Section { (section: inout Section) in
+                section.rows = todos.map { todo in
                     Row { row in
-                        row.identifier = "\(todo.id)"
+                        row.key = "\(todo.id)"
                         let reloadKey = "\(todo.description, isEditing)"
-                        if isEditing {
-                            row.cell = Cell(reloadKey: reloadKey) { (cell: TextFieldCell) in
-                                cell.textField.text = todo.description
-                                cell.textField.placeholder = "Describe Todo Here..."
-                                cell.editingDidEnd = { [unowned self] text in
-                                    if let index = self.todos.index(of: todo) {
-                                        self.todos[index].description = text
-                                    }
+                        row.cell = Cell { (cell: TextFieldCell) in
+                            cell.textField.text = todo.description
+                            cell.textField.placeholder = "Describe Todo Here..."
+                            cell.editingDidEnd = { [unowned self] text in
+                                if let index = self.todos.index(of: todo) {
+                                    self.todos[index].description = text
                                 }
-                            }
-                        } else {
-                            row.cell = Cell(reloadKey: reloadKey) { cell in
-                                cell.textLabel?.text = todo.description
                             }
                         }
                         row.commitDelete = { [unowned self] in
                             self.todos.remove(at: self.todos.index(of: todo)!)
                         }
                         row.commitMove = { [unowned self, section = section] (sectionIdentifier, index) in
-                            guard sectionIdentifier == section.identifier else { return }
+                            guard sectionIdentifier == section.key else { return }
                             self.todos.remove(at: self.todos.index(of: todo)!)
                             self.todos.insert(todo, at: index)
                         }
                     }
-                }
-            },
-            isEditing ? Row { row in
-                row.cell = Cell { cell in
-                    cell.textLabel?.text = "Add Todo"
-                }
-                row.didTap = { [unowned self] in
-                    self.todos.append(Todo())
-                }
-                row.commitInsert = row.didTap
-            } : nil
-        )
+                } + [
+                    Row { row in
+                        row.cell = Cell { cell in
+                            cell.textLabel?.text = "Add Todo"
+                        }
+                        row.didTap = { [unowned self] in
+                            self.todos.append(Todo())
+                        }
+                        row.commitInsert = row.didTap
+                    }
+                ]
+            }
+        ]
     }
     
 }
