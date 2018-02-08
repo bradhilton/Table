@@ -10,27 +10,25 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         guard movingRow == nil else {
             return data = newValue
         }
-        guard animated else {
+        guard let indexPaths = tableView.indexPathsForVisibleRows, animated else {
             data = newValue
             return tableView.reloadData()
         }
-        if let indexPaths = tableView.indexPathsForVisibleRows {
-            let rowReloads: [IndexPath] = indexPaths
-                .map { indexPath in
-                    (indexPath, data.sections[indexPath.section].rows[indexPath.row])
-                }.flatMap { indexPath, row in
-                    newValue.rowsByKey[row.key].map { (indexPath, row, newValue.sections[$0.section].rows[$0.row]) }
-                }.flatMap { indexPath, oldRow, newRow in
-                    if (oldRow.cell.reuseIdentifier == newRow.cell.reuseIdentifier) {
-                        tableView.cellForRow(at: indexPath).map { newRow.cell.configure($0) }
-                        return nil
-                    } else {
-                        data.sections[indexPath.section].rows[indexPath.row] = newRow
-                        return indexPath
-                    }
+        let rowReloads: [IndexPath] = indexPaths
+            .map { indexPath in
+                (indexPath, data.sections[indexPath.section].rows[indexPath.row])
+            }.flatMap { indexPath, row in
+                newValue.rowsByKey[row.key].map { (indexPath, row, newValue.sections[$0.section].rows[$0.row]) }
+            }.flatMap { indexPath, oldRow, newRow in
+                if (oldRow.cell.reuseIdentifier == newRow.cell.reuseIdentifier) {
+                    tableView.cellForRow(at: indexPath).map { newRow.cell.configure($0) }
+                    return nil
+                } else {
+                    data.sections[indexPath.section].rows[indexPath.row] = newRow
+                    return indexPath
                 }
-            tableView.reloadRows(at: rowReloads, with: .fade)
-        }
+            }
+        tableView.reloadRows(at: rowReloads, with: .fade)
         zip(data.sections, data.sections.indices)
             .flatMap { (section, index) -> (Section, Int)? in
                 return newValue.sectionsByKey[section.key].map { (sectionIndex) -> (Section, Int) in
@@ -48,15 +46,8 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
             }
         let delta = SectionsDelta(from: data.sections, to: newValue.sections)
         let animation = UITableViewRowAnimation.fade
-        tableView.beginUpdates()
         data = newValue
-        print("")
-        print(delta.sectionDeletes.map { $0 })
-        print(delta.sectionInserts.map { $0 })
-        print(delta.sectionMoves)
-        print(delta.rowDeletes)
-        print(delta.rowInserts)
-        print(delta.rowMoves)
+        tableView.beginUpdates()
         tableView.deleteSections(delta.sectionDeletes, with: animation)
         tableView.insertSections(delta.sectionInserts, with: animation)
         delta.sectionMoves.forEach { tableView.moveSection($0, toSection: $1) }
@@ -92,7 +83,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return data[section].headerTitle
     }
-    
+
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
         return data[section].footerTitle
     }
@@ -142,11 +133,21 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return data[indexPath].height ?? tableView.rowHeight
+        switch data[indexPath].height {
+        case .constant(let height):
+            return height
+        case .automatic:
+            return UITableViewAutomaticDimension
+        }
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return data[indexPath].estimatedHeight ?? tableView.estimatedRowHeight != 0 ? tableView.estimatedRowHeight : 44
+        switch data[indexPath].height {
+        case .constant(let height):
+            return height
+        case .automatic(estimated: let estimatedHeight):
+            return estimatedHeight
+        }
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
@@ -195,7 +196,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, indentationLevelForRowAt indexPath: IndexPath) -> Int {
         return data[indexPath].indentation
     }
-    
+
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         let movingRow = self.movingRow ?? { self.movingRow = data[sourceIndexPath]; return self.movingRow! }()
         movingRow.commitMove?(

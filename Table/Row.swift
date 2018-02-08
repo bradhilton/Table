@@ -1,11 +1,25 @@
 
+
 public struct Row {
+    
+    public enum Height : ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral {
+        case constant(CGFloat)
+        case automatic(estimated: CGFloat)
+        
+        public init(integerLiteral value: Int) {
+            self = .constant(CGFloat(value))
+        }
+        
+        public init(floatLiteral value: Double) {
+            self = .constant(CGFloat(value))
+        }
+        
+    }
     
     public var cell = Cell()
     public var key = AnyHashable.auto
     public var sortKey = AnyHashable.auto
-    public var height: CGFloat?
-    public var estimatedHeight: CGFloat?
+    public var height: Height = .constant(44)
     public var didHighlight: (() -> ())?
     public var didUnhighlight: (() -> ())?
     public var didSelect: (() -> ())?

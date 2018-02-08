@@ -17,10 +17,11 @@ public struct Cell {
         function: String = #function,
         line: Int = #line,
         column: Int = #column,
+        class: Cell.Type = Cell.self,
         configure: @escaping (Cell) -> () = { _ in }
     ) {
         self.reuseIdentifier = "\(Cell.self):\(file):\(function):\(line):\(column)"
-        self.cellClass = Cell.self
+        self.cellClass = `class`
         self.configure = { cell in
             guard let cell = cell as? Cell else { return }
             configure(cell)
