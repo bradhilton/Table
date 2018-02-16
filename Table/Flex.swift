@@ -46,7 +46,7 @@ public struct Flex {
     public var view: View?
     public var children: [Flex] = []
     
-    public init(build: (inout Flex) -> ()) {
+    public init(_ build: (inout Flex) -> () = { _ in }) {
         build(&self)
     }
     

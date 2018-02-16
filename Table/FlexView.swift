@@ -135,7 +135,7 @@ class FlexState {
 
 public class FlexView : UIView {
     
-    public var child = Flex(build: { _ in }) {
+    public var child = Flex() {
         didSet {
             stateOrNil = nil
             invalidateIntrinsicContentSize()
