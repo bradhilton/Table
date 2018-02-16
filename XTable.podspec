@@ -12,4 +12,5 @@ Pod::Spec.new do |s|
   s.tvos.deployment_target = "9.0"
   s.source       = { :git => "https://github.com/BradHilton/Table.git", :tag => "0.0.6" }
   s.source_files  = "Table", "Table/**/*.{h,m,swift}"
+  s.dependency 'Yoga', '1.6.0'
 end
