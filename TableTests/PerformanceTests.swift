@@ -8,126 +8,119 @@
 
 import XCTest
 import Table
+import UIKit
 
-class Controller : UITableViewController {
+final class Stack<Element> {
     
-    func refresh() {
-        tableView.beginUpdates()
-//        tableView.moveRow(at: IndexPath(row: 1, section: 0), to: IndexPath(row: 0, section: 0))
-//        tableView.moveRow(at: IndexPath(row: 2, section: 0), to: IndexPath(row: 1, section: 0))
-//        tableView.moveRow(at: IndexPath(row: 3, section: 0), to: IndexPath(row: 2, section: 0))
-        tableView.moveRow(at: IndexPath(row: 0, section: 0), to: IndexPath(row: 3, section: 0))
-        tableView.endUpdates()
+    var count: Int = 0
+    var node: Node? = nil
+    
+    class Node {
+        let element: Element
+        let previous: Node?
+        init(element: Element, previous: Node?) {
+            self.element = element
+            self.previous = previous
+        }
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+    func push(_ element: Element) {
+        node = Node(element: element, previous: node)
+        count += 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+    func pop() -> Element? {
+        guard let node = node else { return nil }
+        self.node = node.previous
+        count -= 1
+        return node.element
+    }
+    
+}
+
+final class CacheKey : NSObject {
+    
+    let key: AnyHashable
+    
+    init(_ key: AnyHashable) {
+        self.key = key
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let other = object as? CacheKey else {
+            return false
+        }
+        return key == other.key
+    }
+    
+    override var hash: Int {
+        return key.hashValue
+    }
+    
+}
+
+final class ViewCache {
+    
+    private let stackLimit = 12000
+    private let cache = NSCache<CacheKey, Stack<UIView>>()
+    
+    init() {
+        cache.totalCostLimit = 12000
+    }
+    
+    func push(view: UIView, for type: AnyHashable) {
+        let key = CacheKey(type)
+        let stack = cache.object(forKey: key) ?? Stack()
+        if stack.count < stackLimit {
+            stack.push(view)
+            cache.setObject(stack, forKey: key, cost: stack.count)
+        }
+    }
+    
+    func popView(for type: AnyHashable) -> UIView? {
+        let key = CacheKey(type)
+        guard let stack = cache.object(forKey: key), let view = stack.pop() else {
+            return nil
+        }
+        cache.setObject(stack, forKey: key, cost: stack.count)
+        return view
     }
     
 }
 
 class PerformanceTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testPerformanceExample() {
-        let tables = randomlyEvolvingTables(sections: 10, evolutions: 10)
-        let tableView = UITableView()
-        self.measure {
-            for table in tables {
-                tableView.table = table
-            }
+    func testCreateViews() {
+        measure {
+            let views = (0..<1000).map { _ in UIView() }
+            XCTAssert(views.count == 1000)
         }
     }
     
-    func testPerform() {
-        let controller = Controller()
-        self.measure {
-            for _ in 0..<100 {
-                controller.refresh()
-            }
+    func testReuseViewsCache() {
+        let viewCache = ViewCache()
+        for _ in 0..<10000 {
+            viewCache.push(view: UIView(), for: 0)
+        }
+        measure {
+            let views = (0..<1000).flatMap { _ in viewCache.popView(for: 0) }
+            XCTAssert(views.count == 1000)
         }
     }
     
-}
-
-func times() -> Int {
-    return 9 - Int(log(Double(arc4random_uniform(UInt32(pow(2.7, 10))))))
-}
-
-func evolve(evolve: () -> ()) {
-    (0..<times()).forEach { _ in evolve() }
-}
-
-extension String {
-    
-    static var random: String {
-        return UUID().uuidString
-    }
-    
-}
-
-extension UInt32 {
-    
-    static var random: UInt32 {
-        return arc4random()
-    }
-    
-}
-
-extension Array {
-    
-    var randomIndex: Int {
-        return Int(arc4random_uniform(UInt32(count)))
-    }
-    
-}
-
-func randomlyEvolvingTables(sections: Int, evolutions: Int) -> [Table] {
-    let randomSection = { (identifier: String.random, headerTitle: String.random, rank: UInt32.random) }
-    var sections = (0..<sections).map { _ in randomSection() }
-    let randomRow = { (identifier: String.random, reloadKey: String.random, section: sections[sections.randomIndex].identifier, rank: UInt32.random) }
-    var rows = (0..<(sections.count * sections.count)).map { _ in randomRow() }
-    var tables = [Table]()
-    for _ in 0..<evolutions {
-        evolve { sections.remove(at: sections.randomIndex) }
-        evolve { sections.insert(randomSection(), at: sections.randomIndex) }
-        evolve { sections[sections.randomIndex].headerTitle = String.random }
-        evolve { sections[sections.randomIndex].rank = UInt32.random }
-        for _ in sections {
-            evolve { rows.remove(at: sections.randomIndex) }
-            evolve { rows.insert(randomRow(), at: rows.randomIndex) }
-            evolve { rows[rows.randomIndex].reloadKey = String.random }
-            evolve { rows[rows.randomIndex].rank = UInt32.random }
-        }
-        tables.append(
-            Table(
-                sections.sorted { $0.rank < $1.rank }.map { description in
-                    Section { section in
-                        section.key = description.identifier
-                        section.headerTitle = description.headerTitle
-                        section.children = rows.filter { $0.section == description.identifier }.sorted { $0.rank < $1.rank }.map { description in
-                            Row { row in
-                                row.key = description.identifier
-                                row.cell = Cell(reloadKey: description.reloadKey)
-                            }
-                        }
+    func testReuseViewsArray() {
+        var viewsCache = (0..<20000).map { _ in UIView() }
+        measure {
+            let views: [UIView] = (0..<1000).flatMap { _ in
+                for index in viewsCache.indices {
+                    if index == 1000 {
+                        return viewsCache.remove(at: index)
                     }
                 }
-            )
-        )
+                return nil
+            }
+            XCTAssert(views.count == 1000)
+        }
     }
-    return tables
+    
 }

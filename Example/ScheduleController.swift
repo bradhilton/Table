@@ -62,6 +62,12 @@ struct Student {
     var grade: Grade
 }
 
+func MyCell(color: UIColor) -> Cell {
+    return Cell { cell in
+        cell.textLabel?.textColor = color
+    }
+}
+
 class ScheduleController : UITableViewController {
     
     var classes: [String: Class] = [

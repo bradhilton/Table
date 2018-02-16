@@ -11,30 +11,34 @@ import Table
 
 class ViewController: UITableViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    convenience init() {
+        self.init(style: .plain)
         title = "Menu"
         let viewControllers = [
             ScheduleController(),
             TodoListController(),
             AccountViewController(),
-            FormViewController()
+            FormViewController(),
+            FlexViewController(),
+            PresentingViewController()
         ]
-        tableView.sections = [
-            Section { (section: inout Section) in
-                section.rows = viewControllers.map { controller in
-                    Row { row in
-                        row.cell = Cell { cell in
-                            cell.textLabel?.text = controller.title
-                            cell.accessoryType = .disclosureIndicator
-                        }
-                        row.didSelect = { [unowned self] in
-                            self.navigationController?.pushViewController(controller, animated: true)
+        view = View { (tableView: UITableView) in
+            tableView.sections = [
+                Section { (section: inout Section) in
+                    section.rows = viewControllers.map { controller in
+                        Row { row in
+                            row.cell = Cell { cell in
+                                cell.textLabel?.text = controller.title
+                                cell.accessoryType = .disclosureIndicator
+                            }
+                            row.didSelect = { [unowned self] in
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }
                         }
                     }
                 }
-            }
-        ]
+            ]
+        }
     }
     
 }

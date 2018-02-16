@@ -1,20 +1,12 @@
 PODS:
-  - AssociatedValues (3.0.0)
-  - Table (0.0.1):
-    - AssociatedValues (~> 3.0.0)
+  - Yoga (1.6.0)
 
 DEPENDENCIES:
-  - AssociatedValues (~> 3.0.0)
-  - Table (from `Table.podspec`)
-
-EXTERNAL SOURCES:
-  Table:
-    :path: Table.podspec
+  - Yoga
 
 SPEC CHECKSUMS:
-  AssociatedValues: 5c29f5c0bb2672cf9ef0394bcbe3ce28b9fa0c2a
-  Table: 6c6db9faa3ebb29f663b329f579f473c2493983b
+  Yoga: 81670877477311136b1b3f69a6307ce62e1c89cf
 
-PODFILE CHECKSUM: 9a95b1e6e50fd2d437e74fd25aa1315c70638635
+PODFILE CHECKSUM: 6023972a4435856fad46874ba8deb4d468af4c26
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.4.0

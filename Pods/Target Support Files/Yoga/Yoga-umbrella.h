@@ -10,7 +10,11 @@
 #endif
 #endif
 
+#import "YGEnums.h"
+#import "YGMacros.h"
+#import "YGNodeList.h"
+#import "Yoga.h"
 
-FOUNDATION_EXPORT double Pods_TableVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_TableVersionString[];
+FOUNDATION_EXPORT double yogaVersionNumber;
+FOUNDATION_EXPORT const unsigned char yogaVersionString[];
 
