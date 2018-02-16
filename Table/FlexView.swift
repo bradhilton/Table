@@ -27,27 +27,6 @@ extension YGNodeRef {
         )
     }
     
-    var view: UIView? {
-        get {
-            guard let view = YGNodeGetContext(self)?.assumingMemoryBound(to: UIView.self).pointee else { return nil }
-            view.frame = frame
-            return view
-        }
-        set {
-            if var view = newValue {
-                YGNodeSetContext(self, &view)
-            }
-        }
-    }
-    
-    var children: [YGNodeRef] {
-        return (0..<YGNodeGetChildCount(self)).map { index in YGNodeGetChild(self, index) }
-    }
-    
-    var views: [UIView] {
-        return [view].flatMap { $0 } + children.flatMap { $0.views }
-    }
-    
 }
 
 struct FlexKey : Hashable {
