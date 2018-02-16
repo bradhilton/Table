@@ -178,9 +178,13 @@ public class FlexView : UIView {
     }
     
     var direction: YGDirection {
-        switch effectiveUserInterfaceLayoutDirection {
-        case .leftToRight: return .LTR
-        case .rightToLeft: return .RTL
+        if #available(iOS 10.0, tvOS 10.0, *) {
+            switch effectiveUserInterfaceLayoutDirection {
+            case .leftToRight: return .LTR
+            case .rightToLeft: return .RTL
+            }
+        } else {
+            return .inherit
         }
     }
     
