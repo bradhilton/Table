@@ -95,9 +95,13 @@ extension ValueControl where Self : UIControl {
     
 }
 
-extension UIDatePicker : ValueControl {}
+#if os(iOS)
+    extension UIDatePicker : ValueControl {}
+    extension UISlider : ValueControl {}
+    extension UIStepper : ValueControl {}
+    extension UISwitch : ValueControl {}
+#endif
+
 extension UIPageControl : ValueControl {}
 extension UISegmentedControl : ValueControl {}
-extension UISlider : ValueControl {}
-extension UIStepper : ValueControl {}
-extension UISwitch : ValueControl {}
+
