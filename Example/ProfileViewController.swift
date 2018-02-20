@@ -78,6 +78,24 @@ class ProfileViewController : UITableViewController {
                                 ]
                             }
                         }
+                    },
+                    Row { row in
+                        row.cell = Cell { (cell: FlexTableViewCell) in
+                            cell.child = Flex { flex in
+                                flex.direction = .row
+                                flex.children = [
+                                    Flex { (flex: inout Flex) in
+                                        flex.flexGrow = 1
+                                        flex.view = View { (field: UITextField) in
+                                            field.text = "Hello"
+                                            field.events[.editingChanged] = { field in
+                                                print(field.text as Any)
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     }
                 ]
                 section.footerTitle = "Hello there"
@@ -85,8 +103,8 @@ class ProfileViewController : UITableViewController {
         ]
     }
     
-    @objc func injected() {
-        self.render()
-    }
+//    @objc func injected() {
+//        self.render()
+//    }
     
 }

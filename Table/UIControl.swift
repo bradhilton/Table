@@ -8,15 +8,14 @@
 
 fileprivate class Target<Control : NSObjectProtocol> : NSObject {
     
-    private unowned let control: Control
     var handler: (Control) -> ()
     
-    init(control: Control, handler: @escaping (Control) -> ()) {
-        self.control = control
+    init(_ handler: @escaping (Control) -> ()) {
         self.handler = handler
     }
     
-    @objc func action() {
+    @objc func action(control: UIControl) {
+        guard let control = control as? Control else { return }
         handler(control)
     }
     
@@ -24,8 +23,7 @@ fileprivate class Target<Control : NSObjectProtocol> : NSObject {
 
 public struct Events<Control : UIControl> {
     
-    private unowned let control: Control
-    private var targets: [UInt : Target<Control>] = [:]
+    private weak var control: Control?
     
     fileprivate init(_ control: Control) {
         self.control = control
@@ -33,40 +31,73 @@ public struct Events<Control : UIControl> {
     
     public subscript(events: UIControlEvents) -> ((Control) -> ())? {
         get {
-            return targets[events.rawValue]?.handler
+            return control?.targets[events.rawValue]?.handler
         }
         set {
-            switch (newValue, targets[events.rawValue]) {
-            case let (handler?, target?):
-                target.handler = handler
-            case let (handler?, nil):
-                let target = Target(control: control, handler: handler)
-                control.addTarget(target, action: #selector(Target<Control>.action), for: events)
-                targets[events.rawValue] = target
-            case let (nil, target?):
-                control.removeTarget(target, action: #selector(Target<Control>.action), for: events)
-                targets.removeValue(forKey: events.rawValue)
-            case (nil, nil):
-                break
-            }
+            control?.setHandler(newValue, for: events)
         }
     }
     
 }
 
-public protocol ControlProtocol : NSObjectProtocol {}
+public protocol Control : NSObjectProtocol {}
 
-extension ControlProtocol where Self : UIControl {
+extension Control where Self : UIControl {
     
     public var events: Events<Self> {
         get {
-            return storage[\.events, default: Events(self)]
+            return Events(self)
+        }
+        set {}
+    }
+
+    func setHandler(_ handler: ((Self) -> ())?, for events: UIControlEvents) {
+        switch (handler, targets[events.rawValue]) {
+        case let (handler?, target?):
+            target.handler = handler
+        case let (handler?, nil):
+            let target = Target(handler)
+            addTarget(target, action: #selector(Target<Self>.action), for: events)
+            targets[events.rawValue] = target
+        case let (nil, target?):
+            removeTarget(target, action: #selector(Target<Self>.action), for: events)
+            targets.removeValue(forKey: events.rawValue)
+        case (nil, nil):
+            break
+        }
+    }
+    
+    fileprivate var targets: [UInt : Target<Self>] {
+        get {
+            return storage[\.targets, default: [:]]
         }
         set {
-            storage[\.events] = newValue
+            storage[\.targets] = newValue
         }
     }
     
 }
 
-extension UIControl : ControlProtocol {}
+extension UIControl : Control {}
+
+public protocol ValueControl : class {}
+
+extension ValueControl where Self : UIControl {
+    
+    public var valueChanged: ((Self) -> ())? {
+        get {
+            return events[.valueChanged]
+        }
+        set {
+            events[.valueChanged] = newValue
+        }
+    }
+    
+}
+
+extension UIDatePicker : ValueControl {}
+extension UIPageControl : ValueControl {}
+extension UISegmentedControl : ValueControl {}
+extension UISlider : ValueControl {}
+extension UIStepper : ValueControl {}
+extension UISwitch : ValueControl {}

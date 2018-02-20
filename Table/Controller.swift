@@ -107,19 +107,7 @@ extension UINavigationController {
     
 }
 
-extension UITabBarController {
-    
-    public var controllers: [Controller] {
-        get {
-            return storage[\.controllers, default: []]
-        }
-        set {
-            setViewControllers(newValue.viewControllers(using: viewControllers ?? []), animated: viewIsVisible)
-            storage[\.controllers] = newValue
-        }
-    }
-    
-}
+
 
 extension UIWindow {
     
