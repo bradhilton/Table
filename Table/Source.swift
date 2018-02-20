@@ -1,15 +1,13 @@
 
 class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     
-    unowned let tableView: UITableView
+//    var movingRow: Row?
+//    var moving = false
     
-    var movingRow: Row?
-    var moving = false
-    
-    func setData(_ newValue: Data, animated: Bool) {
-        guard movingRow == nil else {
-            return data = newValue
-        }
+    func setData(_ newValue: Data, tableView: UITableView, animated: Bool) {
+//        guard movingRow == nil else {
+//            return data = newValue
+//        }
         guard let indexPaths = tableView.indexPathsForVisibleRows, animated else {
             data = newValue
             return tableView.reloadData()
@@ -60,7 +58,6 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     internal private(set) var data: Data
     
     init(tableView: UITableView, data: Data) {
-        self.tableView = tableView
         self.data = data
         super.init()
         tableView.delegate = self
@@ -118,7 +115,6 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
 //        return max(data.sections.endIndex - 1, 0)
 //    }
 //    #endif
-
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
@@ -128,9 +124,9 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        movingRow = nil
-    }
+//    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        movingRow = nil
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch data[indexPath].height {
@@ -197,20 +193,20 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         return data[indexPath].indentation
     }
 
-    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
-        let movingRow = self.movingRow ?? { self.movingRow = data[sourceIndexPath]; return self.movingRow! }()
-        movingRow.commitMove?(
-            data[proposedDestinationIndexPath.section].key,
-            proposedDestinationIndexPath.row
-        )
-        for (s, section) in data.sections.enumerated() {
-            for (r, row) in section.rows.enumerated() {
-                if row.key == movingRow.key {
-                    return IndexPath(row: r, section: s)
-                }
-            }
-        }
-        return sourceIndexPath
-    }
+//    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+//        let movingRow = self.movingRow ?? { self.movingRow = data[sourceIndexPath]; return self.movingRow! }()
+//        movingRow.commitMove?(
+//            data[proposedDestinationIndexPath.section].key,
+//            proposedDestinationIndexPath.row
+//        )
+//        for (s, section) in data.sections.enumerated() {
+//            for (r, row) in section.rows.enumerated() {
+//                if row.key == movingRow.key {
+//                    return IndexPath(row: r, section: s)
+//                }
+//            }
+//        }
+//        return sourceIndexPath
+//    }
     
 }

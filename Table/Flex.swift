@@ -36,13 +36,22 @@ extension UIView {
 public struct Flex {
     
     public var key: AnyHashable = .auto
-    public var direction: YGFlexDirection = .row
-    public var alignItems: YGAlign = .stretch
-    public var alignSelf: YGAlign? = nil
-    public var alignContent: YGAlign = .flexStart
-    public var justifyContent: YGJustify = .flexStart
-    public var width: Float = .nan
-    public var padding: Float = .nan
+    public var direction: YGFlexDirection?
+    public var layoutDirection: YGDirection?
+    public var alignItems: YGAlign?
+    public var alignSelf: YGAlign?
+    public var alignContent: YGAlign?
+    public var justifyContent: YGJustify?
+    public var flex: Float?
+    public var flexGrow: Float?
+    public var flexShrink: Float?
+    public var flexBasis: FlexValue?
+    public var position: FlexPosition?
+    public var margins: FlexEdges = FlexEdges()
+    public var padding: FlexEdges = FlexEdges()
+    public var width: FlexDimension?
+    public var height: FlexDimension?
+    public var aspectRatio: Float?
     public var view: View?
     public var children: [Flex] = []
     
@@ -52,13 +61,58 @@ public struct Flex {
     
     func nodeAndViews(with pool: inout [UIView]) -> (YGNodeRef, [FlexState.View]) {
         let node = YGNodeNew()!
-        YGNodeStyleSetFlexDirection(node, direction)
-        YGNodeStyleSetAlignItems(node, alignItems)
+        direction.map { YGNodeStyleSetFlexDirection(node, $0) }
+        layoutDirection.map { YGNodeStyleSetDirection(node, $0) }
+        alignItems.map { YGNodeStyleSetAlignItems(node, $0) }
         alignSelf.map { YGNodeStyleSetAlignSelf(node, $0) }
-        YGNodeStyleSetAlignContent(node, alignContent)
-        YGNodeStyleSetJustifyContent(node, justifyContent)
-        YGNodeStyleSetWidth(node, width)
-        YGNodeStyleSetPadding(node, .all, padding)
+        alignContent.map { YGNodeStyleSetAlignContent(node, $0) }
+        justifyContent.map { YGNodeStyleSetJustifyContent(node, $0) }
+        flex.map { YGNodeStyleSetFlex(node, $0) }
+        flexGrow.map { YGNodeStyleSetFlexGrow(node, $0) }
+        flexShrink.map { YGNodeStyleSetFlexShrink(node, $0) }
+        flexBasis.map { flexBasis in
+            flexBasis.updateNode(
+                node,
+                setValue: YGNodeStyleSetFlexBasis,
+                setValuePercent: YGNodeStyleSetFlexBasisPercent
+            )
+        }
+        position.map { position in
+            position.updateNode(node)
+        }
+        margins.updateNode(
+            node,
+            setEdge: YGNodeStyleSetMargin,
+            setEdgePercent: YGNodeStyleSetMarginPercent
+        )
+        padding.updateNode(
+            node,
+            setEdge: YGNodeStyleSetPadding,
+            setEdgePercent: YGNodeStyleSetPaddingPercent
+        )
+        width.map { width in
+            width.updateNode(
+                node,
+                setValue: YGNodeStyleSetWidth,
+                setValuePercent: YGNodeStyleSetWidthPercent,
+                setMin: YGNodeStyleSetMinWidth,
+                setMinPercent: YGNodeStyleSetMinWidthPercent,
+                setMax: YGNodeStyleSetMaxWidth,
+                setMaxPercent: YGNodeStyleSetMaxWidthPercent
+            )
+        }
+        height.map { height in
+            height.updateNode(
+                node,
+                setValue: YGNodeStyleSetHeight,
+                setValuePercent: YGNodeStyleSetHeightPercent,
+                setMin: YGNodeStyleSetMinHeight,
+                setMinPercent: YGNodeStyleSetMinHeightPercent,
+                setMax: YGNodeStyleSetMaxHeight,
+                setMaxPercent: YGNodeStyleSetMaxHeightPercent
+            )
+        }
+        aspectRatio.map { YGNodeStyleSetAspectRatio(node, $0) }
         return (
             node,
             [view.map { view -> FlexState.View in

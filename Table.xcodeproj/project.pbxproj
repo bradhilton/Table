@@ -14,6 +14,11 @@
 		A20EC6A32034B20C00FD9036 /* FlexTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EC6A22034B20C00FD9036 /* FlexTableViewCell.swift */; };
 		A20EC6A52034C68F00FD9036 /* FlexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EC6A42034C68F00FD9036 /* FlexView.swift */; };
 		A21AF0F71E1AC283007DC3B6 /* PublicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21AF0F61E1AC283007DC3B6 /* PublicTests.swift */; };
+		A223F5F0203B58AA00D9BA0F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A223F5EF203B58AA00D9BA0F /* ProfileViewController.swift */; };
+		A223F5F2203B9A8300D9BA0F /* FlexValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A223F5F1203B9A8300D9BA0F /* FlexValue.swift */; };
+		A223F5F4203BB7A300D9BA0F /* FlexDimension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A223F5F3203BB7A300D9BA0F /* FlexDimension.swift */; };
+		A223F5F6203BBA3B00D9BA0F /* FlexEdges.swift in Sources */ = {isa = PBXBuildFile; fileRef = A223F5F5203BBA3B00D9BA0F /* FlexEdges.swift */; };
+		A223F5F8203BC43000D9BA0F /* FlexPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = A223F5F7203BC43000D9BA0F /* FlexPosition.swift */; };
 		A23B52A41E31869200B0901E /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B52A31E31869200B0901E /* PerformanceTests.swift */; };
 		A23B52A61E31869F00B0901E /* InternalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B52A51E31869F00B0901E /* InternalTests.swift */; };
 		A23B52B31E31882400B0901E /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B52A91E31882400B0901E /* Cells.swift */; };
@@ -29,6 +34,8 @@
 		A27E977520375EDC00A30612 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27E977420375EDC00A30612 /* Controller.swift */; };
 		A27E977720376D2600A30612 /* PresentingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27E977620376D2600A30612 /* PresentingViewController.swift */; };
 		A287CB2620191822009F7C1C /* AnyHashable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A287CB2520191822009F7C1C /* AnyHashable+Extensions.swift */; };
+		A2945637203B44F2008E4C76 /* Table.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2BDB5FC1DE4A3BB008FE471 /* Table.framework */; };
+		A2945638203B44F2008E4C76 /* Table.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2BDB5FC1DE4A3BB008FE471 /* Table.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A2BDB6061DE4A3BB008FE471 /* Table.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2BDB5FC1DE4A3BB008FE471 /* Table.framework */; };
 		A2BDB60D1DE4A3BB008FE471 /* Table.h in Headers */ = {isa = PBXBuildFile; fileRef = A2BDB5FF1DE4A3BB008FE471 /* Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2BDB61D1DE4A3E8008FE471 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDB61C1DE4A3E8008FE471 /* AppDelegate.swift */; };
@@ -69,10 +76,25 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A2945639203B44F3008E4C76 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A2945638203B44F2008E4C76 /* Table.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0A0F1AFE8B26621A52F73989 /* Pods-TableTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TableTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TableTests/Pods-TableTests.release.xcconfig"; sourceTree = "<group>"; };
 		17EC6A7F2333653DBC0DF590 /* Pods_Table.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Table.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CED070DFB0B88E1BA30017D /* Pods-TableTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TableTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TableTests/Pods-TableTests.debug.xcconfig"; sourceTree = "<group>"; };
+		71337484D250713B3DCE621C /* Pods-InjectionExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InjectionExample.release.xcconfig"; path = "Pods/Target Support Files/Pods-InjectionExample/Pods-InjectionExample.release.xcconfig"; sourceTree = "<group>"; };
 		7CD082EDF98D841D32349ECF /* Pods-Table.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Table.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Table/Pods-Table.debug.xcconfig"; sourceTree = "<group>"; };
 		84962B038C49AB26EBB02CB0 /* Pods_TableTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TableTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		87B28A0E70C14C33CE9F8582 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +103,11 @@
 		A20EC6A22034B20C00FD9036 /* FlexTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexTableViewCell.swift; sourceTree = "<group>"; };
 		A20EC6A42034C68F00FD9036 /* FlexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexView.swift; sourceTree = "<group>"; };
 		A21AF0F61E1AC283007DC3B6 /* PublicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicTests.swift; sourceTree = "<group>"; };
+		A223F5EF203B58AA00D9BA0F /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		A223F5F1203B9A8300D9BA0F /* FlexValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexValue.swift; sourceTree = "<group>"; };
+		A223F5F3203BB7A300D9BA0F /* FlexDimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexDimension.swift; sourceTree = "<group>"; };
+		A223F5F5203BBA3B00D9BA0F /* FlexEdges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexEdges.swift; sourceTree = "<group>"; };
+		A223F5F7203BC43000D9BA0F /* FlexPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexPosition.swift; sourceTree = "<group>"; };
 		A23B52A31E31869200B0901E /* PerformanceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerformanceTests.swift; sourceTree = "<group>"; };
 		A23B52A51E31869F00B0901E /* InternalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalTests.swift; sourceTree = "<group>"; };
 		A23B52A91E31882400B0901E /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cells.swift; sourceTree = "<group>"; };
@@ -120,7 +147,9 @@
 		B4CDEC31BF60182BF626768A /* Pods-Table.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Table.release.xcconfig"; path = "Pods/Target Support Files/Pods-Table/Pods-Table.release.xcconfig"; sourceTree = "<group>"; };
 		BB93B8622D97482DD0949BAB /* Pods-ExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleUITests/Pods-ExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BD96E6F14B972996E10B09A6 /* Pods-ExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleUITests/Pods-ExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		C357EEF1EE50276C168ED05B /* Pods_InjectionExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InjectionExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F026D9547C32E2C11E23CEB9 /* Pods_ExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDC8BDD88D66AB86E4D725C0 /* Pods-InjectionExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InjectionExample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-InjectionExample/Pods-InjectionExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +175,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BA3DF1D68BC866FA6943387 /* Pods_Example.framework in Frameworks */,
+				A2945637203B44F2008E4C76 /* Table.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +201,8 @@
 				B4CDEC31BF60182BF626768A /* Pods-Table.release.xcconfig */,
 				6CED070DFB0B88E1BA30017D /* Pods-TableTests.debug.xcconfig */,
 				0A0F1AFE8B26621A52F73989 /* Pods-TableTests.release.xcconfig */,
+				FDC8BDD88D66AB86E4D725C0 /* Pods-InjectionExample.debug.xcconfig */,
+				71337484D250713B3DCE621C /* Pods-InjectionExample.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -182,6 +214,7 @@
 				F026D9547C32E2C11E23CEB9 /* Pods_ExampleUITests.framework */,
 				17EC6A7F2333653DBC0DF590 /* Pods_Table.framework */,
 				84962B038C49AB26EBB02CB0 /* Pods_TableTests.framework */,
+				C357EEF1EE50276C168ED05B /* Pods_InjectionExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -230,6 +263,10 @@
 				A2CAB92C2034DB7100531F96 /* Flex.swift */,
 				A27E97722037558200A30612 /* UIViewController+Extensions.swift */,
 				A27E977420375EDC00A30612 /* Controller.swift */,
+				A223F5F1203B9A8300D9BA0F /* FlexValue.swift */,
+				A223F5F3203BB7A300D9BA0F /* FlexDimension.swift */,
+				A223F5F5203BBA3B00D9BA0F /* FlexEdges.swift */,
+				A223F5F7203BC43000D9BA0F /* FlexPosition.swift */,
 			);
 			path = Table;
 			sourceTree = "<group>";
@@ -259,6 +296,7 @@
 				A24133941E7AF1AC0049C8B5 /* FormViewController.swift */,
 				A2CAB9282034D92900531F96 /* FlexViewController.swift */,
 				A27E977620376D2600A30612 /* PresentingViewController.swift */,
+				A223F5EF203B58AA00D9BA0F /* ProfileViewController.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -338,6 +376,7 @@
 				A2BDB6181DE4A3E8008FE471 /* Resources */,
 				4BBE9FBE74F6F157FE6CCA42 /* [CP] Embed Pods Frameworks */,
 				3210D463761C22B16AAF0976 /* [CP] Copy Pods Resources */,
+				A2945639203B44F3008E4C76 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -376,12 +415,13 @@
 		A2BDB5F31DE4A3BB008FE471 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0810;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Brad Hilton";
 				TargetAttributes = {
 					A2BDB5FB1DE4A3BB008FE471 = {
 						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 8KK8UBHJUJ;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
@@ -650,8 +690,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A27E977520375EDC00A30612 /* Controller.swift in Sources */,
+				A223F5F4203BB7A300D9BA0F /* FlexDimension.swift in Sources */,
+				A223F5F8203BC43000D9BA0F /* FlexPosition.swift in Sources */,
 				A2C9108320221959001AEF2A /* SectionsDelta.swift in Sources */,
 				A23B52BB1E31882400B0901E /* UITableView+Extensions.swift in Sources */,
+				A223F5F2203B9A8300D9BA0F /* FlexValue.swift in Sources */,
 				A23B52B41E31882400B0901E /* Source.swift in Sources */,
 				A23B52BE1E31885D00B0901E /* MutableCollection+Extensions.swift in Sources */,
 				A2CAB92D2034DB7100531F96 /* Flex.swift in Sources */,
@@ -662,6 +705,7 @@
 				A23B52B81E31882400B0901E /* Section.swift in Sources */,
 				A27E97732037558200A30612 /* UIViewController+Extensions.swift in Sources */,
 				A23B52B71E31882400B0901E /* Row.swift in Sources */,
+				A223F5F6203BBA3B00D9BA0F /* FlexEdges.swift in Sources */,
 				A2E4048D2019409600253EB6 /* Data.swift in Sources */,
 				A287CB2620191822009F7C1C /* AnyHashable+Extensions.swift in Sources */,
 			);
@@ -687,6 +731,7 @@
 				A2CAB9292034D92900531F96 /* FlexViewController.swift in Sources */,
 				A26C77401E3808F5000FB2CF /* TodoListController.swift in Sources */,
 				A2BDB61D1DE4A3E8008FE471 /* AppDelegate.swift in Sources */,
+				A223F5F0203B58AA00D9BA0F /* ProfileViewController.swift in Sources */,
 				A2DCB9BC1E32C1470015E50A /* ScheduleController.swift in Sources */,
 				A27E977720376D2600A30612 /* PresentingViewController.swift in Sources */,
 			);
@@ -738,7 +783,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -761,13 +806,13 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -798,7 +843,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -821,13 +866,13 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -853,6 +898,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8KK8UBHJUJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -863,7 +909,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -875,6 +921,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 8KK8UBHJUJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -884,7 +931,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.Table;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -923,10 +970,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 8KK8UBHJUJ;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -939,10 +986,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 8KK8UBHJUJ;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -956,7 +1003,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.ExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = Example;
 			};
@@ -971,7 +1018,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.ExampleUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = Example;
 			};

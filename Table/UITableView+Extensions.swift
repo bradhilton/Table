@@ -11,7 +11,7 @@ extension UITableView {
         set {
             let data = Data(sections: newValue)
             if let source = source {
-                source.setData(data, animated: true)
+                source.setData(data, tableView: self, animated: true)
             } else {
                 self.source = Source(tableView: self, data: data)
             }
@@ -23,7 +23,7 @@ extension UITableView {
             return objc_getAssociatedObject(self, &sourceKey) as? Source
         }
         set {
-            objc_setAssociatedObject(self, &sourceKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, &sourceKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -36,7 +36,7 @@ extension UITableView {
             return self.registeredReuseIdentifiers
         }
         set {
-            objc_setAssociatedObject(self, &registeredReuseIdentifiersKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+            objc_setAssociatedObject(self, &registeredReuseIdentifiersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     

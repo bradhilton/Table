@@ -98,4 +98,10 @@ extension UIViewController {
         viewHasAppeared = false
     }
     
+//    #if DEBUG
+//    @objc func injected() {
+//        viewIfLoaded.map { uiview in view.configure(uiview) }
+//    }
+//    #endif
+    
 }

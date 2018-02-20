@@ -11,21 +11,27 @@ import Table
 
 class ViewController: UITableViewController {
     
+    let viewControllers = [
+        ScheduleController(),
+        TodoListController(),
+        AccountViewController(),
+        FormViewController(),
+        FlexViewController(),
+        PresentingViewController(),
+        ProfileViewController()
+    ]
+    
     convenience init() {
         self.init(style: .plain)
         title = "Menu"
-        let viewControllers = [
-            ScheduleController(),
-            TodoListController(),
-            AccountViewController(),
-            FormViewController(),
-            FlexViewController(),
-            PresentingViewController()
-        ]
+        render()
+    }
+    
+    func render() {
         view = View { (tableView: UITableView) in
             tableView.sections = [
                 Section { (section: inout Section) in
-                    section.rows = viewControllers.map { controller in
+                    section.rows = self.viewControllers.map { controller in
                         Row { row in
                             row.cell = Cell { cell in
                                 cell.textLabel?.text = controller.title
@@ -39,6 +45,10 @@ class ViewController: UITableViewController {
                 }
             ]
         }
+    }
+    
+    @objc func injected() {
+        render()
     }
     
 }
