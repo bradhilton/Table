@@ -1,14 +1,25 @@
 //
-//  UIViewController+Extensions.swift
+//  UIViewController.swift
 //  Table
 //
 //  Created by Bradley Hilton on 2/16/18.
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
-var isViewDirtyKey = "isViewDirty"
-var viewHasAppearedKey = "viewHasAppeared"
-var viewKey = "view"
+struct ControllerView<View : UIView> {
+    
+}
+
+protocol ControllerProtocol {
+    associatedtype ViewType
+}
+
+extension ControllerProtocol {
+    
+    
+    
+}
+
 let swizzleViewControllerMethods: () -> () = {
     method_exchangeImplementations(
         class_getInstanceMethod(UIViewController.self, #selector(UIViewController.swizzledViewDidLoad))!,
@@ -33,10 +44,10 @@ extension UIViewController {
     
     private var isViewDirty: Bool {
         get {
-            return (objc_getAssociatedObject(self, &isViewDirtyKey) as? Bool) ?? false
+            return storage[\.isViewDirty, default: false]
         }
         set {
-            objc_setAssociatedObject(self, &isViewDirtyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.isViewDirty] = newValue
         }
     }
     
@@ -46,16 +57,16 @@ extension UIViewController {
     
     var viewHasAppeared: Bool {
         get {
-            return (objc_getAssociatedObject(self, &viewHasAppearedKey) as? Bool) ?? false
+            return storage[\.viewHasAppeared, default: false]
         }
         set {
-            objc_setAssociatedObject(self, &viewHasAppearedKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.viewHasAppeared] = newValue
         }
     }
     
     public var view: View {
         get {
-            return (objc_getAssociatedObject(self, &viewKey) as? View) ?? View()
+            return storage[\.view, default: View()]
         }
         set {
             swizzleViewControllerMethods()
@@ -66,7 +77,7 @@ extension UIViewController {
                     newValue.configure(uiview)
                 }
             }
-            objc_setAssociatedObject(self, &viewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.view] = newValue
         }
     }
     

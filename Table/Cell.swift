@@ -36,14 +36,14 @@ public struct Cell {
     }
     
     func registerCellIfNeeded(for tableView: UITableView) {
-        if !tableView.registeredReuseIdentifiers.contains(reuseIdentifier) {
+        if !tableView.reuseIdentifiers.contains(reuseIdentifier) {
             let nibName = String(describing: cellClass)
             if Bundle.main.path(forResource: nibName, ofType: "nib") != nil {
                 tableView.register(UINib(nibName: nibName, bundle: nil), forCellReuseIdentifier: reuseIdentifier)
             } else {
                 tableView.register(cellClass, forCellReuseIdentifier: reuseIdentifier)
             }
-            tableView.registeredReuseIdentifiers.insert(reuseIdentifier)
+            tableView.reuseIdentifiers.insert(reuseIdentifier)
         }
     }
     

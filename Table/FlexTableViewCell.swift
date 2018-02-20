@@ -8,7 +8,16 @@
 
 public class FlexTableViewCell : UITableViewCell {
     
-    public let flexView = FlexView()
+    public var child: Flex {
+        get {
+            return flexView.child
+        }
+        set {
+            flexView.child = newValue
+        }
+    }
+    
+    private let flexView = FlexView()
     
     public override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

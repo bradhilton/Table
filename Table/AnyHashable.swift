@@ -1,5 +1,5 @@
 //
-//  AnyHashable+Extensions.swift
+//  AnyHashable.swift
 //  Table
 //
 //  Created by Bradley Hilton on 1/24/18.

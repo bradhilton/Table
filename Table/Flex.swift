@@ -8,31 +8,6 @@
 
 import yoga
 
-var flexTypeKey = "flexType"
-var flexKeyKey = "flexKey"
-
-extension UIView {
-    
-    var flexType: AnyHashable {
-        get {
-            return (objc_getAssociatedObject(self, &flexTypeKey) as? AnyHashable) ?? .auto
-        }
-        set {
-            objc_setAssociatedObject(self, &flexTypeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    var flexKey: AnyHashable {
-        get {
-            return (objc_getAssociatedObject(self, &flexKeyKey) as? AnyHashable) ?? .auto
-        }
-        set {
-            objc_setAssociatedObject(self, &flexKeyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-
-}
-
 public struct Flex {
     
     public var key: AnyHashable = .auto
@@ -176,13 +151,13 @@ public struct View {
     }
     
     func view(from pool: inout [UIView], with key: AnyHashable) -> UIView {
-        if let index = pool.index(where: { view in view.flexType == type && view.flexKey == key }) {
+        if let index = pool.index(where: { view in view.type == type && view.key == key }) {
             let view = pool.remove(at: index)
             return view
         } else {
             let view = factory()
-            view.flexType = type
-            view.flexKey = key
+            view.type = type
+            view.key = key
             return view
         }
     }

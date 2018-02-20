@@ -28,10 +28,10 @@ class ProfileViewController : UITableViewController {
                 section.rows = [
                     Row { row in
                         row.cell = Cell { (cell: FlexTableViewCell) in
-                            cell.flexView.child = Flex { flex in
+                            cell.child = Flex { flex in
                                 flex.direction = .row
                                 flex.children = [
-                                    Flex { $0.flexBasis = 16 },
+                                    Flex { $0.width = 16 },
                                     Flex { flex in
                                         flex.view = View { (label: UILabel) in
                                             label.font = UIFont.systemFont(ofSize: 18)
@@ -51,7 +51,7 @@ class ProfileViewController : UITableViewController {
                     Row { row in
                         row.height = .automatic(estimated: 44)
                         row.cell = Cell { (cell: FlexTableViewCell) in
-                            cell.flexView.child = Flex { flex in
+                            cell.child = Flex { flex in
                                 flex.direction = .row
                                 flex.justifyContent = .spaceBetween
                                 flex.padding.start = 16
@@ -69,7 +69,10 @@ class ProfileViewController : UITableViewController {
                                     Flex { flex in
                                         flex.alignSelf = .center
                                         flex.view = View { (toggle: UISwitch) in
-                                            toggle.isOn = false
+                                            toggle.isOn = true
+                                            toggle.events[.valueChanged] = { toggle in
+                                                print("toggle.isOn: \(toggle.isOn)")
+                                            }
                                         }
                                     }
                                 ]
@@ -77,7 +80,7 @@ class ProfileViewController : UITableViewController {
                         }
                     }
                 ]
-                section.footerTitle = nil
+                section.footerTitle = "Hello there"
             }
         ]
     }

@@ -45,7 +45,7 @@ class FlexViewController: UITableViewController {
                     Row { row in
                         row.height = .automatic(estimated: 44)
                         row.cell = Cell { (cell: FlexTableViewCell) in
-                            cell.flexView.child = self.flex(messages: self.messages)
+                            cell.child = self.flex(messages: self.messages)
                         }
                         row.didTap = {
                             for i in 0..<3 {

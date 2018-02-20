@@ -42,36 +42,14 @@ public struct Controller {
     
 }
 
-var controllerTypeKey = "controllerType"
-var controllerKeyKey = "controllerKey"
-var presentedControllerKey = "presentedControllerKey"
-
 extension UIViewController {
-    
-    var type: AnyHashable {
-        get {
-            return (objc_getAssociatedObject(self, &controllerTypeKey) as? AnyHashable) ?? (0 as AnyHashable)
-        }
-        set {
-            objc_setAssociatedObject(self, &controllerTypeKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    var key: AnyHashable {
-        get {
-            return (objc_getAssociatedObject(self, &controllerKeyKey) as? AnyHashable) ?? (0 as AnyHashable)
-        }
-        set {
-            objc_setAssociatedObject(self, &controllerKeyKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
     
     public var presentedController: Controller? {
         get {
-            return objc_getAssociatedObject(self, &presentedControllerKey) as? Controller
+            return storage[\.presentedController]
         }
         set {
-            objc_setAssociatedObject(self, &presentedControllerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.presentedController] = newValue
             if viewHasAppeared {
                 presentController()
             }
@@ -115,45 +93,39 @@ extension Array where Element == Controller {
     
 }
 
-var navigationControllersKey = "navigationControllers"
-
 extension UINavigationController {
     
     public var controllers: [Controller] {
         get {
-            return (objc_getAssociatedObject(self, &navigationControllersKey) as? [Controller]) ?? []
+            return storage[\.controllers, default: []]
         }
         set {
             setViewControllers(newValue.viewControllers(using: viewControllers), animated: viewIsVisible)
-            objc_setAssociatedObject(self, &navigationControllersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.controllers] = newValue
         }
     }
     
 }
-
-var tabBarControllersKey = "tabBarControllers"
 
 extension UITabBarController {
     
     public var controllers: [Controller] {
         get {
-            return (objc_getAssociatedObject(self, &tabBarControllersKey) as? [Controller]) ?? []
+            return storage[\.controllers, default: []]
         }
         set {
             setViewControllers(newValue.viewControllers(using: viewControllers ?? []), animated: viewIsVisible)
-            objc_setAssociatedObject(self, &tabBarControllersKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.controllers] = newValue
         }
     }
     
 }
 
-var rootControllerKey = "rootController"
-
 extension UIWindow {
     
     public var rootController: Controller? {
         get {
-            return objc_getAssociatedObject(self, &rootControllerKey) as? Controller
+            return storage[\.rootController]
         }
         set {
             guard let controller = newValue, let viewController = rootViewController else {
@@ -172,7 +144,7 @@ extension UIWindow {
                     completion: nil
                 )
             }
-            objc_setAssociatedObject(self, &rootControllerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            storage[\.rootController] = newValue
         }
     }
     
