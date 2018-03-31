@@ -82,8 +82,8 @@ class FlexState {
         
         deinit {
             (context?.pointee as? UITextField)?.text = ""
-            context?.deinitialize()
-            context?.deallocate(capacity: 1)
+            context?.deinitialize(count: 1)
+            context?.deallocate()
         }
         
     }
