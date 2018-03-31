@@ -1,4 +1,16 @@
 
+func costEstimate(old: Data, new: Data) -> Int {
+    let diffCost = old.rowsByKey.count + new.rowsByKey.count
+    let minimumDeletes = max(old.rowsByKey.count - new.rowsByKey.count, 0)
+    let minimumInserts = max(new.rowsByKey.count - old.rowsByKey.count, 0)
+    let animationCost = max(minimumDeletes * 13, minimumInserts * 3)
+    return (diffCost + animationCost) / 5
+}
+
+func animationCost(_ delta: SectionsDelta) -> Int {
+    return (delta.rowDeletes.count * 13 + delta.rowInserts.count * 3) / 5
+}
+
 class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     
 //    var movingRow: Row?
@@ -8,7 +20,12 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
 //        guard movingRow == nil else {
 //            return data = newValue
 //        }
-        guard let indexPaths = tableView.indexPathsForVisibleRows, animated else {
+        guard let indexPaths = tableView.indexPathsForVisibleRows, animated, costEstimate(old: data, new: newValue) < deviceBenchmark else {
+            data = newValue
+            return tableView.reloadData()
+        }
+        let delta = SectionsDelta(from: data.sections, to: newValue.sections)
+        guard animationCost(delta) < deviceBenchmark else {
             data = newValue
             return tableView.reloadData()
         }
@@ -19,7 +36,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
                 newValue.rowsByKey[row.key].map { (indexPath, row, newValue.sections[$0.section].rows[$0.row]) }
             }.flatMap { indexPath, oldRow, newRow in
                 if (oldRow.cell.reuseIdentifier == newRow.cell.reuseIdentifier) {
-                    tableView.cellForRow(at: indexPath).map { newRow.cell.configure($0) }
+                    tableView.cellForRow(at: indexPath).map { newRow.cell.update($0) }
                     return nil
                 } else {
                     data.sections[indexPath.section].rows[indexPath.row] = newRow
@@ -42,7 +59,6 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
                 updateHeaderFooterView(tableView.headerView(forSection: index), title: section.headerTitle)
                 updateHeaderFooterView(tableView.footerView(forSection: index), title: section.footerTitle)
             }
-        let delta = SectionsDelta(from: data.sections, to: newValue.sections)
         let animation = UITableViewRowAnimation.fade
         data = newValue
         tableView.beginUpdates()
@@ -93,28 +109,28 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         return data[indexPath].commitMove != nil
     }
     
-//    #if os(iOS)
-//    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-//        return data.indexTitles
-//    }
-//
-//    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-//        var indexLookup: [String: Int] = [:]
-//        for (index, section) in data.sections.enumerated() {
-//            guard let indexTitle = section.indexTitle else { continue }
-//            if indexTitle == title {
-//                return index
-//            }
-//            indexLookup[indexTitle] = index
-//        }
-//        let indexTitles = data.indexTitles ?? []
-//        for title in indexTitles[index..<indexTitles.endIndex] {
-//            guard let index = indexLookup[title] else { continue }
-//            return index
-//        }
-//        return max(data.sections.endIndex - 1, 0)
-//    }
-//    #endif
+    #if os(iOS)
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return tableView.sectionIndexTitles
+    }
+
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        var indexLookup: [String: Int] = [:]
+        for (index, section) in data.sections.enumerated() {
+            guard let indexTitle = section.indexTitle else { continue }
+            if indexTitle == title {
+                return index
+            }
+            indexLookup[indexTitle] = index
+        }
+        let indexTitles = tableView.sectionIndexTitles ?? []
+        for title in indexTitles[index..<indexTitles.endIndex] {
+            guard let index = indexLookup[title] else { continue }
+            return index
+        }
+        return max(data.sections.endIndex - 1, 0)
+    }
+    #endif
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {

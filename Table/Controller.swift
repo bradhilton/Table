@@ -9,34 +9,48 @@
 public struct Controller {
     
     let type: AnyHashable
-    let key: AnyHashable
-    let factory: () -> UIViewController
-    let configure: (UIViewController) -> ()
+    /// Creates a new instance of the view controller
+    public let create: () -> UIViewController
+    /// Configures the view controller after the view is loaded
+    public let configure: (UIViewController) -> ()
+    /// Updates the view controller when visible
+    public let update: (UIViewController) -> ()
     
     public init<Controller : UIViewController>(
         file: String = #file,
         function: String = #function,
         line: Int = #line,
         column: Int = #column,
-        key: AnyHashable = .auto,
         class: Controller.Type = Controller.self,
-        configure: @escaping (Controller) -> () = { _ in }
+        create: @escaping () -> Controller = { Controller() },
+        configure: @escaping (Controller) -> () = { _ in },
+        update: @escaping (Controller) -> () = { _ in }
     ) {
         self.type = "\(Controller.self):\(file):\(function):\(line):\(column)"
-        self.key = key
-        self.factory = { Controller() }
-        self.configure = { controller in
-            guard let controller = controller as? Controller else { return }
-            configure(controller)
-        }
+        self.create = create
+        self.configure = { ($0 as? Controller).map(configure) }
+        self.update = { ($0 as? Controller).map(update) }
     }
     
-    func newViewController() -> UIViewController {
-        let viewController = factory()
-        viewController.type = type
-        UIView.performWithoutAnimation {
-            configure(viewController)
+    func matches(key: AnyHashable) -> (UIViewController) -> Bool {
+        return { $0.type == self.type && $0.key == key }
+    }
+    
+    func viewController(reusing pool: inout [UIViewController], key: AnyHashable = .auto) -> UIViewController {
+        guard let index = pool.index(where: matches(key: key)) else {
+            return self.newViewController(key: key)
         }
+        let viewController = pool.remove(at: index)
+        viewController.update = update
+        return viewController
+    }
+    
+    public func newViewController(key: AnyHashable = .auto) -> UIViewController {
+        let viewController = create()
+        viewController.type = type
+        viewController.key = key
+        viewController.configure = configure
+        viewController.update = update
         return viewController
     }
     
@@ -49,6 +63,7 @@ extension UIViewController {
             return storage[\.presentedController]
         }
         set {
+            swizzleViewControllerMethods()
             storage[\.presentedController] = newValue
             if viewHasAppeared {
                 presentController()
@@ -59,8 +74,8 @@ extension UIViewController {
     func presentController() {
         switch (presentedController, presentedViewController) {
         case (let controller?, let viewController?):
-            if viewController.type == controller.type && viewController.key == controller.key {
-                controller.configure(viewController)
+            if viewController.type == controller.type {
+                viewController.update = controller.update
             } else {
                 viewController.dismiss(animated: true) {
                     self.present(controller.newViewController(), animated: true)
@@ -77,38 +92,6 @@ extension UIViewController {
     
 }
 
-extension Array where Element == Controller {
-    
-    func viewControllers(using viewControllers: [UIViewController]) -> [UIViewController] {
-        var pool = viewControllers
-        return map { controller in
-            guard let index = pool.index(where: { $0.type == controller.type && $0.key == controller.key }) else {
-                return controller.newViewController()
-            }
-            let viewController = pool.remove(at: index)
-            controller.configure(viewController)
-            return viewController
-        }
-    }
-    
-}
-
-extension UINavigationController {
-    
-    public var controllers: [Controller] {
-        get {
-            return storage[\.controllers, default: []]
-        }
-        set {
-            setViewControllers(newValue.viewControllers(using: viewControllers), animated: viewIsVisible)
-            storage[\.controllers] = newValue
-        }
-    }
-    
-}
-
-
-
 extension UIWindow {
     
     public var rootController: Controller? {
@@ -116,11 +99,12 @@ extension UIWindow {
             return storage[\.rootController]
         }
         set {
-            guard let controller = newValue, let viewController = rootViewController else {
-                return rootViewController = newValue?.newViewController()
+            storage[\.rootController] = newValue
+            guard let controller = rootController, let viewController = rootViewController else {
+                return rootViewController = rootController?.newViewController()
             }
-            if viewController.type == controller.type && viewController.key == controller.key {
-                controller.configure(viewController)
+            if viewController.type == controller.type {
+                viewController.update = controller.update
             } else {
                 UIView.transition(
                     with: self,
@@ -128,11 +112,10 @@ extension UIWindow {
                     options: .transitionCrossDissolve,
                     animations: {
                         self.rootViewController = controller.newViewController()
-                    },
+                },
                     completion: nil
                 )
             }
-            storage[\.rootController] = newValue
         }
     }
     

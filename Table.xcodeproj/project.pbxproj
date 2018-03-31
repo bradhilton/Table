@@ -11,6 +11,13 @@
 		3E3C6942E80B15C4AB6CFA74 /* Pods_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F026D9547C32E2C11E23CEB9 /* Pods_ExampleUITests.framework */; };
 		455BB4F23E36951D39158794 /* Pods_Table.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17EC6A7F2333653DBC0DF590 /* Pods_Table.framework */; };
 		7BA3DF1D68BC866FA6943387 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87B28A0E70C14C33CE9F8582 /* Pods_Example.framework */; };
+		A200F8A520608B86006E1B15 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8A220608B85006E1B15 /* UINavigationController.swift */; };
+		A200F8A620608B86006E1B15 /* UISplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8A320608B86006E1B15 /* UISplitViewController.swift */; };
+		A200F8A720608B86006E1B15 /* Reusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8A420608B86006E1B15 /* Reusable.swift */; };
+		A200F8A920608C31006E1B15 /* FlexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8A820608C31006E1B15 /* FlexViewController.swift */; };
+		A200F8AB20608DB1006E1B15 /* UIBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8AA20608DB1006E1B15 /* UIBarButtonItem.swift */; };
+		A200F8AD206146F5006E1B15 /* UISearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8AC206146F5006E1B15 /* UISearchController.swift */; };
+		A200F8AF20615C5A006E1B15 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200F8AE20615C5A006E1B15 /* Device.swift */; };
 		A20EC6A32034B20C00FD9036 /* FlexTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EC6A22034B20C00FD9036 /* FlexTableViewCell.swift */; };
 		A20EC6A52034C68F00FD9036 /* FlexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20EC6A42034C68F00FD9036 /* FlexView.swift */; };
 		A21AF0F71E1AC283007DC3B6 /* PublicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21AF0F61E1AC283007DC3B6 /* PublicTests.swift */; };
@@ -30,16 +37,20 @@
 		A23B52BE1E31885D00B0901E /* MutableCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23B52BD1E31885D00B0901E /* MutableCollection.swift */; };
 		A24133911E79E6F40049C8B5 /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24133901E79E6F40049C8B5 /* Cell.swift */; };
 		A24133951E7AF1AC0049C8B5 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24133941E7AF1AC0049C8B5 /* FormViewController.swift */; };
-		A24514C5203C7E0200997D59 /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24514C4203C7E0200997D59 /* UIResponder.swift */; };
 		A26C77401E3808F5000FB2CF /* TodoListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26C773F1E3808F5000FB2CF /* TodoListController.swift */; };
+		A2749A8F206552E900BE7A2D /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A8E206552E900BE7A2D /* Weak.swift */; };
+		A2749A912065559400BE7A2D /* ActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A902065559400BE7A2D /* ActionSheet.swift */; };
+		A2749A9320655CD100BE7A2D /* UIResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A9220655CD100BE7A2D /* UIResponder.swift */; };
 		A27E97732037558200A30612 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27E97722037558200A30612 /* UIViewController.swift */; };
 		A27E977520375EDC00A30612 /* Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27E977420375EDC00A30612 /* Controller.swift */; };
 		A27E977720376D2600A30612 /* PresentingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27E977620376D2600A30612 /* PresentingViewController.swift */; };
 		A287CB2620191822009F7C1C /* AnyHashable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A287CB2520191822009F7C1C /* AnyHashable.swift */; };
 		A2945637203B44F2008E4C76 /* Table.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2BDB5FC1DE4A3BB008FE471 /* Table.framework */; };
 		A2945638203B44F2008E4C76 /* Table.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A2BDB5FC1DE4A3BB008FE471 /* Table.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A294923F206F99E800DBDD73 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294923E206F99E800DBDD73 /* Keys.swift */; };
 		A294A068203C7EFC00FDA8E7 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294A067203C7EFC00FDA8E7 /* UIControl.swift */; };
 		A294A06A203CA8A100FDA8E7 /* UITabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294A069203CA8A100FDA8E7 /* UITabBarController.swift */; };
+		A2B71225206C2CF700B16B5A /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B71224206C2CF700B16B5A /* UIView.swift */; };
 		A2BDB6061DE4A3BB008FE471 /* Table.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2BDB5FC1DE4A3BB008FE471 /* Table.framework */; };
 		A2BDB60D1DE4A3BB008FE471 /* Table.h in Headers */ = {isa = PBXBuildFile; fileRef = A2BDB5FF1DE4A3BB008FE471 /* Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2BDB61D1DE4A3E8008FE471 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDB61C1DE4A3E8008FE471 /* AppDelegate.swift */; };
@@ -104,6 +115,13 @@
 		87B28A0E70C14C33CE9F8582 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A036A830ED2E71F4E4DADB84 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
 		A06DB4479149CB718DA81584 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
+		A200F8A220608B85006E1B15 /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
+		A200F8A320608B86006E1B15 /* UISplitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UISplitViewController.swift; sourceTree = "<group>"; };
+		A200F8A420608B86006E1B15 /* Reusable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reusable.swift; sourceTree = "<group>"; };
+		A200F8A820608C31006E1B15 /* FlexViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlexViewController.swift; sourceTree = "<group>"; };
+		A200F8AA20608DB1006E1B15 /* UIBarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBarButtonItem.swift; sourceTree = "<group>"; };
+		A200F8AC206146F5006E1B15 /* UISearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISearchController.swift; sourceTree = "<group>"; };
+		A200F8AE20615C5A006E1B15 /* Device.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		A20EC6A22034B20C00FD9036 /* FlexTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexTableViewCell.swift; sourceTree = "<group>"; };
 		A20EC6A42034C68F00FD9036 /* FlexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexView.swift; sourceTree = "<group>"; };
 		A21AF0F61E1AC283007DC3B6 /* PublicTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublicTests.swift; sourceTree = "<group>"; };
@@ -123,14 +141,18 @@
 		A23B52BD1E31885D00B0901E /* MutableCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutableCollection.swift; sourceTree = "<group>"; };
 		A24133901E79E6F40049C8B5 /* Cell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
 		A24133941E7AF1AC0049C8B5 /* FormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
-		A24514C4203C7E0200997D59 /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		A26C773F1E3808F5000FB2CF /* TodoListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListController.swift; sourceTree = "<group>"; };
+		A2749A8E206552E900BE7A2D /* Weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
+		A2749A902065559400BE7A2D /* ActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheet.swift; sourceTree = "<group>"; };
+		A2749A9220655CD100BE7A2D /* UIResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIResponder.swift; sourceTree = "<group>"; };
 		A27E97722037558200A30612 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		A27E977420375EDC00A30612 /* Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Controller.swift; sourceTree = "<group>"; };
 		A27E977620376D2600A30612 /* PresentingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentingViewController.swift; sourceTree = "<group>"; };
 		A287CB2520191822009F7C1C /* AnyHashable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashable.swift; sourceTree = "<group>"; };
+		A294923E206F99E800DBDD73 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		A294A067203C7EFC00FDA8E7 /* UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
 		A294A069203CA8A100FDA8E7 /* UITabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITabBarController.swift; sourceTree = "<group>"; };
+		A2B71224206C2CF700B16B5A /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		A2BDB5FC1DE4A3BB008FE471 /* Table.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Table.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2BDB5FF1DE4A3BB008FE471 /* Table.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Table.h; sourceTree = "<group>"; };
 		A2BDB6001DE4A3BB008FE471 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -232,11 +254,11 @@
 			children = (
 				A2BDB61B1DE4A3E8008FE471 /* Example */,
 				A2BDB6301DE4A3E8008FE471 /* ExampleUITests */,
+				A10F7A766FCDE3CF581626E9 /* Frameworks */,
+				1EDCB7D7E656ECB7CB7DC898 /* Pods */,
 				A2BDB5FE1DE4A3BB008FE471 /* Table */,
 				A2BDB6091DE4A3BB008FE471 /* TableTests */,
 				A2C9108420221A17001AEF2A /* XTable.podspec */,
-				1EDCB7D7E656ECB7CB7DC898 /* Pods */,
-				A10F7A766FCDE3CF581626E9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -254,31 +276,42 @@
 		A2BDB5FE1DE4A3BB008FE471 /* Table */ = {
 			isa = PBXGroup;
 			children = (
-				A23B52A91E31882400B0901E /* Cells.swift */,
-				A23B52AA1E31882400B0901E /* Source.swift */,
-				A2BDB6001DE4A3BB008FE471 /* Info.plist */,
-				A23B52BD1E31885D00B0901E /* MutableCollection.swift */,
-				A23B52AD1E31882400B0901E /* Row.swift */,
-				A23B52AE1E31882400B0901E /* Section.swift */,
-				A2BDB5FF1DE4A3BB008FE471 /* Table.h */,
-				A23B52B11E31882400B0901E /* UITableView.swift */,
-				A24133901E79E6F40049C8B5 /* Cell.swift */,
 				A287CB2520191822009F7C1C /* AnyHashable.swift */,
-				A2E4048C2019409600253EB6 /* Data.swift */,
-				A2C9108220221959001AEF2A /* SectionsDelta.swift */,
-				A20EC6A22034B20C00FD9036 /* FlexTableViewCell.swift */,
-				A20EC6A42034C68F00FD9036 /* FlexView.swift */,
-				A2CAB92C2034DB7100531F96 /* Flex.swift */,
-				A27E97722037558200A30612 /* UIViewController.swift */,
+				A24133901E79E6F40049C8B5 /* Cell.swift */,
+				A23B52A91E31882400B0901E /* Cells.swift */,
 				A27E977420375EDC00A30612 /* Controller.swift */,
-				A223F5F1203B9A8300D9BA0F /* FlexValue.swift */,
+				A2E4048C2019409600253EB6 /* Data.swift */,
+				A2CAB92C2034DB7100531F96 /* Flex.swift */,
 				A223F5F3203BB7A300D9BA0F /* FlexDimension.swift */,
 				A223F5F5203BBA3B00D9BA0F /* FlexEdges.swift */,
 				A223F5F7203BC43000D9BA0F /* FlexPosition.swift */,
+				A20EC6A22034B20C00FD9036 /* FlexTableViewCell.swift */,
+				A223F5F1203B9A8300D9BA0F /* FlexValue.swift */,
+				A20EC6A42034C68F00FD9036 /* FlexView.swift */,
+				A200F8A820608C31006E1B15 /* FlexViewController.swift */,
+				A2BDB6001DE4A3BB008FE471 /* Info.plist */,
+				A23B52BD1E31885D00B0901E /* MutableCollection.swift */,
+				A200F8A420608B86006E1B15 /* Reusable.swift */,
+				A23B52AD1E31882400B0901E /* Row.swift */,
+				A23B52AE1E31882400B0901E /* Section.swift */,
+				A2C9108220221959001AEF2A /* SectionsDelta.swift */,
+				A23B52AA1E31882400B0901E /* Source.swift */,
 				A223F5F9203C755600D9BA0F /* Storage.swift */,
-				A24514C4203C7E0200997D59 /* UIResponder.swift */,
+				A2BDB5FF1DE4A3BB008FE471 /* Table.h */,
+				A200F8AA20608DB1006E1B15 /* UIBarButtonItem.swift */,
 				A294A067203C7EFC00FDA8E7 /* UIControl.swift */,
+				A200F8A220608B85006E1B15 /* UINavigationController.swift */,
+				A200F8AC206146F5006E1B15 /* UISearchController.swift */,
+				A200F8A320608B86006E1B15 /* UISplitViewController.swift */,
 				A294A069203CA8A100FDA8E7 /* UITabBarController.swift */,
+				A23B52B11E31882400B0901E /* UITableView.swift */,
+				A27E97722037558200A30612 /* UIViewController.swift */,
+				A200F8AE20615C5A006E1B15 /* Device.swift */,
+				A2749A8E206552E900BE7A2D /* Weak.swift */,
+				A2749A902065559400BE7A2D /* ActionSheet.swift */,
+				A2749A9220655CD100BE7A2D /* UIResponder.swift */,
+				A2B71224206C2CF700B16B5A /* UIView.swift */,
+				A294923E206F99E800DBDD73 /* Keys.swift */,
 			);
 			path = Table;
 			sourceTree = "<group>";
@@ -297,18 +330,18 @@
 		A2BDB61B1DE4A3E8008FE471 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				A2C691821E624B94004B545A /* AccountViewController.swift */,
 				A2BDB61C1DE4A3E8008FE471 /* AppDelegate.swift */,
 				A2BDB6231DE4A3E8008FE471 /* Assets.xcassets */,
+				A2CAB9282034D92900531F96 /* FlexViewController.swift */,
+				A24133941E7AF1AC0049C8B5 /* FormViewController.swift */,
 				A2BDB6281DE4A3E8008FE471 /* Info.plist */,
 				A2BDB6251DE4A3E8008FE471 /* LaunchScreen.storyboard */,
-				A2BDB61E1DE4A3E8008FE471 /* ViewController.swift */,
-				A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */,
-				A26C773F1E3808F5000FB2CF /* TodoListController.swift */,
-				A2C691821E624B94004B545A /* AccountViewController.swift */,
-				A24133941E7AF1AC0049C8B5 /* FormViewController.swift */,
-				A2CAB9282034D92900531F96 /* FlexViewController.swift */,
 				A27E977620376D2600A30612 /* PresentingViewController.swift */,
 				A223F5EF203B58AA00D9BA0F /* ProfileViewController.swift */,
+				A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */,
+				A26C773F1E3808F5000FB2CF /* TodoListController.swift */,
+				A2BDB61E1DE4A3E8008FE471 /* ViewController.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -548,10 +581,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-TableTests/Pods-TableTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,10 +634,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -705,25 +742,36 @@
 				A223F5F4203BB7A300D9BA0F /* FlexDimension.swift in Sources */,
 				A223F5F8203BC43000D9BA0F /* FlexPosition.swift in Sources */,
 				A2C9108320221959001AEF2A /* SectionsDelta.swift in Sources */,
-				A24514C5203C7E0200997D59 /* UIResponder.swift in Sources */,
+				A294923F206F99E800DBDD73 /* Keys.swift in Sources */,
 				A294A068203C7EFC00FDA8E7 /* UIControl.swift in Sources */,
+				A200F8A520608B86006E1B15 /* UINavigationController.swift in Sources */,
 				A23B52BB1E31882400B0901E /* UITableView.swift in Sources */,
 				A294A06A203CA8A100FDA8E7 /* UITabBarController.swift in Sources */,
 				A223F5F2203B9A8300D9BA0F /* FlexValue.swift in Sources */,
+				A200F8AF20615C5A006E1B15 /* Device.swift in Sources */,
 				A23B52B41E31882400B0901E /* Source.swift in Sources */,
+				A2749A8F206552E900BE7A2D /* Weak.swift in Sources */,
 				A23B52BE1E31885D00B0901E /* MutableCollection.swift in Sources */,
 				A2CAB92D2034DB7100531F96 /* Flex.swift in Sources */,
+				A200F8AD206146F5006E1B15 /* UISearchController.swift in Sources */,
 				A223F5FA203C755600D9BA0F /* Storage.swift in Sources */,
 				A23B52B31E31882400B0901E /* Cells.swift in Sources */,
 				A20EC6A32034B20C00FD9036 /* FlexTableViewCell.swift in Sources */,
+				A2749A9320655CD100BE7A2D /* UIResponder.swift in Sources */,
 				A24133911E79E6F40049C8B5 /* Cell.swift in Sources */,
 				A20EC6A52034C68F00FD9036 /* FlexView.swift in Sources */,
+				A2749A912065559400BE7A2D /* ActionSheet.swift in Sources */,
+				A200F8AB20608DB1006E1B15 /* UIBarButtonItem.swift in Sources */,
 				A23B52B81E31882400B0901E /* Section.swift in Sources */,
 				A27E97732037558200A30612 /* UIViewController.swift in Sources */,
 				A23B52B71E31882400B0901E /* Row.swift in Sources */,
 				A223F5F6203BBA3B00D9BA0F /* FlexEdges.swift in Sources */,
 				A2E4048D2019409600253EB6 /* Data.swift in Sources */,
 				A287CB2620191822009F7C1C /* AnyHashable.swift in Sources */,
+				A2B71225206C2CF700B16B5A /* UIView.swift in Sources */,
+				A200F8A920608C31006E1B15 /* FlexViewController.swift in Sources */,
+				A200F8A720608B86006E1B15 /* Reusable.swift in Sources */,
+				A200F8A620608B86006E1B15 /* UISplitViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

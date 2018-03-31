@@ -10,15 +10,16 @@ import yoga
 
 extension YGNodeRef {
     
-    var origin: CGPoint {
-        guard let parent = YGNodeGetParent(self) else { return CGPoint() }
+    private func origin(withOffset offset: CGPoint) -> CGPoint {
+        guard let parentOrigin = YGNodeGetParent(self)?.origin(withOffset: offset) else { return offset }
         return CGPoint(
-            x: parent.origin.x + CGFloat(YGNodeLayoutGetLeft(self)),
-            y: parent.origin.y + CGFloat(YGNodeLayoutGetTop(self))
+            x: parentOrigin.x + CGFloat(YGNodeLayoutGetLeft(self)),
+            y: parentOrigin.y + CGFloat(YGNodeLayoutGetTop(self))
         )
     }
     
-    var frame: CGRect {
+    func frame(withOffset offset: CGPoint) -> CGRect {
+        let origin = self.origin(withOffset: offset)
         return CGRect(
             x: origin.x,
             y: origin.y,
@@ -58,23 +59,25 @@ class FlexState {
             self.update = update
         }
         
-        func updateView(with superview: UIView) {
+        func updateView(with superview: UIView, offset: CGPoint) {
             if view.superview == nil {
                 let alpha = view.alpha
                 UIView.performWithoutAnimation {
-                    view.frame = node.frame
+                    view.frame = node.frame(withOffset: offset)
                     view.alpha = 0
                     superview.addSubview(view)
                 }
                 view.alpha = alpha
             } else {
-                view.frame = node.frame
+                view.alpha = 1
+                view.frame = node.frame(withOffset: offset)
             }
-            if let update = self.update {
-                update(view)
-                self.update = nil
-            }
+            update.pop()?(view)
             view.setNeedsLayout()
+        }
+        
+        func updateFrame(withOffset offset: CGPoint) {
+            view.frame = node.frame(withOffset: offset)
         }
         
         deinit {
@@ -85,45 +88,59 @@ class FlexState {
         
     }
     
-    var subviewsToRemove: [UIView]?
-    var previousFrame: CGRect
-    let node: YGNodeRef
-    let views: [View]
+    private var subviewsToBeRemoved: [UIView]?
+    private let node: YGNodeRef
+    private let views: [View]
     lazy var intrinsicContentSize: CGSize = {
-        YGNodeCalculateLayout(node, .nan, .nan, .inherit)
+        YGNodeCalculateLayout(self.node, .nan, .nan, .inherit)
         return CGSize(
-            width: CGFloat(YGNodeLayoutGetWidth(node)),
-            height: CGFloat(YGNodeLayoutGetHeight(node))
+            width: CGFloat(YGNodeLayoutGetWidth(self.node)),
+            height: CGFloat(YGNodeLayoutGetHeight(self.node))
         )
     }()
     
     init(view: FlexView) {
         var pool = view.subviews
-        (self.node, self.views) = view.child.nodeAndViews(with: &pool)
-        self.subviewsToRemove = pool
-        self.previousFrame = view.frame
+        (node, views) = view.child.nodeAndViews(with: &pool)
+        subviewsToBeRemoved = pool
     }
     
-    func update(flexView: FlexView) {
-        if let views = subviewsToRemove {
-            subviewsToRemove = nil
+    private func calculateLayout(with flexView: FlexView) -> CGPoint {
+        let frame: CGRect
+        if #available(iOS 11.0, *) {
+            frame = UIEdgeInsetsInsetRect(flexView.frame, flexView.safeAreaInsets)
+        } else {
+            frame = flexView.frame
+        }
+        YGNodeCalculateLayout(node, Float(frame.width), Float(frame.height), flexView.direction)
+        return frame.origin
+    }
+    
+    func updateViews(flexView: FlexView) {
+        if let subviews = subviewsToBeRemoved.pop() {
             UIView.animate(
                 withDuration: UIView.inheritedAnimationDuration,
                 animations: {
-                    views.forEach { view in
+                    subviews.forEach { view in
                         view.alpha = 0
                     }
-                }, completion: { _ in
-                    views.forEach { view in
-                        view.removeFromSuperview()
-                    }
-                }
+                },
+                completion: nil
             )
         }
-        YGNodeCalculateLayout(node, Float(flexView.frame.width), Float(flexView.frame.height), flexView.direction)
+        let offset = calculateLayout(with: flexView)
         UIView.animate(withDuration: UIView.inheritedAnimationDuration) {
             for child in self.views {
-                child.updateView(with: flexView)
+                child.updateView(with: flexView, offset: offset)
+            }
+        }
+    }
+    
+    func updateFrames(flexView: FlexView) {
+        let offset = calculateLayout(with: flexView)
+        UIView.animate(withDuration: UIView.inheritedAnimationDuration) {
+            for child in self.views {
+                child.updateFrame(withOffset: offset)
             }
         }
     }
@@ -134,14 +151,20 @@ class FlexState {
     
 }
 
-public class FlexView : UIView {
+open class FlexView : UIView {
     
     public var child = Flex() {
         didSet {
             stateOrNil = nil
             invalidateIntrinsicContentSize()
-            UIView.animate(withDuration: 0.25) {
-                self.state.update(flexView: self)
+            if self.window != nil {
+                UIView.animate(withDuration: 0.25) {
+                    self.state.updateViews(flexView: self)
+                }
+            } else {
+                UIView.performWithoutAnimation {
+                    self.state.updateViews(flexView: self)
+                }
             }
         }
     }
@@ -168,15 +191,21 @@ public class FlexView : UIView {
         }
     }
     
-    public override var intrinsicContentSize: CGSize {
+    open override var intrinsicContentSize: CGSize {
         return state.intrinsicContentSize
     }
     
-    public override func layoutSubviews() {
+    var previousSafeAreaInsets: UIEdgeInsets?
+    
+    @available(iOS 11.0, *)
+    open override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        self.state.updateFrames(flexView: self)
+    }
+    
+    open override func layoutSubviews() {
         super.layoutSubviews()
-        UIView.animate(withDuration: 1) {
-            self.state.update(flexView: self)
-        }
+        self.state.updateFrames(flexView: self)
     }
     
 }

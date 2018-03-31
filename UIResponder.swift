@@ -1,9 +1,8 @@
 //
 //  UIResponder.swift
-//  Table
+//  XTable
 //
-//  Created by Bradley Hilton on 3/23/18.
-//  Copyright © 2018 Brad Hilton. All rights reserved.
+//  Created by Bradley Hilton on 3/19/18.
 //
 
 extension UIResponder {

@@ -6,37 +6,43 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
-class TypedStorage<Owner : AnyObject> {
-    
-    private var storage: [PartialKeyPath<Owner>: Any] = [:]
+fileprivate class UntypedStorage {
+    fileprivate var storage: [AnyKeyPath: Any] = [:]
+}
 
-    fileprivate init() {}
+public struct TypedStorage<Owner : AnyObject> {
     
-    subscript<Property>(key: KeyPath<Owner, Property>) -> Property? {
+    private let untyped: UntypedStorage
+    
+    fileprivate init(_ untyped: UntypedStorage) {
+        self.untyped = untyped
+    }
+    
+    public subscript<Property>(key: KeyPath<Owner, Property>) -> Property? {
         get {
-            return storage[key] as? Property
+            return untyped.storage[key] as? Property
         }
-        set {
-            storage[key] = newValue
+        nonmutating set {
+            untyped.storage[key] = newValue
         }
     }
     
-    subscript<Property>(key: KeyPath<Owner, Property?>) -> Property? {
+    public subscript<Property>(key: KeyPath<Owner, Property?>) -> Property? {
         get {
-            return storage[key] as? Property
+            return untyped.storage[key] as? Property
         }
-        set {
-            storage[key] = newValue
+        nonmutating set {
+            untyped.storage[key] = newValue
         }
     }
     
-    subscript<Property>(key: KeyPath<Owner, Property>, default default: Property) -> Property {
-        get {
-            return storage[key] as? Property ?? `default`
+    public subscript<Property>(key: KeyPath<Owner, Property>, default defaultValue: @autoclosure () -> Property) -> Property {
+        guard let property = untyped.storage[key] as? Property else {
+            let property = defaultValue()
+            untyped.storage[key] = property
+            return property
         }
-        set {
-            storage[key] = newValue
-        }
+        return property
     }
     
 }
@@ -45,13 +51,13 @@ private var storageKey = "storageKey"
 
 extension NSObjectProtocol {
     
-    var storage: TypedStorage<Self> {
-        guard let storage = objc_getAssociatedObject(self, &storageKey) as? TypedStorage<Self> else {
-            let storage = TypedStorage<Self>()
+    public var storage: TypedStorage<Self> {
+        guard let storage = objc_getAssociatedObject(self, &storageKey) as? UntypedStorage else {
+            let storage = UntypedStorage()
             objc_setAssociatedObject(self, &storageKey, storage, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-            return storage
+            return TypedStorage(storage)
         }
-        return storage
+        return TypedStorage(storage)
     }
     
 }

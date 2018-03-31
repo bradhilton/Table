@@ -84,6 +84,7 @@ class ProfileViewController : UITableViewController {
                             cell.child = Flex { flex in
                                 flex.direction = .row
                                 flex.children = [
+                                    Flex { $0.width = 100 },
                                     Flex { (flex: inout Flex) in
                                         flex.flexGrow = 1
                                         flex.view = View { (field: UITextField) in
@@ -103,8 +104,8 @@ class ProfileViewController : UITableViewController {
         ]
     }
     
-//    @objc func injected() {
-//        self.render()
-//    }
+    @objc func injected() {
+        self.render()
+    }
     
 }

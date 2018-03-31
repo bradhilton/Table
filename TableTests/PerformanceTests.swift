@@ -123,4 +123,26 @@ class PerformanceTests: XCTestCase {
         }
     }
     
+    func testSetNavigationItemTitle() {
+        let navigationItem = UINavigationItem()
+        navigationItem.title = "Home"
+        measure {
+            for _ in 0..<10_000 {
+                navigationItem.title = "Home"
+            }
+        }
+    }
+    
+    func testSetNavigationItemTitleWithEqualityCheck() {
+        let navigationItem = UINavigationItem()
+        navigationItem.title = "Home"
+        measure {
+            for _ in 0..<10_000 {
+                if navigationItem.title != "Home" {
+                    navigationItem.title = "Home"
+                }
+            }
+        }
+    }
+    
 }

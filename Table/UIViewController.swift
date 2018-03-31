@@ -6,17 +6,12 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
-struct ControllerView<View : UIView> {
+extension Optional {
     
-}
-
-protocol ControllerProtocol {
-    associatedtype ViewType
-}
-
-extension ControllerProtocol {
-    
-    
+    mutating func pop() -> Wrapped? {
+        defer { self = .none }
+        return self
+    }
     
 }
 
@@ -42,17 +37,50 @@ let swizzleViewControllerMethods: () -> () = {
 
 extension UIViewController {
     
-    private var isViewDirty: Bool {
+    var configure: ((UIViewController) -> ())? {
         get {
-            return storage[\.isViewDirty, default: false]
+            return storage[\.configure]
         }
         set {
-            storage[\.isViewDirty] = newValue
+            swizzleViewControllerMethods()
+            if viewIsVisible {
+                newValue?(self)
+            } else {
+                storage[\.configure] = newValue
+            }
+        }
+    }
+    
+    var update: ((UIViewController) -> ())? {
+        get {
+            return storage[\.update]
+        }
+        set {
+            swizzleViewControllerMethods()
+            if viewIsVisible {
+                newValue?(self)
+            } else {
+                storage[\.update] = newValue
+            }
+        }
+    }
+    
+    var updateNavigationItem: ((UINavigationItem) -> ())? {
+        get {
+            return storage[\.updateNavigationItem]
+        }
+        set {
+            swizzleViewControllerMethods()
+            if viewIsVisible {
+                newValue?(self.navigationItem)
+            } else {
+                storage[\.updateNavigationItem] = newValue
+            }
         }
     }
     
     var viewIsVisible: Bool {
-        return !(viewIfLoaded?.window == nil)
+        return viewIfLoaded?.window != nil
     }
     
     var viewHasAppeared: Bool {
@@ -64,37 +92,19 @@ extension UIViewController {
         }
     }
     
-    public var view: View {
-        get {
-            return storage[\.view, default: View()]
-        }
-        set {
-            swizzleViewControllerMethods()
-            if let uiview = viewIfLoaded {
-                if uiview.window == nil {
-                    isViewDirty = true
-                } else {
-                    newValue.configure(uiview)
-                }
-            }
-            storage[\.view] = newValue
-        }
-    }
-    
     @objc func swizzledViewDidLoad() {
         self.swizzledViewDidLoad()
         UIView.performWithoutAnimation {
-            self.view.configure(self.viewIfLoaded!)
+            configure.pop()?(self)
         }
     }
     
     @objc func swizzledViewWillAppear(animated: Bool) {
         self.swizzledViewWillAppear(animated: animated)
-        if isViewDirty {
-            isViewDirty = false
-            UIView.performWithoutAnimation {
-                self.view.configure(viewIfLoaded!)
-            }
+        UIView.performWithoutAnimation {
+            configure.pop()?(self)
+            updateNavigationItem.pop()?(self.navigationItem)
+            update.pop()?(self)
         }
     }
     

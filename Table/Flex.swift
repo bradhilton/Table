@@ -93,7 +93,7 @@ public struct Flex {
             [view.map { view -> FlexState.View in
                 let uiview = view.view(from: &pool, with: key)
                 if children.isEmpty {
-                    view.configure(uiview)
+                    view.update(uiview)
                     let context = UnsafeMutablePointer<UIView>.allocate(capacity: 1)
                     context.initialize(to: uiview)
                     YGNodeSetContext(node, context)
@@ -104,7 +104,7 @@ public struct Flex {
                     }
                     return FlexState.View(view: uiview, node: node, context: context)
                 } else {
-                    return FlexState.View(view: uiview, node: node, update: view.configure)
+                    return FlexState.View(view: uiview, node: node, update: view.update)
                 }
             }].flatMap { $0 } + children.enumerated().flatMap { (index, child) -> [FlexState.View] in
                 let (childNode, views) = child.nodeAndViews(with: &pool)
@@ -131,8 +131,9 @@ public struct Flex {
 public struct View {
     
     let type: AnyHashable
-    let factory: () -> UIView
+    let create: () -> UIView
     let configure: (UIView) -> ()
+    let update: (UIView) -> ()
     
     public init<View : UIView>(
         file: String = #file,
@@ -140,14 +141,14 @@ public struct View {
         line: Int = #line,
         column: Int = #column,
         class: View.Type = View.self,
-        configure: @escaping (View) -> () = { _ in }
+        create: @escaping () -> View = { View() },
+        configure: @escaping (View) -> () = { _ in },
+        update: @escaping (View) -> () = { _ in }
     ) {
         self.type = "\(View.self):\(file):\(function):\(line):\(column)"
-        self.factory = { View() }
-        self.configure = { view in
-            guard let view = view as? View else { return }
-            configure(view)
-        }
+        self.create = create
+        self.configure = { ($0 as? View).map(configure) }
+        self.update = { ($0 as? View).map(update) }
     }
     
     func view(from pool: inout [UIView], with key: AnyHashable) -> UIView {
@@ -155,7 +156,8 @@ public struct View {
             let view = pool.remove(at: index)
             return view
         } else {
-            let view = factory()
+            let view = create()
+            configure(view)
             view.type = type
             view.key = key
             return view

@@ -8,9 +8,15 @@
 
 public struct Cell {
     
-    let reuseIdentifier: String
+    let file: String
+    let function: String
+    let line: Int
+    let column: Int
     let cellClass: UITableViewCell.Type
-    let configure: (UITableViewCell) -> ()
+    var reuseIdentifier: String {
+        return "\(cellClass):\(file):\(function):\(line):\(column)"
+    }
+    let update: (UITableViewCell) -> ()
     
     public init<Cell : UITableViewCell>(
         file: String = #file,
@@ -18,20 +24,23 @@ public struct Cell {
         line: Int = #line,
         column: Int = #column,
         class: Cell.Type = Cell.self,
-        configure: @escaping (Cell) -> () = { _ in }
+        update: @escaping (Cell) -> () = { _ in }
     ) {
-        self.reuseIdentifier = "\(Cell.self):\(file):\(function):\(line):\(column)"
+        self.file = file
+        self.function = function
+        self.line = line
+        self.column = column
         self.cellClass = `class`
-        self.configure = { cell in
+        self.update = { cell in
             guard let cell = cell as? Cell else { return }
-            configure(cell)
+            update(cell)
         }
     }
     
     func cell(for indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
         registerCellIfNeeded(for: tableView)
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
-        UIView.performWithoutAnimation { configure(cell) }
+        UIView.performWithoutAnimation { update(cell) }
         return cell
     }
     
