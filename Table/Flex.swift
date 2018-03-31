@@ -106,7 +106,7 @@ public struct Flex {
                 } else {
                     return FlexState.View(view: uiview, node: node, update: view.update)
                 }
-            }].compactMap { $0 } + children.enumerated().flatMap { (index, child) -> [FlexState.View] in
+            }].flatMap { $0 } + children.enumerated().flatMap { (index, child) -> [FlexState.View] in
                 let (childNode, views) = child.nodeAndViews(with: &pool)
                 YGNodeInsertChild(node, childNode, UInt32(index))
                 return views

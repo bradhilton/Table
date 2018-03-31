@@ -32,9 +32,9 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         let rowReloads: [IndexPath] = indexPaths
             .map { indexPath in
                 (indexPath, data.sections[indexPath.section].rows[indexPath.row])
-            }.compactMap { indexPath, row in
+            }.flatMap { indexPath, row in
                 newValue.rowsByKey[row.key].map { (indexPath, row, newValue.sections[$0.section].rows[$0.row]) }
-            }.compactMap { indexPath, oldRow, newRow in
+            }.flatMap { indexPath, oldRow, newRow in
                 if (oldRow.cell.reuseIdentifier == newRow.cell.reuseIdentifier) {
                     tableView.cellForRow(at: indexPath).map { newRow.cell.update($0) }
                     return nil
@@ -45,7 +45,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
             }
         tableView.reloadRows(at: rowReloads, with: .fade)
         zip(data.sections, data.sections.indices)
-            .compactMap { (section, index) -> (Section, Int)? in
+            .flatMap { (section, index) -> (Section, Int)? in
                 return newValue.sectionsByKey[section.key].map { (sectionIndex) -> (Section, Int) in
                     return (newValue.sections[sectionIndex], index)
                 }
