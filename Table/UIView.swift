@@ -58,4 +58,76 @@ extension UIView {
         return guide
     }
     
+    var firstResponder: UIView? {
+        guard !isFirstResponder else { return self }
+        for subview in subviews {
+            if let firstResponder = subview.firstResponder {
+                return firstResponder
+            }
+        }
+        return nil
+    }
+    
+}
+
+extension NSObjectProtocol where Self : UITextField {
+    
+    public var inputView: View? {
+        get {
+            return storage[\.inputView]
+        }
+        set {
+            storage[\.inputView] = newValue
+            inputView = newValue?.view(reusing: inputView)
+        }
+    }
+    
+    public var inputAccessoryView: View? {
+        get {
+            return storage[\.inputAccessoryView]
+        }
+        set {
+            storage[\.inputAccessoryView] = newValue
+            inputAccessoryView = newValue?.view(reusing: inputAccessoryView)
+        }
+    }
+    
+}
+
+private let swizzleViewMethods: () -> () = {
+    method_exchangeImplementations(
+        class_getInstanceMethod(UIView.self, #selector(UIView.swizzledLayoutSubviews))!,
+        class_getInstanceMethod(UIView.self, #selector(UIView.layoutSubviews))!
+    )
+    return {}
+}()
+
+extension UIView {
+    
+    var layout: (UIView) -> () {
+        get {
+            return storage[\.layout, default: { _ in }]
+        }
+        set {
+            storage[\.layout] = newValue
+            newValue(self)
+        }
+    }
+    
+    @objc fileprivate func swizzledLayoutSubviews() {
+        swizzledLayoutSubviews()
+        layout(self)
+    }
+    
+    public func firstSubview<T : UIView>(class: T.Type = T.self, key: AnyHashable? = nil) -> T? {
+        for subview in subviews {
+            if let view = subview as? T, key == nil || view.key == key, view.alpha > 0, !view.isHidden {
+                return view
+            } else if let view = subview.firstSubview(class: T.self, key: key) {
+                return view
+            }
+        }
+        return nil
+    }
+    
 }

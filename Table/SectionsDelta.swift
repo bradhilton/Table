@@ -15,6 +15,15 @@ struct SectionsDelta {
     let rowInserts: [IndexPath]
     let rowMoves: [(IndexPath, IndexPath)]
     
+    var isEmpty: Bool {
+        return sectionDeletes.isEmpty
+            && sectionInserts.isEmpty
+            && sectionMoves.isEmpty
+            && rowDeletes.isEmpty
+            && rowInserts.isEmpty
+            && rowMoves.isEmpty
+    }
+    
     init(from: [Section], to: [Section]) {
         var sectionDeletes = IndexSet()
         var sectionInserts = IndexSet()

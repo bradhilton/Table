@@ -4,11 +4,11 @@ func costEstimate(old: Data, new: Data) -> Int {
     let minimumDeletes = max(old.rowsByKey.count - new.rowsByKey.count, 0)
     let minimumInserts = max(new.rowsByKey.count - old.rowsByKey.count, 0)
     let animationCost = max(minimumDeletes * 13, minimumInserts * 3)
-    return (diffCost + animationCost) / 5
+    return (diffCost + animationCost) / 4
 }
 
 func animationCost(_ delta: SectionsDelta) -> Int {
-    return (delta.rowDeletes.count * 13 + delta.rowInserts.count * 3) / 5
+    return (delta.rowDeletes.count * 13 + delta.rowInserts.count * 3) / 4
 }
 
 class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -32,9 +32,9 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         let rowReloads: [IndexPath] = indexPaths
             .map { indexPath in
                 (indexPath, data.sections[indexPath.section].rows[indexPath.row])
-            }.flatMap { indexPath, row in
+            }.compactMap { indexPath, row in
                 newValue.rowsByKey[row.key].map { (indexPath, row, newValue.sections[$0.section].rows[$0.row]) }
-            }.flatMap { indexPath, oldRow, newRow in
+            }.compactMap { indexPath, oldRow, newRow in
                 if (oldRow.cell.reuseIdentifier == newRow.cell.reuseIdentifier) {
                     tableView.cellForRow(at: indexPath).map { newRow.cell.update($0) }
                     return nil
@@ -45,7 +45,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
             }
         tableView.reloadRows(at: rowReloads, with: .fade)
         zip(data.sections, data.sections.indices)
-            .flatMap { (section, index) -> (Section, Int)? in
+            .compactMap { (section, index) -> (Section, Int)? in
                 return newValue.sectionsByKey[section.key].map { (sectionIndex) -> (Section, Int) in
                     return (newValue.sections[sectionIndex], index)
                 }
@@ -61,6 +61,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
             }
         let animation = UITableViewRowAnimation.fade
         data = newValue
+        guard !delta.isEmpty else { return }
         tableView.beginUpdates()
         tableView.deleteSections(delta.sectionDeletes, with: animation)
         tableView.insertSections(delta.sectionInserts, with: animation)
@@ -160,6 +161,16 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         case .automatic(estimated: let estimatedHeight):
             return estimatedHeight
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        data[indexPath].cell.willDisplay(cell)
+        cell.didEndDisplaying = data[indexPath].cell.didEndDisplaying
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.didEndDisplaying(cell)
+        cell.didEndDisplaying = { _ in }
     }
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {

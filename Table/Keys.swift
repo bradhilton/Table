@@ -6,6 +6,11 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
+struct TypeAndKey : Hashable {
+    let type: AnyHashable
+    let key: AnyHashable
+}
+
 extension NSObject {
     
     var type: AnyHashable? {
@@ -24,6 +29,11 @@ extension NSObject {
         set {
             storage[\.key] = newValue
         }
+    }
+    
+    var typeAndKey: TypeAndKey? {
+        guard let type = type, let key = key else { return nil }
+        return TypeAndKey(type: type, key: key)
     }
     
 }

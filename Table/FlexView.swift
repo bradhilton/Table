@@ -50,13 +50,11 @@ class FlexState {
         let view: UIView
         let node: YGNodeRef
         let context: UnsafeMutablePointer<UIView>?
-        var update: ((UIView) -> ())?
         
-        init(view: UIView, node: YGNodeRef, context: UnsafeMutablePointer<UIView>? = nil, update: ((UIView) -> ())? = nil) {
+        init(view: UIView, node: YGNodeRef, context: UnsafeMutablePointer<UIView>? = nil) {
             self.view = view
             self.node = node
             self.context = context
-            self.update = update
         }
         
         func updateView(with superview: UIView, offset: CGPoint) {
@@ -72,7 +70,6 @@ class FlexState {
                 view.alpha = 1
                 view.frame = node.frame(withOffset: offset)
             }
-            update.pop()?(view)
             view.setNeedsLayout()
         }
         
@@ -81,9 +78,8 @@ class FlexState {
         }
         
         deinit {
-            (context?.pointee as? UITextField)?.text = ""
-            context?.deinitialize()
-            context?.deallocate(capacity: 1)
+            context?.deinitialize(count: 1)
+            context?.deallocate()
         }
         
     }
@@ -91,13 +87,14 @@ class FlexState {
     private var subviewsToBeRemoved: [UIView]?
     private let node: YGNodeRef
     private let views: [View]
-    lazy var intrinsicContentSize: CGSize = {
-        YGNodeCalculateLayout(self.node, .nan, .nan, .inherit)
+    
+    func sizeThatFits(_ size: CGSize) -> CGSize {
+        YGNodeCalculateLayout(node, Float(size.width), Float(size.height), .inherit)
         return CGSize(
             width: CGFloat(YGNodeLayoutGetWidth(self.node)),
             height: CGFloat(YGNodeLayoutGetHeight(self.node))
         )
-    }()
+    }
     
     init(view: FlexView) {
         var pool = view.subviews
@@ -105,15 +102,9 @@ class FlexState {
         subviewsToBeRemoved = pool
     }
     
-    private func calculateLayout(with flexView: FlexView) -> CGPoint {
-        let frame: CGRect
-        if #available(iOS 11.0, *) {
-            frame = UIEdgeInsetsInsetRect(flexView.frame, flexView.safeAreaInsets)
-        } else {
-            frame = flexView.frame
-        }
-        YGNodeCalculateLayout(node, Float(frame.width), Float(frame.height), flexView.direction)
-        return frame.origin
+    private func calculateLayout(with view: FlexView) -> CGPoint {
+        YGNodeCalculateLayout(node, Float(view.bounds.width), Float(view.bounds.height), view.direction)
+        return view.bounds.origin
     }
     
     func updateViews(flexView: FlexView) {
@@ -124,8 +115,7 @@ class FlexState {
                     subviews.forEach { view in
                         view.alpha = 0
                     }
-                },
-                completion: nil
+                }
             )
         }
         let offset = calculateLayout(with: flexView)
@@ -151,21 +141,27 @@ class FlexState {
     
 }
 
+extension UIView {
+    
+    var direction: YGDirection {
+        if #available(iOS 10.0, tvOS 10.0, *) {
+            switch effectiveUserInterfaceLayoutDirection {
+            case .leftToRight: return .LTR
+            case .rightToLeft: return .RTL
+            }
+        } else {
+            return .inherit
+        }
+    }
+    
+}
+
 open class FlexView : UIView {
     
     public var child = Flex() {
         didSet {
             stateOrNil = nil
-            invalidateIntrinsicContentSize()
-            if self.window != nil {
-                UIView.animate(withDuration: 0.25) {
-                    self.state.updateViews(flexView: self)
-                }
-            } else {
-                UIView.performWithoutAnimation {
-                    self.state.updateViews(flexView: self)
-                }
-            }
+            state.updateViews(flexView: self)
         }
     }
     
@@ -180,28 +176,14 @@ open class FlexView : UIView {
         return state
     }
     
-    var direction: YGDirection {
-        if #available(iOS 10.0, tvOS 10.0, *) {
-            switch effectiveUserInterfaceLayoutDirection {
-            case .leftToRight: return .LTR
-            case .rightToLeft: return .RTL
-            }
-        } else {
-            return .inherit
-        }
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        return state.sizeThatFits(size)
     }
     
-    open override var intrinsicContentSize: CGSize {
-        return state.intrinsicContentSize
-    }
-    
-    var previousSafeAreaInsets: UIEdgeInsets?
-    
-    @available(iOS 11.0, *)
-    open override func safeAreaInsetsDidChange() {
-        super.safeAreaInsetsDidChange()
-        self.state.updateFrames(flexView: self)
-    }
+//    open override var intrinsicContentSize: CGSize {
+//        let adjustedGreatestFiniteMagnitude = CGFloat(Float.greatestFiniteMagnitude)
+//        return state.sizeThatFits(CGSize(width: adjustedGreatestFiniteMagnitude, height: adjustedGreatestFiniteMagnitude))
+//    }
     
     open override func layoutSubviews() {
         super.layoutSubviews()

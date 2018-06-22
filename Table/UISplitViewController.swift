@@ -118,6 +118,7 @@ public class SplitNavigationController : UISplitViewController, UISplitViewContr
         masterNavigationController = UINavigationController()
         detailNavigationController = UINavigationController()
         super.init(nibName: nil, bundle: nil)
+        preferredDisplayMode = .allVisible
         masterNavigationController.root = state.master
         detailNavigationController.root = state.detail
         delegate = self
@@ -157,7 +158,10 @@ public class SplitNavigationController : UISplitViewController, UISplitViewContr
                 item.next = nil
             }
             masterNavigationController.root = state.master
-            viewControllers = [masterNavigationController, detailNavigationController]
+            // MARK: Performance equality check
+            if viewControllers != [masterNavigationController, detailNavigationController] {
+                viewControllers = [masterNavigationController, detailNavigationController]
+            }
         }
     }
     

@@ -6,7 +6,7 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
-fileprivate class Target<Control : NSObjectProtocol> : NSObject {
+fileprivate class EventTarget<Control : NSObjectProtocol> : NSObject {
     
     var handler: (Control) -> ()
     
@@ -56,18 +56,18 @@ extension Control where Self : UIControl {
         case let (handler?, target?):
             target.handler = handler
         case let (handler?, nil):
-            let target = Target(handler)
-            addTarget(target, action: #selector(Target<Self>.action), for: events)
+            let target = EventTarget(handler)
+            addTarget(target, action: #selector(EventTarget<Self>.action), for: events)
             targets[events.rawValue] = target
         case let (nil, target?):
-            removeTarget(target, action: #selector(Target<Self>.action), for: events)
+            removeTarget(target, action: #selector(EventTarget<Self>.action), for: events)
             targets.removeValue(forKey: events.rawValue)
         case (nil, nil):
             break
         }
     }
     
-    fileprivate var targets: [UInt : Target<Self>] {
+    fileprivate var targets: [UInt : EventTarget<Self>] {
         get {
             return storage[\.targets, default: [:]]
         }

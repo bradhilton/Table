@@ -25,14 +25,30 @@ public struct FlexValue {
     }
 }
 
-extension FlexValue : ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral {
+extension FlexValue {
     
-    public init(integerLiteral value: Int) {
+    public init(_ value: Int) {
         self = FlexValue(value: Float(value), isPercentage: false)
     }
     
-    public init(floatLiteral value: Float) {
+    public init(_ value: Float) {
         self = FlexValue(value: value, isPercentage: false)
+    }
+    
+    public init(_ value: CGFloat) {
+        self = FlexValue(value: Float(value), isPercentage: false)
+    }
+    
+}
+
+extension FlexValue : ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral {
+    
+    public init(integerLiteral value: Int) {
+        self = FlexValue(value)
+    }
+    
+    public init(floatLiteral value: Float) {
+        self = FlexValue(value)
     }
     
 }

@@ -107,7 +107,7 @@ extension Reusable where Object == UISearchController {
             configure: configure,
             update: { searchController in
                 update(searchController)
-                searchController.searchResultsController?.update = searchResultsController?.update
+                searchResultsController.map { searchController.searchResultsController?.update(with: $0) }
             }
         )
     }

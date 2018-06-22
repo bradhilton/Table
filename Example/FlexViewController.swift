@@ -39,7 +39,7 @@ class FlexViewController: UITableViewController {
     
     func render() {
         self.tableView.sections = [
-            Section { (section: inout Section) in
+            Section { section in
                 section.headerTitle = "Flex"
                 section.rows = [
                     Row { row in

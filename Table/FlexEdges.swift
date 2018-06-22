@@ -10,7 +10,7 @@ import yoga
 
 public struct FlexEdges {
     
-    var all: FlexValue?
+    public var all: FlexValue?
     public var horizontal: FlexValue?
     public var vertical: FlexValue?
     public var start: FlexValue?

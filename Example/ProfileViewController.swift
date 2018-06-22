@@ -56,7 +56,7 @@ class ProfileViewController : UITableViewController {
                                 flex.justifyContent = .spaceBetween
                                 flex.padding.start = 16
                                 flex.padding.end = 16
-                                flex.height = 44...
+                                flex.minHeight = 44
                                 flex.children = [
                                     Flex { flex in
                                         flex.width = 90

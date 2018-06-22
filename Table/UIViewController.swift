@@ -15,6 +15,19 @@ extension Optional {
     
 }
 
+extension Sequence {
+    
+    func first<U>(where hasValue: (Element) -> U?) -> U? {
+        for element in self {
+            if let value = hasValue(element) {
+                return value
+            }
+        }
+        return nil
+    }
+    
+}
+
 let swizzleViewControllerMethods: () -> () = {
     method_exchangeImplementations(
         class_getInstanceMethod(UIViewController.self, #selector(UIViewController.swizzledViewDidLoad))!,
@@ -32,35 +45,64 @@ let swizzleViewControllerMethods: () -> () = {
         class_getInstanceMethod(UIViewController.self, #selector(UIViewController.swizzledViewWillDisappear))!,
         class_getInstanceMethod(UIViewController.self, #selector(UIViewController.viewWillDisappear))!
     )
+    method_exchangeImplementations(
+        class_getInstanceMethod(UIViewController.self, #selector(UIViewController.swizzledViewDidLayoutSubviews))!,
+        class_getInstanceMethod(UIViewController.self, #selector(UIViewController.viewDidLayoutSubviews))!
+    )
     return {}
 }()
 
 extension UIViewController {
     
-    var configure: ((UIViewController) -> ())? {
+    public func firstSubview<T : UIView>(class: T.Type = T.self, key: AnyHashable? = nil) -> T? {
+        return view.firstSubview(class: T.self, key: key)
+            ?? childViewControllers.first { $0.firstSubview(class: T.self, key: key) }
+    }
+    
+    var configureView: ((UIViewController) -> ())? {
         get {
-            return storage[\.configure]
+            return storage[\.configureView]
         }
         set {
             swizzleViewControllerMethods()
-            if viewIsVisible {
+            if viewIsVisible && storage[\.configureView] == nil {
+                storage[\.configureView] = newValue
                 newValue?(self)
             } else {
-                storage[\.configure] = newValue
+                storage[\.configureView] = newValue
             }
         }
     }
     
-    var update: ((UIViewController) -> ())? {
+    var previousViewFrame: CGRect {
         get {
-            return storage[\.update]
+            return storage[\.previousViewFrame, default: .zero]
+        }
+        set {
+            storage[\.previousViewFrame] = newValue
+        }
+    }
+    
+    var updateViewOnLayout: Bool {
+        get {
+            return storage[\.updateViewOnLayout, default: false]
+        }
+        set {
+            storage[\.updateViewOnLayout] = newValue
+        }
+    }
+    
+    var updateView: ((UIViewController) -> ())? {
+        get {
+            return storage[\.updateView]
         }
         set {
             swizzleViewControllerMethods()
             if viewIsVisible {
+                storage[\.updateView] = updateViewOnLayout ? newValue : nil
                 newValue?(self)
             } else {
-                storage[\.update] = newValue
+                storage[\.updateView] = newValue
             }
         }
     }
@@ -72,6 +114,7 @@ extension UIViewController {
         set {
             swizzleViewControllerMethods()
             if viewIsVisible {
+                storage[\.updateNavigationItem] = nil
                 newValue?(self.navigationItem)
             } else {
                 storage[\.updateNavigationItem] = newValue
@@ -95,17 +138,35 @@ extension UIViewController {
     @objc func swizzledViewDidLoad() {
         self.swizzledViewDidLoad()
         UIView.performWithoutAnimation {
-            configure.pop()?(self)
+            configureView?(self)
+            if !updateViewOnLayout {
+                updateView.pop()?(self)
+            }
         }
     }
     
     @objc func swizzledViewWillAppear(animated: Bool) {
         self.swizzledViewWillAppear(animated: animated)
         UIView.performWithoutAnimation {
-            configure.pop()?(self)
+            if !updateViewOnLayout {
+                updateView.pop()?(self)
+            }
             updateNavigationItem.pop()?(self.navigationItem)
-            update.pop()?(self)
         }
+    }
+    
+    @objc func swizzledViewDidLayoutSubviews() {
+        self.swizzledViewDidLayoutSubviews()
+        if updateViewOnLayout && view.frame != previousViewFrame {
+            if previousViewFrame == .zero {
+                UIView.performWithoutAnimation {
+                    updateView?(self)
+                }
+            } else {
+                updateView?(self)
+            }
+        }
+        previousViewFrame = view.frame
     }
     
     @objc func swizzledViewDidAppear(animated: Bool) {
@@ -118,11 +179,5 @@ extension UIViewController {
         self.swizzledViewWillDisappear(animated: animated)
         viewHasAppeared = false
     }
-    
-//    #if DEBUG
-//    @objc func injected() {
-//        viewIfLoaded.map { uiview in view.configure(uiview) }
-//    }
-//    #endif
     
 }

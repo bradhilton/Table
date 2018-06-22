@@ -16,6 +16,8 @@ public struct Cell {
     var reuseIdentifier: String {
         return "\(cellClass):\(file):\(function):\(line):\(column)"
     }
+    let willDisplay: (UITableViewCell) -> ()
+    let didEndDisplaying: (UITableViewCell) -> ()
     let update: (UITableViewCell) -> ()
     
     public init<Cell : UITableViewCell>(
@@ -24,6 +26,8 @@ public struct Cell {
         line: Int = #line,
         column: Int = #column,
         class: Cell.Type = Cell.self,
+        willDisplay: @escaping (Cell) -> () = { _ in },
+        didEndDisplaying: @escaping (Cell) -> () = { _ in },
         update: @escaping (Cell) -> () = { _ in }
     ) {
         self.file = file
@@ -31,10 +35,9 @@ public struct Cell {
         self.line = line
         self.column = column
         self.cellClass = `class`
-        self.update = { cell in
-            guard let cell = cell as? Cell else { return }
-            update(cell)
-        }
+        self.willDisplay = { ($0 as? Cell).map(willDisplay) }
+        self.didEndDisplaying = { ($0 as? Cell).map(didEndDisplaying) }
+        self.update = { ($0 as? Cell).map(update) }
     }
     
     func cell(for indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {

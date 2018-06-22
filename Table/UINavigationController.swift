@@ -17,8 +17,9 @@ extension UINavigationItem {
 public class NavigationItem {
     public var key: AnyHashable = .auto
     public var title: String? = nil
+    public var titleView: View? = nil
     public var prompt: String? = nil
-    public var controller: Controller = Controller(class: UIViewController.self)
+    public var controller = Controller()
     public var rightBarButtonItems: [BarButtonItem] = []
     public var leftBarButtonItems: [BarButtonItem] = []
     public var largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .automatic
@@ -51,8 +52,21 @@ public class NavigationItem {
         return stack
     }
     
+    var containerController: Controller {
+        return Controller(
+            updateController: { (controller: ContainerViewController) in
+                controller.setChildController(self.controller)
+            }
+        )
+    }
+    
     func updateItem(_ item: UINavigationItem, bar: UINavigationBar?) {
         item.title = title
+        if let titleView = titleView?.view(reusing: item.titleView) {
+            item.titleView = titleView
+        } else {
+            UIView.performWithoutAnimation { item.titleView = nil }
+        }
         item.prompt = prompt
         var pool = item.allBarButtonItems + (bar?.topItem?.allBarButtonItems ?? []) + (bar?.backItem?.allBarButtonItems ?? [])
         item.setRightBarButtonItems(rightBarButtonItems.objects(reusing: &pool), animated: true)
@@ -95,6 +109,7 @@ extension UINavigationController {
             return storage[\.stack]
         }
         set {
+            interactivePopGestureRecognizer?.isEnabled = false
             self.delegate = defaultDelegate
             guard let stack = newValue else {
                 storage[\.stack] = nil
@@ -102,26 +117,47 @@ extension UINavigationController {
                 return
             }
             var pool = self.viewControllers
-            let viewControllers: [UIViewController] = stack.map { item in
-                let viewController = item.controller.viewController(reusing: &pool, key: item.key)
-                // MARK: Performance equality check
-                if item.title != viewController.navigationItem.title {
-                    viewController.navigationItem.title = item.title
-                }
-                viewController.updateNavigationItem = { [weak self] navigationItem in
-                    item.updateItem(navigationItem, bar: self?.navigationBar)
-                }
-                return viewController
-            }
+            let viewControllers: [UIViewController] = stack.map { viewController(for: $0, with: &pool) }
             if viewControllers != self.viewControllers {
-                setViewControllers(viewControllers, animated: viewIsVisible && (stack.map { $0.key } != (self.stack ?? []).map { $0.key }))
+                let animated = viewIsVisible && (stack.map { $0.key } != (self.stack ?? []).map { $0.key })
+                setViewControllers(viewControllers, animated: animated)
             }
             storage[\.stack] = stack
         }
     }
     
+    private func viewController(for item: NavigationItem, with pool: inout [UIViewController]) -> UIViewController {
+        let viewController = item.containerController.viewController(reusing: &pool, key: item.key)
+        if isViewLoaded {
+            // MARK: Immediately update title, do a performance equality check
+            if item.title != viewController.navigationItem.title {
+                viewController.navigationItem.title = item.title
+            }
+            viewController.updateNavigationItem = { [weak self] navigationItem in
+                item.updateItem(navigationItem, bar: self?.navigationBar)
+            }
+        } else /* configureController */ {
+            item.updateItem(viewController.navigationItem, bar: self.navigationBar)
+        }
+        return viewController
+    }
+    
     fileprivate var defaultDelegate: NavigationControllerDelegate {
         return storage[\.defaultDelegate, default: NavigationControllerDelegate()]
+    }
+    
+}
+
+extension NSObjectProtocol where Self : UIToolbar {
+    
+    public var items: [BarButtonItem]? {
+        get {
+            return storage[\.items]
+        }
+        set {
+            storage[\.items] = newValue
+            items = newValue?.objects(reusing: items ?? [])
+        }
     }
     
 }

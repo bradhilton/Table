@@ -12,4 +12,7 @@ target 'Table' do
   target 'TableTests' do
     inherit! :search_paths
   end
+  target 'TablePerformanceTests' do
+    inherit! :search_paths
+  end
 end

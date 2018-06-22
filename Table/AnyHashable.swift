@@ -6,9 +6,15 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
-public struct Auto : Hashable {
-    public let hashValue = 0
-    public static func ==(lhs: Auto, rhs: Auto) -> Bool { return true }
+public struct Auto : Hashable {}
+
+public struct Pair<T : Hashable, U : Hashable> : Hashable {
+    public let first: T
+    public let second: U
+    public init(_ first: T, _ second: U) {
+        self.first = first
+        self.second = second
+    }
 }
 
 extension AnyHashable {

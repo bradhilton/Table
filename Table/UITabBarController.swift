@@ -82,7 +82,7 @@ extension UITabBarController {
                 }
                 return viewController
             }
-            setViewControllers(viewControllers, animated: viewIsVisible)
+            setViewControllers(viewControllers, animated: viewIsVisible && UIView.inheritedAnimationDuration > 0)
             let selectedIndex = tabs.index { $0.keyOrTitle == selectedTab } ?? self.selectedIndex
             // MARK: Performance equality check
             if selectedIndex != self.selectedIndex {
