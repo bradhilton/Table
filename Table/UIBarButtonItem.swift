@@ -66,3 +66,17 @@ extension UIBarButtonItem {
     }
     
 }
+
+extension NSObjectProtocol where Self : UIBarButtonItem {
+    
+    public var customView: View? {
+        get {
+            return storage[\.customView]
+        }
+        set {
+            storage[\.customView] = newValue
+            customView = newValue?.view(reusing: customView)
+        }
+    }
+    
+}

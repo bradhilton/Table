@@ -180,10 +180,9 @@ open class FlexView : UIView {
         return state.sizeThatFits(size)
     }
     
-//    open override var intrinsicContentSize: CGSize {
-//        let adjustedGreatestFiniteMagnitude = CGFloat(Float.greatestFiniteMagnitude)
-//        return state.sizeThatFits(CGSize(width: adjustedGreatestFiniteMagnitude, height: adjustedGreatestFiniteMagnitude))
-//    }
+    open override var intrinsicContentSize: CGSize {
+        return state.sizeThatFits(CGSize(width: CGFloat.nan, height: .nan))
+    }
     
     open override func layoutSubviews() {
         super.layoutSubviews()
