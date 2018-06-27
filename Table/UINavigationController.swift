@@ -55,7 +55,7 @@ public class NavigationItem {
     var containerController: Controller {
         return Controller(
             updateController: { (controller: ContainerViewController) in
-                controller.setChildController(self.controller)
+                controller.setChildController(self.controller, key: self.key)
             }
         )
     }
@@ -84,7 +84,14 @@ public class NavigationItem {
 
 private class NavigationControllerDelegate : NSObject, UINavigationControllerDelegate {
     
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+//    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+//        guard let stack = navigationController.stack else { return }
+//        if stack.count > navigationController.viewControllers.count {
+//            stack.last?.willPop?()
+//        }
+//    }
+    
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         guard let stack = navigationController.stack else { return }
         if stack.count > navigationController.viewControllers.count {
             stack.last?.willPop?()
@@ -109,7 +116,6 @@ extension UINavigationController {
             return storage[\.stack]
         }
         set {
-            interactivePopGestureRecognizer?.isEnabled = false
             self.delegate = defaultDelegate
             guard let stack = newValue else {
                 storage[\.stack] = nil
@@ -119,15 +125,14 @@ extension UINavigationController {
             var pool = self.viewControllers
             let viewControllers: [UIViewController] = stack.map { viewController(for: $0, with: &pool) }
             if viewControllers != self.viewControllers {
-                let animated = viewIsVisible && (stack.map { $0.key } != (self.stack ?? []).map { $0.key })
-                setViewControllers(viewControllers, animated: animated)
+                setViewControllers(viewControllers, animated: viewIsVisible && (stack.count != (self.stack ?? []).count))
             }
             storage[\.stack] = stack
         }
     }
     
     private func viewController(for item: NavigationItem, with pool: inout [UIViewController]) -> UIViewController {
-        let viewController = item.containerController.viewController(reusing: &pool, key: item.key)
+        let viewController = item.containerController.viewController(reusing: &pool)
         if isViewLoaded {
             // MARK: Immediately update title, do a performance equality check
             if item.title != viewController.navigationItem.title {

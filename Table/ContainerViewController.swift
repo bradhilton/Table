@@ -16,12 +16,12 @@ func ContainerController(childController: Controller) -> Controller {
 
 class ContainerViewController : UIViewController {
     
-    func setChildController(_ controller: Controller) {
+    func setChildController(_ controller: Controller, key: AnyHashable = .auto) {
         if let viewController = childViewControllers.last {
-            if viewController.type == controller.type {
+            if viewController.type == controller.type, viewController.key == key {
                 viewController.update(with: controller)
             } else {
-                let newViewController = controller.newViewController()
+                let newViewController = controller.newViewController(key: key)
                 addChildViewController(newViewController)
                 addChildView(newViewController.view)
                 if viewIsVisible {
@@ -43,7 +43,7 @@ class ContainerViewController : UIViewController {
                 }
             }
         } else {
-            let newViewController = controller.newViewController()
+            let newViewController = controller.newViewController(key: key)
             addChildViewController(newViewController)
             addChildView(newViewController.view)
             newViewController.didMove(toParentViewController: self)
