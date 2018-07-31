@@ -21,7 +21,7 @@ public class ContainerView : UIView {
                     viewController.transition(
                         from: childViewController,
                         to: newChildViewController,
-                        duration: 0.25,
+                        duration: UIView.inheritedAnimationDuration,
                         options: [.transitionCrossDissolve],
                         animations: {
                             self.addChildView(newChildViewController.view)

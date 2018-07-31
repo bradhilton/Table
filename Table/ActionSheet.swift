@@ -10,29 +10,42 @@ public struct AlertAction {
     public let title: String
     public let style: UIAlertActionStyle
     public let image: UIImage?
-    public let isEnabled: Bool
-    public let didSelect: () -> ()
+    public let didSelect: (() -> ())?
+    
     public init(
         title: String,
         style: UIAlertActionStyle = .default,
         image: UIImage? = nil,
-        isEnabled: Bool = true,
-        didSelect: @escaping () -> () = {}
+        didSelect: (() -> ())? = nil
     ) {
         self.title = title
         self.style = style
         self.image = image
-        self.isEnabled = isEnabled
         self.didSelect = didSelect
     }
+    
+    public var isEnabled: Bool {
+        return style == .cancel || didSelect != nil
+    }
+    
 }
 
 extension UIAlertAction {
     
     convenience init(action: AlertAction) {
-        self.init(title: action.title, style: action.style) { _ in action.didSelect() }
+        self.init(title: action.title, style: action.style) { action in action.didSelect?() }
         setValue(action.image, forKey: "image")
+        didSelect = action.didSelect
         isEnabled = action.isEnabled
+    }
+    
+    var didSelect: (() -> ())? {
+        get {
+            return storage[\.didSelect]
+        }
+        set {
+            storage[\.didSelect] = newValue
+        }
     }
     
 }

@@ -43,7 +43,9 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
                     return indexPath
                 }
             }
-        tableView.reloadRows(at: rowReloads, with: .fade)
+        if rowReloads.count > 0 || delta.isEmpty {
+            tableView.reloadRows(at: rowReloads, with: .fade)
+        }
         zip(data.sections, data.sections.indices)
             .compactMap { (section, index) -> (Section, Int)? in
                 return newValue.sectionsByKey[section.key].map { (sectionIndex) -> (Section, Int) in
@@ -52,24 +54,35 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
             }.forEach { section, index in
                 func updateHeaderFooterView(_ view: UITableViewHeaderFooterView?, title: String?) {
                     if let view = view, let title = title {
-                        view.textLabel?.text = title
+                        view.textLabel?.numberOfLines = 1
+                        view.textLabel?.text = tableView.style == .grouped ? title.uppercased() : title
                         view.textLabel?.sizeToFit()
                     }
                 }
                 updateHeaderFooterView(tableView.headerView(forSection: index), title: section.headerTitle)
                 updateHeaderFooterView(tableView.footerView(forSection: index), title: section.footerTitle)
             }
+        guard !delta.isEmpty else { return }
+        if #available(iOS 11.0, *) {
+            tableView.performBatchUpdates({
+                update(tableView: tableView, delta: delta, newValue: newValue)
+            })
+        } else {
+            tableView.beginUpdates()
+            update(tableView: tableView, delta: delta, newValue: newValue)
+            tableView.endUpdates()
+        }
+    }
+    
+    func update(tableView: UITableView, delta: SectionsDelta, newValue: Data) {
         let animation = UITableViewRowAnimation.fade
         data = newValue
-        guard !delta.isEmpty else { return }
-        tableView.beginUpdates()
         tableView.deleteSections(delta.sectionDeletes, with: animation)
         tableView.insertSections(delta.sectionInserts, with: animation)
         delta.sectionMoves.forEach { tableView.moveSection($0, toSection: $1) }
         tableView.deleteRows(at: delta.rowDeletes, with: animation)
         tableView.insertRows(at: delta.rowInserts, with: animation)
         delta.rowMoves.forEach { tableView.moveRow(at: $0, to: $1) }
-        tableView.endUpdates()
     }
     
     internal private(set) var data: Data
@@ -95,11 +108,11 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return data[section].headerTitle
+        return data[section].headerTitle.map { tableView.style == .grouped ? $0.uppercased() : $0 }
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return data[section].footerTitle
+        return data[section].footerTitle.map { tableView.style == .grouped ? $0.uppercased() : $0 }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -162,6 +175,27 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
             return estimatedHeight
         }
     }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return data[section].headerTitle != nil
+            ? tableView.style == .grouped ? 45 : 28
+            : UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return data[section].headerTitle != nil
+            ? tableView.style == .grouped ? 45 : 28
+            : UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return data[section].footerTitle != nil ? 28 : UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        return data[section].footerTitle != nil ? 28 : UITableViewAutomaticDimension
+    }
+
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         data[indexPath].cell.willDisplay(cell)

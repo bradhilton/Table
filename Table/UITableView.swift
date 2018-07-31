@@ -8,7 +8,7 @@ extension UITableView {
         set {
             let data = Data(sections: newValue)
             if let source = source {
-                source.setData(data, tableView: self, animated: window != nil)
+                source.setData(data, tableView: self, animated: window != nil && UIView.inheritedAnimationDuration > 0)
             } else {
                 self.source = Source(tableView: self, data: data)
             }
@@ -26,6 +26,10 @@ extension UITableView {
             storage[\.sectionIndexTitles] = newValue
             reloadSectionIndexTitles()
         }
+    }
+    
+    public func indexPath(for key: AnyHashable) -> IndexPath? {
+        return source?.data.rowsByKey[key]
     }
     
     var source: Source? {

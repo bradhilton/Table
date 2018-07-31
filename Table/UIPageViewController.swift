@@ -85,7 +85,7 @@ extension UIPageViewController {
         dataSource = defaultDelegate
         var pool = containerViewControllers
         containerViewControllers = controllers
-            .map(ContainerController)
+            .map { ContainerController(childController: $0) }
             .map { controller in controller.viewController(reusing: &pool) }
         setViewControllers(
             [containerViewControllers[selectedIndex]],

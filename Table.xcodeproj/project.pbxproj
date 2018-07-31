@@ -72,6 +72,7 @@
 		A2CAB9292034D92900531F96 /* FlexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CAB9282034D92900531F96 /* FlexViewController.swift */; };
 		A2CAB92D2034DB7100531F96 /* Flex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CAB92C2034DB7100531F96 /* Flex.swift */; };
 		A2DCB9BC1E32C1470015E50A /* ScheduleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */; };
+		A2E049AF2100149500F0B8DB /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E049AE2100149500F0B8DB /* UIButton.swift */; };
 		A2E4048D2019409600253EB6 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E4048C2019409600253EB6 /* Data.swift */; };
 		A2E6754420C1D622004EF61F /* Subviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E6754320C1D622004EF61F /* Subviews.swift */; };
 		A2EC5D0C20910B9700AA368B /* FlexCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2EC5D0B20910B9700AA368B /* FlexCollectionViewCell.swift */; };
@@ -205,6 +206,7 @@
 		A2CAB9282034D92900531F96 /* FlexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexViewController.swift; sourceTree = "<group>"; };
 		A2CAB92C2034DB7100531F96 /* Flex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flex.swift; sourceTree = "<group>"; };
 		A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleController.swift; sourceTree = "<group>"; };
+		A2E049AE2100149500F0B8DB /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		A2E4048C2019409600253EB6 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		A2E6754320C1D622004EF61F /* Subviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subviews.swift; sourceTree = "<group>"; };
 		A2EC5D0B20910B9700AA368B /* FlexCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -395,6 +397,7 @@
 				A246F61320D8395F002CF94E /* Item.swift */,
 				A246F61520D83A0D002CF94E /* CollectionCell.swift */,
 				A2B089AC20D854E7006F6834 /* ItemsDelta.swift */,
+				A2E049AE2100149500F0B8DB /* UIButton.swift */,
 			);
 			path = Table;
 			sourceTree = "<group>";
@@ -853,6 +856,7 @@
 				A290FD4F208FA314007DD9E0 /* RefreshControl.swift in Sources */,
 				A2F94C2E20D465C70065E78B /* KeyedTransitioningDelegate.swift in Sources */,
 				A27E97732037558200A30612 /* UIViewController.swift in Sources */,
+				A2E049AF2100149500F0B8DB /* UIButton.swift in Sources */,
 				A23B52B71E31882400B0901E /* Row.swift in Sources */,
 				A2E6754420C1D622004EF61F /* Subviews.swift in Sources */,
 				A2BE318220D34669004203B9 /* Constraints.swift in Sources */,

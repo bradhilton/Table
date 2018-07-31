@@ -9,6 +9,7 @@
 public struct Controller {
     
     let type: AnyHashable
+    public var key: AnyHashable
     /// Creates a new instance of the view controller
     fileprivate let create: () -> UIViewController
     /// Configures the view controller before the view is loaded
@@ -27,8 +28,9 @@ public struct Controller {
         function: String = #function,
         line: Int = #line,
         column: Int = #column,
+        key: AnyHashable = .auto,
         class: Controller.Type = Controller.self,
-        create: @escaping () -> Controller = { Controller() },
+        instance: @escaping @autoclosure () -> Controller = Controller(),
         configureController: @escaping (Controller) -> () = { _ in },
         configureView: @escaping (Controller) -> () = { _ in },
         updateController: @escaping (Controller) -> () = { _ in },
@@ -37,7 +39,8 @@ public struct Controller {
         updateView: @escaping (Controller) -> () = { _ in }
     ) {
         self.type = "\(Controller.self):\(file):\(function):\(line):\(column)"
-        self.create = create
+        self.key = key
+        self.create = instance
         self.configureController = { ($0 as? Controller).map(configureController) }
         self.configureView = { ($0 as? Controller).map(configureView) }
         self.updateController = { ($0 as? Controller).map(updateController) }
@@ -45,13 +48,9 @@ public struct Controller {
         self.updateView = { ($0 as? Controller).map(updateView) }
     }
     
-    func matches(key: AnyHashable) -> (UIViewController) -> Bool {
-        return { $0.type == self.type && $0.key == key }
-    }
-    
-    func viewController(reusing pool: inout [UIViewController], key: AnyHashable = .auto) -> UIViewController {
-        guard let index = pool.index(where: matches(key: key)) else {
-            return newViewController(key: key)
+    func viewController(reusing pool: inout [UIViewController]) -> UIViewController {
+        guard let index = pool.index(where: { $0.type == type && $0.key == key }) else {
+            return newViewController()
         }
         let viewController = pool.remove(at: index)
         viewController.update(with: self)
@@ -66,7 +65,7 @@ public struct Controller {
         return viewController
     }
     
-    public func newViewController(key: AnyHashable = .auto) -> UIViewController {
+    public func newViewController() -> UIViewController {
         let viewController = create()
         viewController.type = type
         viewController.key = key
@@ -150,7 +149,7 @@ extension UIWindow {
             } else {
                 UIView.transition(
                     with: self,
-                    duration: 0.25,
+                    duration: UIView.inheritedAnimationDuration,
                     options: .transitionCrossDissolve,
                     animations: {
                         self.rootViewController = controller.newViewController()

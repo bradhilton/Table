@@ -107,7 +107,7 @@ extension UIViewController {
         }
     }
     
-    var updateNavigationItem: ((UINavigationItem) -> ())? {
+    var updateNavigationItem: ((UIViewController) -> ())? {
         get {
             return storage[\.updateNavigationItem]
         }
@@ -115,7 +115,7 @@ extension UIViewController {
             swizzleViewControllerMethods()
             if viewIsVisible {
                 storage[\.updateNavigationItem] = nil
-                newValue?(self.navigationItem)
+                newValue?(self)
             } else {
                 storage[\.updateNavigationItem] = newValue
             }
@@ -151,7 +151,7 @@ extension UIViewController {
             if !updateViewOnLayout {
                 updateView.pop()?(self)
             }
-            updateNavigationItem.pop()?(self.navigationItem)
+            updateNavigationItem.pop()?(self)
         }
     }
     

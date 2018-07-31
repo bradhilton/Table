@@ -27,6 +27,7 @@ public class NavigationItem {
     public var hidesSearchBarWhenScrolling: Bool = true
     public var willPop: (() -> ())? = nil
     public var next: NavigationItem?
+    public var presentedController: Controller?
     
     public init(_ build: (NavigationItem) -> ()) {
         build(self)
@@ -53,14 +54,15 @@ public class NavigationItem {
     }
     
     var containerController: Controller {
-        return Controller(
-            updateController: { (controller: ContainerViewController) in
-                controller.setChildController(self.controller, key: self.key)
-            }
-        )
+        return ContainerController(key: key, childController: controller, presentedController: presentedController)
     }
     
-    func updateItem(_ item: UINavigationItem, bar: UINavigationBar?) {
+    func updateItem(for controller: UIViewController) {
+        let item = controller.navigationItem
+        let bar = controller.navigationController?.navigationBar
+        let editButtonItem = controller.editButtonItem
+        editButtonItem.type = editButtonItemType
+        editButtonItem.key = editButtonItemKey
         item.title = title
         if let titleView = titleView?.view(reusing: item.titleView) {
             item.titleView = titleView
@@ -68,7 +70,8 @@ public class NavigationItem {
             UIView.performWithoutAnimation { item.titleView = nil }
         }
         item.prompt = prompt
-        var pool = item.allBarButtonItems + (bar?.topItem?.allBarButtonItems ?? []) + (bar?.backItem?.allBarButtonItems ?? [])
+        var pool = item.allBarButtonItems + [editButtonItem]
+//        var pool = item.allBarButtonItems + (bar?.topItem?.allBarButtonItems ?? []) + (bar?.backItem?.allBarButtonItems ?? []) + [editButtonItem]
         item.setRightBarButtonItems(rightBarButtonItems.objects(reusing: &pool), animated: true)
         item.setLeftBarButtonItems(leftBarButtonItems.objects(reusing: &pool), animated: true)
         item.leftBarButtonItems?.forEach { $0.viewController = bar?.viewController }
@@ -98,6 +101,40 @@ private class NavigationControllerDelegate : NSObject, UINavigationControllerDel
         }
     }
     
+//    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        return operation == .push && fromVC.navigationItem.key == toVC.navigationItem.key ? CrossFadeTransition(duration: UIView.inheritedAnimationDuration) : nil
+//    }
+    
+}
+
+private class CrossFadeTransition : NSObject, UIViewControllerAnimatedTransitioning {
+    
+    let duration: TimeInterval
+    
+    init(duration: TimeInterval) {
+        self.duration = duration
+        super.init()
+    }
+    
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return duration
+    }
+    
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        guard let toView = transitionContext.view(forKey: .to) else { return }
+        transitionContext.containerView.addSubview(toView)
+        toView.alpha = 0
+        UIView.animate(
+            withDuration: duration,
+            animations: {
+                toView.alpha = 1
+            },
+            completion: { completed in
+                transitionContext.completeTransition(completed)
+            }
+        )
+    }
+    
 }
 
 extension UINavigationController {
@@ -125,7 +162,7 @@ extension UINavigationController {
             var pool = self.viewControllers
             let viewControllers: [UIViewController] = stack.map { viewController(for: $0, with: &pool) }
             if viewControllers != self.viewControllers {
-                setViewControllers(viewControllers, animated: viewIsVisible && (stack.count != (self.stack ?? []).count))
+                setViewControllers(viewControllers, animated: viewIsVisible && (stack.count != (self.stack ?? []).count || stack.last?.key != self.stack?.last?.key))
             }
             storage[\.stack] = stack
         }
@@ -133,16 +170,17 @@ extension UINavigationController {
     
     private func viewController(for item: NavigationItem, with pool: inout [UIViewController]) -> UIViewController {
         let viewController = item.containerController.viewController(reusing: &pool)
+        viewController.navigationItem.key = item.key
         if isViewLoaded {
             // MARK: Immediately update title, do a performance equality check
             if item.title != viewController.navigationItem.title {
                 viewController.navigationItem.title = item.title
             }
-            viewController.updateNavigationItem = { [weak self] navigationItem in
-                item.updateItem(navigationItem, bar: self?.navigationBar)
+            viewController.updateNavigationItem = { viewController in
+                item.updateItem(for: viewController)
             }
         } else /* configureController */ {
-            item.updateItem(viewController.navigationItem, bar: self.navigationBar)
+            item.updateItem(for: viewController)
         }
         return viewController
     }

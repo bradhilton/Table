@@ -29,7 +29,9 @@ public struct Reusable<Object : NSObject> : ReuseProtocol {
         self.update = update
     }
     
-    func object(reusing pool: inout [Object]) -> Object {
+
+    
+    func object<C : RangeReplaceableCollection>(reusing pool: inout C) -> Object where C.Element == Object {
         guard let index = pool.index(where: { $0.type == self.type && $0.key == self.key }) else {
             return newObject()
         }
@@ -67,6 +69,9 @@ protocol ReuseProtocol {
     func object(reusing pool: inout [Object]) -> Object
 }
 
+let editButtonItemType = "editButtonItemType"
+let editButtonItemKey = "editButtonItemKey"
+
 extension Reusable where Object == UIBarButtonItem {
     
     public init(
@@ -85,6 +90,14 @@ extension Reusable where Object == UIBarButtonItem {
             create: create,
             configure: configure,
             update: update
+        )
+    }
+    
+    public static var editButtonItem: Reusable<UIBarButtonItem> {
+        return Reusable(
+            type: editButtonItemType,
+            key: editButtonItemKey,
+            create: { UIBarButtonItem(barButtonSystemItem: .edit, target: nil, action: nil) }
         )
     }
     
@@ -115,7 +128,7 @@ extension Reusable where Object == UISearchController {
 }
 
 extension Array where Element : ReuseProtocol {
-    
+
     func objects(reusing pool: inout [Element.Object]) -> [Element.Object] {
         return map { $0.object(reusing: &pool) }
     }

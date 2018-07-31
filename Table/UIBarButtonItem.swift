@@ -41,7 +41,7 @@ extension UIBarButtonItem {
     @objc private func presentActionSheet() {
         guard let viewController = viewController, let actionSheet = presentedActionSheetWhenTapped else { return }
         let alertController = UIAlertController(title: actionSheet.title, message: actionSheet.message, preferredStyle: .actionSheet)
-        actionSheet.actions.map(UIAlertAction.init).forEach(alertController.addAction)
+        alertController.actions = actionSheet.actions
         alertController.popoverPresentationController?.barButtonItem = self
         viewController.present(alertController, animated: true)
     }

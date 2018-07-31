@@ -6,47 +6,51 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
-func ContainerController(childController: Controller) -> Controller {
+public func ContainerController(key: AnyHashable = .auto, childController: Controller, presentedController: Controller? = nil) -> Controller {
     return Controller(
+        key: key,
         updateController: { (controller: ContainerViewController) in
-            controller.setChildController(childController)
+            controller.childController = childController
+            controller.presentedController = presentedController
         }
     )
 }
 
-class ContainerViewController : UIViewController {
+public class ContainerViewController : UIViewController {
     
-    func setChildController(_ controller: Controller, key: AnyHashable = .auto) {
-        if let viewController = childViewControllers.last {
-            if viewController.type == controller.type, viewController.key == key {
-                viewController.update(with: controller)
+    public var childController: Controller = Controller() {
+        didSet {
+            if let viewController = childViewControllers.last {
+                if viewController.type == childController.type, viewController.key == childController.key {
+                    viewController.update(with: childController)
+                } else {
+                    let newViewController = childController.newViewController()
+                    addChildViewController(newViewController)
+                    addChildView(newViewController.view)
+                    if viewIsVisible {
+                        transition(
+                            from: viewController,
+                            to: newViewController,
+                            duration: UIView.inheritedAnimationDuration,
+                            options: [.transitionCrossDissolve],
+                            animations: {},
+                            completion: { _ in
+                                viewController.removeFromParentViewController()
+                                newViewController.didMove(toParentViewController: self)
+                            }
+                        )
+                    } else {
+                        viewController.view.removeFromSuperview()
+                        viewController.removeFromParentViewController()
+                        newViewController.didMove(toParentViewController: self)
+                    }
+                }
             } else {
-                let newViewController = controller.newViewController(key: key)
+                let newViewController = childController.newViewController()
                 addChildViewController(newViewController)
                 addChildView(newViewController.view)
-                if viewIsVisible {
-                    transition(
-                        from: viewController,
-                        to: newViewController,
-                        duration: UIView.inheritedAnimationDuration,
-                        options: [.transitionCrossDissolve],
-                        animations: {},
-                        completion: { _ in
-                            viewController.removeFromParentViewController()
-                            newViewController.didMove(toParentViewController: self)
-                        }
-                    )
-                } else {
-                    viewController.view.removeFromSuperview()
-                    viewController.removeFromParentViewController()
-                    newViewController.didMove(toParentViewController: self)
-                }
+                newViewController.didMove(toParentViewController: self)
             }
-        } else {
-            let newViewController = controller.newViewController(key: key)
-            addChildViewController(newViewController)
-            addChildView(newViewController.view)
-            newViewController.didMove(toParentViewController: self)
         }
     }
     
@@ -59,6 +63,10 @@ class ContainerViewController : UIViewController {
             childView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
             childView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
+    }
+    
+    override public var editButtonItem: UIBarButtonItem {
+        return childViewControllers.last?.editButtonItem ?? super.editButtonItem
     }
     
 }

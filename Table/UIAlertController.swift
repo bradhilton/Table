@@ -73,3 +73,41 @@ extension UIAlertController {
     }
     
 }
+
+extension NSObjectProtocol where Self : UIAlertController {
+    
+    public var actions: [AlertAction] {
+        get {
+            return storage[\.actions, default: []]
+        }
+        set {
+            storage[\.actions] = newValue
+            for (offset, action) in newValue.enumerated() {
+                if offset < actions.count {
+                    actions[offset].isEnabled = action.isEnabled
+                    actions[offset].didSelect = action.didSelect
+                } else {
+                    addAction(UIAlertAction(action: action))
+                }
+            }
+        }
+    }
+    
+    public var textFields: [(UITextField) -> ()] {
+        get {
+            return storage[\.textFields, default: []]
+        }
+        set {
+            storage[\.textFields] = newValue
+            for (offset, configurationHandler) in newValue.enumerated() {
+                let textFields = self.textFields ?? []
+                if offset < textFields.count {
+                    configurationHandler(textFields[offset])
+                } else {
+                    addTextField(configurationHandler: configurationHandler)
+                }
+            }
+        }
+    }
+    
+}
