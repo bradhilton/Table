@@ -107,18 +107,48 @@ extension NSObjectProtocol where Self : UIView {
             return storage[\.subviews, default: []]
         }
         set {
+            swizzleViewMethods()
             storage[\.subviews] = newValue
-            updateSubviews(newValue)
+            if window != nil {
+                updateSubviews(newValue)
+            } else {
+                shouldUpdateSubviews = true
+            }
         }
     }
     
 }
 
+private let swizzleViewMethods: () -> () = {
+    method_exchangeImplementations(
+        class_getInstanceMethod(UIView.self, #selector(UIView.swizzledDidMoveToWindow))!,
+        class_getInstanceMethod(UIView.self, #selector(UIView.didMoveToWindow))!
+    )
+    return {}
+}()
+
 extension UIView : ItemProtocol {
     
+    fileprivate var shouldUpdateSubviews: Bool {
+        get {
+            return storage[\.shouldUpdateSubviews, default: false]
+        }
+        set {
+            storage[\.shouldUpdateSubviews] = newValue
+        }
+    }
+    
+    @objc fileprivate func swizzledDidMoveToWindow() {
+        swizzledDidMoveToWindow()
+        if window != nil, shouldUpdateSubviews {
+            UIView.performWithoutAnimation {
+                updateSubviews(subviews)
+            }
+        }
+    }
+    
     public func setSubviews(_ subviews: [Subview]) {
-        storage[\.subviews] = subviews
-        updateSubviews(subviews)
+        self.subviews = subviews
     }
     
     fileprivate var constraintsAffectingLayout: [NSLayoutConstraint] {
@@ -126,6 +156,7 @@ extension UIView : ItemProtocol {
     }
     
     fileprivate func updateSubviews(_ subviews: [Subview]) {
+        shouldUpdateSubviews = false
         let (newItems, updatedItems, removedItems) = resolvedItems(for: subviews)
         UIView.performWithoutAnimation {
             updateConstraints(for: newItems)
@@ -249,6 +280,7 @@ extension UIView : ItemProtocol {
                 }
             case .superviewMargins: return layoutMarginsGuide
             case .superviewReadableContent: return readableContentGuide
+            case .keyboard: return window?.keyboardLayoutGuide ?? self
             case .sibling(let key): return siblings[key]!
             }
         }

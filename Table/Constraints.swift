@@ -67,6 +67,7 @@ public enum Target : Equatable {
     case superviewSafeArea
     case superviewMargins
     case superviewReadableContent
+    case keyboard
     case sibling(key: AnyHashable)
 }
 

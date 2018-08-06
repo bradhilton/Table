@@ -104,7 +104,8 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return data[indexPath].cell.cell(for: indexPath, in: tableView)
+        let row = data[indexPath]
+        return row.cell.cell(for: indexPath, in: tableView, with: row.key)
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

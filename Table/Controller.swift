@@ -119,7 +119,16 @@ extension UIViewController {
             }
         case (let controller?, nil):
             guard viewHasAppeared else { return }
-            present(controller.newViewController(), animated: true)
+            let viewController = controller.newViewController()
+            if let popoverPresentationController = viewController.popoverPresentationController,
+                let sourceViewKey = popoverPresentationController.sourceViewKey,
+                let sourceView = firstSubview(key: sourceViewKey) {
+                popoverPresentationController.sourceView = sourceView
+                if let sourceRectGetter = popoverPresentationController.sourceRectGetter {
+                    popoverPresentationController.sourceRect = sourceRectGetter(sourceView)
+                }
+            }
+            present(viewController, animated: true)
         case (nil, let viewController?):
             guard let previousPresentedController = previousPresentedController, previousPresentedController.type == viewController.type
             else { return }

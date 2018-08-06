@@ -40,9 +40,10 @@ public struct Cell {
         self.update = { ($0 as? Cell).map(update) }
     }
     
-    func cell(for indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
+    func cell(for indexPath: IndexPath, in tableView: UITableView, with key: AnyHashable) -> UITableViewCell {
         registerCellIfNeeded(for: tableView)
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath)
+        cell.key = key
         UIView.performWithoutAnimation { update(cell) }
         return cell
     }
