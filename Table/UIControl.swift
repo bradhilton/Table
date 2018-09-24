@@ -29,7 +29,7 @@ public struct Events<Control : UIControl> {
         self.control = control
     }
     
-    public subscript(events: UIControlEvents) -> ((Control) -> ())? {
+    public subscript(events: UIControl.Event) -> ((Control) -> ())? {
         get {
             return control?.targets[events.rawValue]?.handler
         }
@@ -51,7 +51,7 @@ extension Control where Self : UIControl {
         set {}
     }
 
-    func setHandler(_ handler: ((Self) -> ())?, for events: UIControlEvents) {
+    func setHandler(_ handler: ((Self) -> ())?, for events: UIControl.Event) {
         switch (handler, targets[events.rawValue]) {
         case let (handler?, target?):
             target.handler = handler

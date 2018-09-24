@@ -29,7 +29,7 @@ private func deactivateBottomConstraint(between container: UIView, and label: UI
             constraint.firstItem as? NSObject,
             constraint.secondItem as? NSObject
         ].compactMap { $0 })
-        let bottomOrBaseline: Set<NSLayoutAttribute> = [.bottom, .lastBaseline]
+        let bottomOrBaseline: Set<NSLayoutConstraint.Attribute> = [.bottom, .lastBaseline]
         return items == Set([label, container])
             && bottomOrBaseline.contains(constraint.firstAttribute)
             && bottomOrBaseline.contains(constraint.secondAttribute)

@@ -1,6 +1,6 @@
 public class SubtitleTableViewCell : UITableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
     }
     
@@ -12,7 +12,7 @@ public class SubtitleTableViewCell : UITableViewCell {
 
 public class Value1TableViewCell : UITableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .value1, reuseIdentifier: reuseIdentifier)
     }
     
@@ -24,7 +24,7 @@ public class Value1TableViewCell : UITableViewCell {
 
 public class Value2TableViewCell : UITableViewCell {
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .value2, reuseIdentifier: reuseIdentifier)
     }
     

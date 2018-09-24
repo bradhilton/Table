@@ -20,12 +20,12 @@ public class ContainerViewController : UIViewController {
     
     public var childController: Controller = Controller() {
         didSet {
-            if let viewController = childViewControllers.last {
+            if let viewController = children.last {
                 if viewController.type == childController.type, viewController.key == childController.key {
                     viewController.update(with: childController)
                 } else {
                     let newViewController = childController.newViewController()
-                    addChildViewController(newViewController)
+                    addChild(newViewController)
                     addChildView(newViewController.view)
                     if viewIsVisible {
                         transition(
@@ -35,21 +35,21 @@ public class ContainerViewController : UIViewController {
                             options: [.transitionCrossDissolve],
                             animations: {},
                             completion: { _ in
-                                viewController.removeFromParentViewController()
-                                newViewController.didMove(toParentViewController: self)
+                                viewController.removeFromParent()
+                                newViewController.didMove(toParent: self)
                             }
                         )
                     } else {
                         viewController.view.removeFromSuperview()
-                        viewController.removeFromParentViewController()
-                        newViewController.didMove(toParentViewController: self)
+                        viewController.removeFromParent()
+                        newViewController.didMove(toParent: self)
                     }
                 }
             } else {
                 let newViewController = childController.newViewController()
-                addChildViewController(newViewController)
+                addChild(newViewController)
                 addChildView(newViewController.view)
-                newViewController.didMove(toParentViewController: self)
+                newViewController.didMove(toParent: self)
             }
         }
     }
@@ -66,7 +66,7 @@ public class ContainerViewController : UIViewController {
     }
     
     override public var editButtonItem: UIBarButtonItem {
-        return childViewControllers.last?.editButtonItem ?? super.editButtonItem
+        return children.last?.editButtonItem ?? super.editButtonItem
     }
     
 }

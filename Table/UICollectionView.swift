@@ -65,7 +65,7 @@ public class FlexCollectionViewLayout : UICollectionViewLayout {
         let node = layout.node
         let safeBounds: CGRect
         if #available(iOS 11.0, *) {
-            safeBounds = UIEdgeInsetsInsetRect(collectionView.bounds, collectionView.safeAreaInsets)
+            safeBounds = collectionView.bounds.inset(by: collectionView.safeAreaInsets)
         } else {
             safeBounds = collectionView.bounds
         }

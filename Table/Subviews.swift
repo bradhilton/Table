@@ -25,10 +25,10 @@ public struct Subview {
 
 struct ResolvedConstraint {
     let firstItem: AnyObject
-    let firstAttribute: NSLayoutAttribute
-    let relation: NSLayoutRelation
+    let firstAttribute: NSLayoutConstraint.Attribute
+    let relation: NSLayoutConstraint.Relation
     let secondItem: AnyObject?
-    let secondAttribute: NSLayoutAttribute
+    let secondAttribute: NSLayoutConstraint.Attribute
     let multiplier: CGFloat
     let constant: CGFloat
     let priority: UILayoutPriority

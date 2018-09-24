@@ -52,7 +52,7 @@ public struct Row {
         return commitDelete != nil || commitInsert != nil || commitMove != nil
     }
     
-    var editingStyle: UITableViewCellEditingStyle {
+    var editingStyle: UITableViewCell.EditingStyle {
         switch (commitDelete, commitInsert, commitMove) {
         case (_?, _, _): return .delete
         case (_, _?, _): return .insert

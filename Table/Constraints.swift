@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol Axis {
-    var layoutAttribute: NSLayoutAttribute { get }
+    var layoutAttribute: NSLayoutConstraint.Attribute { get }
 }
 
 public enum XAxis : Axis {
@@ -19,7 +19,7 @@ public enum XAxis : Axis {
     case trailing
     case centerX
     
-    public var layoutAttribute: NSLayoutAttribute {
+    public var layoutAttribute: NSLayoutConstraint.Attribute {
         switch self {
         case .left: return .left
         case .right: return .right
@@ -38,7 +38,7 @@ public enum YAxis : Axis {
     case lastBaseline
     case firstBaseline
     
-    public var layoutAttribute: NSLayoutAttribute {
+    public var layoutAttribute: NSLayoutConstraint.Attribute {
         switch self {
         case .top: return .top
         case .bottom: return .bottom
@@ -53,7 +53,7 @@ public enum Dimension {
     case width
     case height
     
-    public var layoutAttribute: NSLayoutAttribute {
+    public var layoutAttribute: NSLayoutConstraint.Attribute {
         switch self {
         case .width: return .width
         case .height: return .height
@@ -157,19 +157,19 @@ public typealias DimensionAndMultiplierAndConstantAndPriority = (dimension: Dime
 public typealias ConstantAndPriority = (constant: CGFloat, priority: UILayoutPriority)
 
 public struct Constraint : Equatable {
-    let attribute: NSLayoutAttribute
-    let relation: NSLayoutRelation
+    let attribute: NSLayoutConstraint.Attribute
+    let relation: NSLayoutConstraint.Relation
     let target: Target?
-    let targetAttribute: NSLayoutAttribute
+    let targetAttribute: NSLayoutConstraint.Attribute
     let multiplier: CGFloat
     let constant: CGFloat
     let priority: UILayoutPriority
     
     fileprivate init(
-        attribute: NSLayoutAttribute,
-        relation: NSLayoutRelation,
+        attribute: NSLayoutConstraint.Attribute,
+        relation: NSLayoutConstraint.Relation,
         target: Target?,
-        targetAttribute: NSLayoutAttribute,
+        targetAttribute: NSLayoutConstraint.Attribute,
         multiplier: CGFloat,
         constant: CGFloat,
         priority: UILayoutPriority
@@ -190,7 +190,7 @@ extension Constraint {
     // attribute [= | ≥ | ≤] target.attribute + constant
     private init<Attribute : Axis>(
         _ attribute: Attribute,
-        _ relation: NSLayoutRelation,
+        _ relation: NSLayoutConstraint.Relation,
         _ targetAndAttribute: TargetAndAttribute<Attribute>,
         _ constant: CGFloat,
         _ priority: UILayoutPriority
@@ -292,7 +292,7 @@ extension Constraint {
     // dimension [= | ≥ | ≤] target.dimension * multiplier + constant
     private init(
         _ attribute: Dimension,
-        _ relation: NSLayoutRelation,
+        _ relation: NSLayoutConstraint.Relation,
         _ targetAndAttribute: TargetAndAttribute<Dimension>,
         _ multiplier: CGFloat,
         _ constant: CGFloat,
@@ -430,7 +430,7 @@ extension Constraint {
     // dimension [= | ≥ | ≤] dimension * multiplier + constant
     private init(
         _ attribute: Dimension,
-        _ relation: NSLayoutRelation,
+        _ relation: NSLayoutConstraint.Relation,
         _ targetAttribute: Dimension,
         _ multiplier: CGFloat,
         _ constant: CGFloat,
@@ -568,7 +568,7 @@ extension Constraint {
     // dimension [= | ≥ | ≤] constant
     private init(
         _ attribute: Dimension,
-        _ relation: NSLayoutRelation,
+        _ relation: NSLayoutConstraint.Relation,
         _ constant: CGFloat,
         _ priority: UILayoutPriority
     ) {
