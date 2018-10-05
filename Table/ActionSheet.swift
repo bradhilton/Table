@@ -8,13 +8,13 @@
 
 public struct AlertAction {
     public let title: String
-    public let style: UIAlertActionStyle
+    public let style: UIAlertAction.Style
     public let image: UIImage?
     public let didSelect: (() -> ())?
     
     public init(
         title: String,
-        style: UIAlertActionStyle = .default,
+        style: UIAlertAction.Style = .default,
         image: UIImage? = nil,
         didSelect: (() -> ())? = nil
     ) {

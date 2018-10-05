@@ -39,6 +39,7 @@
 		A266DC28209281C900F524FC /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A266DC27209281C900F524FC /* ContainerView.swift */; };
 		A266DC2C2093B52800F524FC /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A266DC2B2093B52800F524FC /* UIPageViewController.swift */; };
 		A26C77401E3808F5000FB2CF /* TodoListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26C773F1E3808F5000FB2CF /* TodoListController.swift */; };
+		A26C871C2159451E001B4946 /* .swift-version in Resources */ = {isa = PBXBuildFile; fileRef = A26C871B2159451E001B4946 /* .swift-version */; };
 		A272A72B20B35624005EA28D /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A272A72A20B35624005EA28D /* UITableViewCell.swift */; };
 		A2749A8F206552E900BE7A2D /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A8E206552E900BE7A2D /* Weak.swift */; };
 		A2749A912065559400BE7A2D /* ActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A902065559400BE7A2D /* ActionSheet.swift */; };
@@ -176,6 +177,7 @@
 		A266DC27209281C900F524FC /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
 		A266DC2B2093B52800F524FC /* UIPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
 		A26C773F1E3808F5000FB2CF /* TodoListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListController.swift; sourceTree = "<group>"; };
+		A26C871B2159451E001B4946 /* .swift-version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 		A272A72A20B35624005EA28D /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		A2749A8E206552E900BE7A2D /* Weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		A2749A902065559400BE7A2D /* ActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheet.swift; sourceTree = "<group>"; };
@@ -347,6 +349,7 @@
 		A2BDB5F21DE4A3BB008FE471 = {
 			isa = PBXGroup;
 			children = (
+				A26C871B2159451E001B4946 /* .swift-version */,
 				A2BDB61B1DE4A3E8008FE471 /* Example */,
 				A2BDB6301DE4A3E8008FE471 /* ExampleUITests */,
 				A10F7A766FCDE3CF581626E9 /* Frameworks */,
@@ -582,12 +585,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Brad Hilton";
 				TargetAttributes = {
 					A224636A20CC220F0002CB9A = {
 						CreatedOnToolsVersion = 9.4;
 						DevelopmentTeam = XV8GRWN9U6;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					A252619B20CC346A004DB1C0 = {
@@ -598,7 +602,7 @@
 					A2BDB5FB1DE4A3BB008FE471 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 8KK8UBHJUJ;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 					A2BDB6191DE4A3E8008FE471 = {
@@ -656,6 +660,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A26C871C2159451E001B4946 /* .swift-version in Resources */,
 				A2C9108520221A17001AEF2A /* XTable.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -988,7 +993,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.TableTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1009,7 +1014,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.TableTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1069,6 +1074,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1076,6 +1082,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1129,6 +1136,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1136,6 +1144,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1187,8 +1196,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1209,8 +1217,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.Table;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

@@ -16,7 +16,7 @@ public class ContainerView : UIView {
                 childViewController.update(with: controller)
             } else if let viewController = viewController {
                 let newChildViewController = controller.newViewController()
-                viewController.addChildViewController(newChildViewController)
+                viewController.addChild(newChildViewController)
                 if viewController.viewIsVisible {
                     viewController.transition(
                         from: childViewController,
@@ -27,17 +27,17 @@ public class ContainerView : UIView {
                             self.addChildView(newChildViewController.view)
                         },
                         completion: { _ in
-                            viewController.removeFromParentViewController()
-                            newChildViewController.didMove(toParentViewController: viewController)
+                            viewController.removeFromParent()
+                            newChildViewController.didMove(toParent: viewController)
                         }
                     )
                 } else {
                     childViewController.view.removeFromSuperview()
-                    childViewController.removeFromParentViewController()
+                    childViewController.removeFromParent()
                     childViewController = controller.newViewController()
-                    viewController.addChildViewController(childViewController)
+                    viewController.addChild(childViewController)
                     addChildView(childViewController.view)
-                    childViewController.didMove(toParentViewController: viewController)
+                    childViewController.didMove(toParent: viewController)
                 }
             }
         }
@@ -66,11 +66,11 @@ public class ContainerView : UIView {
         super.didMoveToWindow()
         if childViewController.type != controller.type {
             childViewController.view.removeFromSuperview()
-            childViewController.removeFromParentViewController()
+            childViewController.removeFromParent()
             childViewController = controller.newViewController()
-            viewController?.addChildViewController(childViewController)
+            viewController?.addChild(childViewController)
             addChildView(childViewController.view)
-            childViewController.didMove(toParentViewController: viewController)
+            childViewController.didMove(toParent: viewController)
         }
     }
     

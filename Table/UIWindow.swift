@@ -25,22 +25,22 @@ private class KeyboardLayoutGuide : UILayoutGuide {
         let heightConstraint = heightAnchor.constraint(equalToConstant: 0)
         heightConstraint.isActive = true
         NotificationCenter.default.addObserver(
-            forName: NSNotification.Name.UIKeyboardWillChangeFrame,
+            forName: UIResponder.keyboardWillChangeFrameNotification,
             object: nil,
             queue: .main
         ) { [weak window] notification in
             guard
                 let window = window,
                 let userInfo = notification.userInfo,
-                let frame = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect,
-                let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval,
-                let animationCurve = (userInfo[UIKeyboardAnimationCurveUserInfoKey] as? Int)
-                    .flatMap(UIViewAnimationCurve.init)
+                let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+                let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+                let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int)
+                    .flatMap(UIView.AnimationCurve.init)
                 else { return }
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
-                options: [UIViewAnimationOptions(animationCurve: animationCurve)],
+                options: [UIView.AnimationOptions(animationCurve: animationCurve)],
                 animations: {
                     heightConstraint.constant = window.frame.height - frame.minY
                     window.layoutIfNeeded()
@@ -56,9 +56,9 @@ private class KeyboardLayoutGuide : UILayoutGuide {
     
 }
 
-extension UIViewAnimationOptions {
+extension UIView.AnimationOptions {
     
-    fileprivate init(animationCurve: UIViewAnimationCurve) {
+    fileprivate init(animationCurve: UIView.AnimationCurve) {
         switch animationCurve {
         case .easeInOut:
             self = .curveEaseInOut

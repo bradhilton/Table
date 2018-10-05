@@ -75,7 +75,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     
     func update(tableView: UITableView, delta: SectionsDelta, newValue: Data) {
-        let animation = UITableViewRowAnimation.fade
+        let animation = UITableView.RowAnimation.fade
         data = newValue
         tableView.deleteSections(delta.sectionDeletes, with: animation)
         tableView.insertSections(delta.sectionInserts, with: animation)
@@ -147,7 +147,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     #endif
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
         case .delete: data[indexPath].commitDelete?()
         case .insert: data[indexPath].commitInsert?()
@@ -164,7 +164,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         case .constant(let height):
             return height
         case .automatic:
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
     
@@ -180,21 +180,21 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return data[section].headerTitle != nil
             ? tableView.style == .grouped ? 45 : 28
-            : UITableViewAutomaticDimension
+            : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
         return data[section].headerTitle != nil
             ? tableView.style == .grouped ? 45 : 28
-            : UITableViewAutomaticDimension
+            : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return data[section].footerTitle != nil ? 28 : UITableViewAutomaticDimension
+        return data[section].footerTitle != nil ? 28 : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        return data[section].footerTitle != nil ? 28 : UITableViewAutomaticDimension
+        return data[section].footerTitle != nil ? 28 : UITableView.automaticDimension
     }
 
     
@@ -237,7 +237,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
         data[indexPath].didDeselect?()
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return data[indexPath].editingStyle
     }
     

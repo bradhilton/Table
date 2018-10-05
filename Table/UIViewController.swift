@@ -56,7 +56,7 @@ extension UIViewController {
     
     public func firstSubview<T : UIView>(class: T.Type = T.self, key: AnyHashable? = nil) -> T? {
         return view.firstSubview(class: T.self, key: key)
-            ?? childViewControllers.first { $0.firstSubview(class: T.self, key: key) }
+            ?? children.first { $0.firstSubview(class: T.self, key: key) }
     }
     
     var configureView: ((UIViewController) -> ())? {
