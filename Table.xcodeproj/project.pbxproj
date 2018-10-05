@@ -56,6 +56,8 @@
 		A294923F206F99E800DBDD73 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294923E206F99E800DBDD73 /* Keys.swift */; };
 		A294A068203C7EFC00FDA8E7 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294A067203C7EFC00FDA8E7 /* UIControl.swift */; };
 		A294A06A203CA8A100FDA8E7 /* UITabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294A069203CA8A100FDA8E7 /* UITabBarController.swift */; };
+		A2A8AED621666C1600FF59D6 /* UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A8AED521666C1600FF59D6 /* UIStackView.swift */; };
+		A2A8AED921666FAA00FF59D6 /* ArrangedSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A8AED821666FAA00FF59D6 /* ArrangedSubview.swift */; };
 		A2B089AD20D854E7006F6834 /* ItemsDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B089AC20D854E7006F6834 /* ItemsDelta.swift */; };
 		A2B71225206C2CF700B16B5A /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B71224206C2CF700B16B5A /* UIView.swift */; };
 		A2BDB60D1DE4A3BB008FE471 /* Table.h in Headers */ = {isa = PBXBuildFile; fileRef = A2BDB5FF1DE4A3BB008FE471 /* Table.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -71,6 +73,8 @@
 		A2C9108520221A17001AEF2A /* XTable.podspec in Resources */ = {isa = PBXBuildFile; fileRef = A2C9108420221A17001AEF2A /* XTable.podspec */; };
 		A2CAB9292034D92900531F96 /* FlexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CAB9282034D92900531F96 /* FlexViewController.swift */; };
 		A2CAB92D2034DB7100531F96 /* Flex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CAB92C2034DB7100531F96 /* Flex.swift */; };
+		A2D5A8E62166B21700DE6B35 /* ChildDiff.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5A8E52166B21700DE6B35 /* ChildDiff.swift */; };
+		A2D5A8E82167F80C00DE6B35 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5A8E72167F80C00DE6B35 /* Sequence.swift */; };
 		A2DCB9BC1E32C1470015E50A /* ScheduleController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */; };
 		A2E049AF2100149500F0B8DB /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E049AE2100149500F0B8DB /* UIButton.swift */; };
 		A2E4048D2019409600253EB6 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E4048C2019409600253EB6 /* Data.swift */; };
@@ -187,6 +191,9 @@
 		A294923E206F99E800DBDD73 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		A294A067203C7EFC00FDA8E7 /* UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
 		A294A069203CA8A100FDA8E7 /* UITabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITabBarController.swift; sourceTree = "<group>"; };
+		A2A8AED4216666A500FF59D6 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		A2A8AED521666C1600FF59D6 /* UIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackView.swift; sourceTree = "<group>"; };
+		A2A8AED821666FAA00FF59D6 /* ArrangedSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangedSubview.swift; sourceTree = "<group>"; };
 		A2B089AC20D854E7006F6834 /* ItemsDelta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemsDelta.swift; sourceTree = "<group>"; };
 		A2B71224206C2CF700B16B5A /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		A2BDB5FC1DE4A3BB008FE471 /* Table.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Table.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +215,8 @@
 		A2C9108420221A17001AEF2A /* XTable.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = XTable.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A2CAB9282034D92900531F96 /* FlexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexViewController.swift; sourceTree = "<group>"; };
 		A2CAB92C2034DB7100531F96 /* Flex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flex.swift; sourceTree = "<group>"; };
+		A2D5A8E52166B21700DE6B35 /* ChildDiff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildDiff.swift; sourceTree = "<group>"; };
+		A2D5A8E72167F80C00DE6B35 /* Sequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sequence.swift; sourceTree = "<group>"; };
 		A2DCB9BB1E32C1470015E50A /* ScheduleController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleController.swift; sourceTree = "<group>"; };
 		A2E049AE2100149500F0B8DB /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		A2E4048C2019409600253EB6 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
@@ -325,6 +334,16 @@
 			path = TablePerformanceTests;
 			sourceTree = "<group>";
 		};
+		A2A8AED721666F6D00FF59D6 /* StackView */ = {
+			isa = PBXGroup;
+			children = (
+				A2D5A8E52166B21700DE6B35 /* ChildDiff.swift */,
+				A2A8AED521666C1600FF59D6 /* UIStackView.swift */,
+				A2A8AED821666FAA00FF59D6 /* ArrangedSubview.swift */,
+			);
+			path = StackView;
+			sourceTree = "<group>";
+		};
 		A2BDB5F21DE4A3BB008FE471 = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +354,7 @@
 				A2BDB5FE1DE4A3BB008FE471 /* Table */,
 				A252619D20CC346A004DB1C0 /* TablePerformanceTests */,
 				A224636C20CC220F0002CB9A /* TableTests */,
+				A2A8AED4216666A500FF59D6 /* Playground.playground */,
 				A2C9108420221A17001AEF2A /* XTable.podspec */,
 			);
 			sourceTree = "<group>";
@@ -354,11 +374,13 @@
 		A2BDB5FE1DE4A3BB008FE471 /* Table */ = {
 			isa = PBXGroup;
 			children = (
+				A2A8AED721666F6D00FF59D6 /* StackView */,
 				A2749A902065559400BE7A2D /* ActionSheet.swift */,
 				A287CB2520191822009F7C1C /* AnyHashable.swift */,
 				A28E7D7C20C2F6A80082D92E /* Array.swift */,
 				A24133901E79E6F40049C8B5 /* Cell.swift */,
 				A23B52A91E31882400B0901E /* Cells.swift */,
+				A246F61520D83A0D002CF94E /* CollectionCell.swift */,
 				A2BE318120D34669004203B9 /* Constraints.swift */,
 				A266DC27209281C900F524FC /* ContainerView.swift */,
 				A290FD48208E7CCE007DD9E0 /* ContainerViewController.swift */,
@@ -372,6 +394,9 @@
 				A223F5F1203B9A8300D9BA0F /* FlexValue.swift */,
 				A20EC6A42034C68F00FD9036 /* FlexView.swift */,
 				A2BDB6001DE4A3BB008FE471 /* Info.plist */,
+				A246F61320D8395F002CF94E /* Item.swift */,
+				A2B089AC20D854E7006F6834 /* ItemsDelta.swift */,
+				A2F94C2D20D465C70065E78B /* KeyedTransitioningDelegate.swift */,
 				A294923E206F99E800DBDD73 /* Keys.swift */,
 				A23B52BD1E31885D00B0901E /* MutableCollection.swift */,
 				A290FD4E208FA314007DD9E0 /* RefreshControl.swift */,
@@ -385,10 +410,13 @@
 				A2BDB5FF1DE4A3BB008FE471 /* Table.h */,
 				A2BDC22D20769A3A00A72C70 /* UIAlertController.swift */,
 				A200F8AA20608DB1006E1B15 /* UIBarButtonItem.swift */,
+				A2E049AE2100149500F0B8DB /* UIButton.swift */,
 				A290FD52208FAEA5007DD9E0 /* UICollectionView.swift */,
 				A294A067203C7EFC00FDA8E7 /* UIControl.swift */,
 				A200F8A220608B85006E1B15 /* UINavigationController.swift */,
 				A266DC2B2093B52800F524FC /* UIPageViewController.swift */,
+				A2E5F05621164D5200F83F26 /* UIPickerView.swift */,
+				A2E5F04A211622CA00F83F26 /* UIPopoverPresentationController.swift */,
 				A2749A9220655CD100BE7A2D /* UIResponder.swift */,
 				A200F8AC206146F5006E1B15 /* UISearchController.swift */,
 				A200F8A320608B86006E1B15 /* UISplitViewController.swift */,
@@ -397,16 +425,10 @@
 				A272A72A20B35624005EA28D /* UITableViewCell.swift */,
 				A2B71224206C2CF700B16B5A /* UIView.swift */,
 				A27E97722037558200A30612 /* UIViewController.swift */,
+				A2EC87D02110E475008ED80E /* UIWindow.swift */,
 				A2EF417020A4FA6D00B5DD7E /* View.swift */,
 				A2749A8E206552E900BE7A2D /* Weak.swift */,
-				A2F94C2D20D465C70065E78B /* KeyedTransitioningDelegate.swift */,
-				A246F61320D8395F002CF94E /* Item.swift */,
-				A246F61520D83A0D002CF94E /* CollectionCell.swift */,
-				A2B089AC20D854E7006F6834 /* ItemsDelta.swift */,
-				A2E049AE2100149500F0B8DB /* UIButton.swift */,
-				A2EC87D02110E475008ED80E /* UIWindow.swift */,
-				A2E5F04A211622CA00F83F26 /* UIPopoverPresentationController.swift */,
-				A2E5F05621164D5200F83F26 /* UIPickerView.swift */,
+				A2D5A8E72167F80C00DE6B35 /* Sequence.swift */,
 			);
 			path = Table;
 			sourceTree = "<group>";
@@ -841,6 +863,7 @@
 				A200F8AF20615C5A006E1B15 /* Device.swift in Sources */,
 				A23B52B41E31882400B0901E /* Source.swift in Sources */,
 				A246F61420D8395F002CF94E /* Item.swift in Sources */,
+				A2A8AED621666C1600FF59D6 /* UIStackView.swift in Sources */,
 				A2749A8F206552E900BE7A2D /* Weak.swift in Sources */,
 				A23B52BE1E31885D00B0901E /* MutableCollection.swift in Sources */,
 				A266DC28209281C900F524FC /* ContainerView.swift in Sources */,
@@ -857,6 +880,7 @@
 				A2749A9320655CD100BE7A2D /* UIResponder.swift in Sources */,
 				A24133911E79E6F40049C8B5 /* Cell.swift in Sources */,
 				A20EC6A52034C68F00FD9036 /* FlexView.swift in Sources */,
+				A2D5A8E82167F80C00DE6B35 /* Sequence.swift in Sources */,
 				A2749A912065559400BE7A2D /* ActionSheet.swift in Sources */,
 				A200F8AB20608DB1006E1B15 /* UIBarButtonItem.swift in Sources */,
 				A2EF417120A4FA6D00B5DD7E /* View.swift in Sources */,
@@ -878,7 +902,9 @@
 				A287CB2620191822009F7C1C /* AnyHashable.swift in Sources */,
 				A2B71225206C2CF700B16B5A /* UIView.swift in Sources */,
 				A2EC5D0C20910B9700AA368B /* FlexCollectionViewCell.swift in Sources */,
+				A2A8AED921666FAA00FF59D6 /* ArrangedSubview.swift in Sources */,
 				A200F8A720608B86006E1B15 /* Reusable.swift in Sources */,
+				A2D5A8E62166B21700DE6B35 /* ChildDiff.swift in Sources */,
 				A290FD49208E7CCE007DD9E0 /* ContainerViewController.swift in Sources */,
 				A200F8A620608B86006E1B15 /* UISplitViewController.swift in Sources */,
 			);

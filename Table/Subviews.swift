@@ -170,11 +170,9 @@ extension UIView : ItemProtocol {
             }
             view.alpha = alpha
         }
-        removedItems.forEach { item in
-            if let view = item as? UIView {
-                view.isRemoved = true
-                view.alpha = 0
-            }
+        removedItems.compactMap { $0 as? UIView }.forEach { view in
+            view.isRemoved = true
+            view.alpha = 0
         }
     }
     
