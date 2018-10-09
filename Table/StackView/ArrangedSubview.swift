@@ -14,7 +14,7 @@ public struct ArrangedSubview {
     
     public init(
         key: AnyHashable = .auto,
-        constraints: [Constraint],
+        constraints: [Constraint] = [],
         spacingAfterView: CGFloat = .defaultSpacing,
         view: View
     ) {

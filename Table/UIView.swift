@@ -18,6 +18,22 @@ extension UIView {
         return nil
     }
     
+    var isVisible: Bool {
+        return window != nil && layer.isVisible
+    }
+    
+}
+
+extension CALayer {
+    
+    fileprivate var isVisible: Bool {
+        return presentation()?.hasVisibleBoundsAndOpacity ?? hasVisibleBoundsAndOpacity
+    }
+    
+    private var hasVisibleBoundsAndOpacity: Bool {
+        return bounds.width > 0 && bounds.height > 0 && opacity > 0
+    }
+    
 }
 
 extension NSObjectProtocol where Self : UITextField {
@@ -44,14 +60,6 @@ extension NSObjectProtocol where Self : UITextField {
     
 }
 
-private let swizzleViewMethods: () -> () = {
-    method_exchangeImplementations(
-        class_getInstanceMethod(UIView.self, #selector(UIView.swizzledLayoutSubviews))!,
-        class_getInstanceMethod(UIView.self, #selector(UIView.layoutSubviews))!
-    )
-    return {}
-}()
-
 extension UIView {
     
     var layout: (UIView) -> () {
@@ -64,7 +72,7 @@ extension UIView {
         }
     }
     
-    @objc fileprivate func swizzledLayoutSubviews() {
+    @objc func swizzledLayoutSubviews() {
         swizzledLayoutSubviews()
         layout(self)
     }

@@ -66,7 +66,35 @@ public struct View {
     
 }
 
+struct AutoKeys {
+    private var keys: [AnyHashable: Key] = [:]
+    
+    struct Key : Hashable {
+        var key: Int
+    }
+    
+    subscript(type: AnyHashable) -> Key {
+        mutating get {
+            defer { self[type].key += 1 }
+            return keys[type, default: Key(key: 0)]
+        }
+        set {
+            keys[type] = newValue
+        }
+    }
+    
+}
+
 extension Array where Element == (AnyHashable, View) {
+    
+    func views(reusing pool: inout [TypeAndKey: UIView]) -> [UIView] {
+        var autoKeys = AutoKeys()
+        return map { (key, view) in
+            let key = key == .auto ? autoKeys[view.type] : key
+            let typeAndKey = TypeAndKey(type: view.type, key: key)
+            return view.view(reusing: pool.removeValue(forKey: typeAndKey), with: key)
+        }
+    }
     
     func views(reusingSubviewsOf superview: UIView) -> (reusedViews: [UIView], unusedViews: [UIView]) {
         var pool = superview.subviews.indexedPool

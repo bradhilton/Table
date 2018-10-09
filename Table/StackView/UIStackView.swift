@@ -13,38 +13,67 @@ extension NSObjectProtocol where Self : UIStackView {
             return storage[\.arrangedSubviews, default: []]
         }
         set {
+            swizzleViewMethods()
             storage[\.arrangedSubviews] = newValue
-            var arrangedSubviewsPool = arrangedSubviews.indexedPool
-            let indicesAndViews: [(Int, UIView)] = newValue.map { child in
-                return indexAndView(for: child.view, with: child.key, reusing: &arrangedSubviewsPool)
+            guard let window = window else {
+                shouldUpdateArrangedSubviews = true
+                return
             }
-            for subview in arrangedSubviewsPool.values.flatMap({ subviews in subviews.map { $0.1 } }) {
-                subview.isHidden = true
+            shouldUpdateArrangedSubviews = false
+            updateArrangedSubviews(window: window)
+        }
+    }
+    
+}
+
+extension UIStackView {
+    
+    var shouldUpdateArrangedSubviews: Bool {
+        get {
+            return storage[\.shouldUpdateArrangedSubviews, default: false]
+        }
+        set {
+            storage[\.shouldUpdateArrangedSubviews] = newValue
+        }
+    }
+    
+    func updateArrangedSubviews(window: UIWindow) {
+        let newValue: [ArrangedSubview] = arrangedSubviews
+        var arrangedSubviewsPool = Dictionary(
+            uniqueKeysWithValues: arrangedSubviews.lazy.compactMap { $0.typeAndKey != nil ? ($0.typeAndKey!, $0) : nil }
+        )
+        let views = newValue.map { ($0.key, $0.view) }.views(reusing: &arrangedSubviewsPool)
+        let diff = ChildDiff(
+            newChildren: views,
+            oldChildren: arrangedSubviews.map { ChildAndState(child: $0, state: $0.childState) }
+        )
+        print(diff.map { ($0 as! UILabel).text! })
+        let (newConstraints, visibleConstraints) = zip(newValue.map { $0.constraints }, views).constraints(superview: self, window: window)
+        UIView.performWithoutAnimation {
+            for child in diff.removeChildren {
+                child.removeFromSuperview()
             }
-            for (_, view) in indicesAndViews {
-                view.translatesAutoresizingMaskIntoConstraints = false
+            for (child, index) in diff.insertNewChildren {
+                child.isHidden = true
+                insertArrangedSubview(child, at: index)
             }
-            let arrangedSubviewsSet = Set(arrangedSubviews)
-            var lastIndex = 0
-//            var insertionIndex = 0
-            for (index, view) in indicesAndViews {
-                if index <= lastIndex {
-                    if arrangedSubviewsSet.contains(view) {
-                        insertArrangedSubview(view, at: index)
-                    } else {
-                        UIView.performWithoutAnimation {
-                            view.isHidden = true
-                            insertArrangedSubview(view, at: index)
-                            layoutSubviews()
-                        }
-                    }
-                } else {
-                    lastIndex = index
-                }
-                view.isHidden = false
-//                insertionIndex += 1
+            updateConstraints(newConstraints)
+            layoutIfNeeded()
+        }
+        for (child, index) in diff.moveVisibleChildren {
+            insertArrangedSubview(child, at: index)
+        }
+        updateConstraints(visibleConstraints)
+        let set = Set(views)
+        for child in arrangedSubviews {
+            child.isHidden = !set.contains(child)
+        }
+        for (view, uiview) in zip(newValue, views) {
+            if #available(iOS 11.0, *) {
+                setCustomSpacing(view.spacingAfterView, after: uiview)
             }
         }
+        layoutIfNeeded()
     }
     
 }

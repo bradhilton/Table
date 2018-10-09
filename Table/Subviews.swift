@@ -57,6 +57,8 @@ extension NSLayoutConstraint {
             && secondItem === constraint.secondItem
             && secondAttribute == constraint.secondAttribute
             && Float(multiplier) == Float(constraint.multiplier)
+            && Float(constant) == Float(constraint.constant)
+            && priority == constraint.priority
     }
     
     convenience init(_ constraint: ResolvedConstraint) {
@@ -77,26 +79,9 @@ extension NSLayoutConstraint {
 
 fileprivate protocol ItemProtocol : class {
     var key: AnyHashable? { get }
-    var constraintsAffectingLayout: [NSLayoutConstraint] { get }
-}
-
-extension ItemProtocol {
-    
-    var resolvedConstraintsAffectingLayout: [NSLayoutConstraint] {
-        return constraintsAffectingLayout.filter { $0.firstItem === self && $0.type == ResolvedConstraintType() as AnyHashable }
-    }
-    
 }
 
 extension UILayoutGuide : ItemProtocol {
-    
-    fileprivate var constraintsAffectingLayout: [NSLayoutConstraint] {
-        if #available(iOS 10.0, *) {
-            return constraintsAffectingLayout(for: .horizontal) + constraintsAffectingLayout(for: .vertical)
-        } else {
-            return []
-        }
-    }
     
 }
 
@@ -109,17 +94,22 @@ extension NSObjectProtocol where Self : UIView {
         set {
             swizzleViewMethods()
             storage[\.subviews] = newValue
-            if window != nil {
-                updateSubviews(newValue)
-            } else {
+            guard let window = window else {
                 shouldUpdateSubviews = true
+                return
             }
+            shouldUpdateSubviews = false
+            updateSubviews(window: window)
         }
     }
     
 }
 
-private let swizzleViewMethods: () -> () = {
+let swizzleViewMethods: () -> () = {
+    method_exchangeImplementations(
+        class_getInstanceMethod(UIView.self, #selector(UIView.swizzledLayoutSubviews))!,
+        class_getInstanceMethod(UIView.self, #selector(UIView.layoutSubviews))!
+    )
     method_exchangeImplementations(
         class_getInstanceMethod(UIView.self, #selector(UIView.swizzledDidMoveToWindow))!,
         class_getInstanceMethod(UIView.self, #selector(UIView.didMoveToWindow))!
@@ -140,23 +130,29 @@ extension UIView : ItemProtocol {
     
     @objc fileprivate func swizzledDidMoveToWindow() {
         swizzledDidMoveToWindow()
-        if window != nil, shouldUpdateSubviews {
+        guard let window = window else { return }
+        
+        if shouldUpdateSubviews {
+            shouldUpdateSubviews = false
             UIView.performWithoutAnimation {
-                updateSubviews(subviews)
+                updateSubviews(window: window)
             }
         }
+        
+        if let stackView = self as? UIStackView, stackView.shouldUpdateArrangedSubviews {
+            stackView.shouldUpdateArrangedSubviews = false
+            UIView.performWithoutAnimation {
+                stackView.updateArrangedSubviews(window: window)
+            }
+        }
+        
     }
     
     public func setSubviews(_ subviews: [Subview]) {
         self.subviews = subviews
     }
     
-    fileprivate var constraintsAffectingLayout: [NSLayoutConstraint] {
-        return constraintsAffectingLayout(for: .horizontal) + constraintsAffectingLayout(for: .vertical)
-    }
-    
-    fileprivate func updateSubviews(_ subviews: [Subview]) {
-        shouldUpdateSubviews = false
+    fileprivate func updateSubviews(window: UIWindow) {
         let (newItems, updatedItems, removedItems) = resolvedItems(for: subviews)
         UIView.performWithoutAnimation {
             updateConstraints(for: newItems)
@@ -313,8 +309,8 @@ extension UIView : ItemProtocol {
     }
     
     private func constraintsPool(for item: ItemProtocol) -> [NSLayoutConstraint] {
-        return constraints.filter { $0.firstItem === item && $0.type == ResolvedConstraintType() as AnyHashable }
-            + ((item as? UIView)?.constraints.filter { $0.firstItem === item && $0.type == ResolvedConstraintType() as AnyHashable } ?? [])
+        return (constraints + ((item as? UIView)?.constraints ?? []))
+            .filter { $0.firstItem === item && $0.type == ResolvedConstraintType() as AnyHashable }
     }
     
 }

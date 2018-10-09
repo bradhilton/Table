@@ -57,6 +57,7 @@
 		A294923F206F99E800DBDD73 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294923E206F99E800DBDD73 /* Keys.swift */; };
 		A294A068203C7EFC00FDA8E7 /* UIControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294A067203C7EFC00FDA8E7 /* UIControl.swift */; };
 		A294A06A203CA8A100FDA8E7 /* UITabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A294A069203CA8A100FDA8E7 /* UITabBarController.swift */; };
+		A2A2BCF2216C2BD000D6A1DF /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A2BCF1216C2BD000D6A1DF /* UIView+Constraints.swift */; };
 		A2A8AED621666C1600FF59D6 /* UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A8AED521666C1600FF59D6 /* UIStackView.swift */; };
 		A2A8AED921666FAA00FF59D6 /* ArrangedSubview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2A8AED821666FAA00FF59D6 /* ArrangedSubview.swift */; };
 		A2B089AD20D854E7006F6834 /* ItemsDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B089AC20D854E7006F6834 /* ItemsDelta.swift */; };
@@ -193,6 +194,7 @@
 		A294923E206F99E800DBDD73 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		A294A067203C7EFC00FDA8E7 /* UIControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControl.swift; sourceTree = "<group>"; };
 		A294A069203CA8A100FDA8E7 /* UITabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITabBarController.swift; sourceTree = "<group>"; };
+		A2A2BCF1216C2BD000D6A1DF /* UIView+Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		A2A8AED4216666A500FF59D6 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A2A8AED521666C1600FF59D6 /* UIStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackView.swift; sourceTree = "<group>"; };
 		A2A8AED821666FAA00FF59D6 /* ArrangedSubview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrangedSubview.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				A2D5A8E52166B21700DE6B35 /* ChildDiff.swift */,
 				A2A8AED521666C1600FF59D6 /* UIStackView.swift */,
 				A2A8AED821666FAA00FF59D6 /* ArrangedSubview.swift */,
+				A2A2BCF1216C2BD000D6A1DF /* UIView+Constraints.swift */,
 			);
 			path = StackView;
 			sourceTree = "<group>";
@@ -888,6 +891,7 @@
 				A2D5A8E82167F80C00DE6B35 /* Sequence.swift in Sources */,
 				A2749A912065559400BE7A2D /* ActionSheet.swift in Sources */,
 				A200F8AB20608DB1006E1B15 /* UIBarButtonItem.swift in Sources */,
+				A2A2BCF2216C2BD000D6A1DF /* UIView+Constraints.swift in Sources */,
 				A2EF417120A4FA6D00B5DD7E /* View.swift in Sources */,
 				A2BDC22E20769A3A00A72C70 /* UIAlertController.swift in Sources */,
 				A266DC2C2093B52800F524FC /* UIPageViewController.swift in Sources */,

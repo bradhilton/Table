@@ -73,7 +73,7 @@ class TableTests: XCTestCase {
     }
     
     func testChildDiff() {
-        var state: [(key: AnyHashable, state: ChildState)] = []
+        var state: [ChildAndState<String>] = []
         
         var visibleChildren = ["A", "B", "C"]
         state.update(with: visibleChildren)
@@ -93,32 +93,30 @@ class TableTests: XCTestCase {
         visibleChildren = ["B", "D", "E", "F"]
         state.update(with: visibleChildren)
         XCTAssertEqual(state.visibleChildren, visibleChildren)
-        XCTAssertEqual(state.children, ["A", "B", "C", "D", "E", "F"])
         
         visibleChildren = ["A", "B", "F"]
         state.update(with: visibleChildren)
         XCTAssertEqual(state.visibleChildren, visibleChildren)
-        XCTAssertEqual(state.children, ["A", "B", "C", "D", "E", "F"])
         
         visibleChildren = ["G", "H", "A", "B", "I", "F"]
         state.update(with: visibleChildren)
         XCTAssertEqual(state.visibleChildren, visibleChildren)
-        XCTAssertEqual(state.children, ["G", "H", "A", "B", "I", "C", "D", "E", "F"])
         
         visibleChildren = ["G", "H", "B", "A", "I", "F"]
         state.update(with: visibleChildren)
         XCTAssertEqual(state.visibleChildren, visibleChildren)
-        XCTAssertEqual(state.children, ["G", "H", "B", "A", "I", "C", "D", "E", "F"])
+        
+        state.hideHidingChildren()
         
         visibleChildren = ["I", "C", "H", "B", "K", "A", "G"]
         state.update(with: visibleChildren)
         XCTAssertEqual(state.visibleChildren, visibleChildren)
-        XCTAssertEqual(state.children, ["I", "C", "D", "E", "F", "H", "B", "K", "A", "G"])
+        
+        state.hideHidingChildren()
         
         visibleChildren = ["M", "K", "C", "E", "L", "G", "B"]
         state.update(with: visibleChildren)
         XCTAssertEqual(state.visibleChildren, visibleChildren)
-        XCTAssertEqual(state.children, ["M", "I", "K", "A", "C", "D", "E", "L", "F", "H", "G", "B"])
     }
     
 }
@@ -128,27 +126,35 @@ struct Update {
     let all: [AnyHashable]
 }
 
-extension Array where Element == (key: AnyHashable, state: ChildState) {
+extension Array where Element == ChildAndState<String> {
     
-    var children: [AnyHashable] {
-        return map { $0.key }
+    var children: [String] {
+        return map { $0.child }
     }
     
-    var visibleChildren: [AnyHashable] {
+    var visibleChildren: [String] {
         return filter { $0.state == .visible }.children
     }
     
-    mutating func update(with newChildren: [AnyHashable]) {
+    mutating func update(with newChildren: [String]) {
         let diff = ChildDiff(newChildren: newChildren, oldChildren: self)
-        for (index, isHidden) in diff.hidden {
-            self[index].state = isHidden ? .hiding : .visible
+        for (child, index) in diff.insertNewChildren + diff.moveVisibleChildren {
+            if let from = firstIndex(where: { $0.child == child }) {
+                remove(at: from)
+            }
+            insert(ChildAndState(child: child, state: .visible), at: index)
         }
-        for (key, to, from) in diff.move {
-//            guard let from = firstIndex(where: { $0.key == key }) else { continue }
-            insert(remove(at: from), at: to)
+        let set = Set(newChildren)
+        for (index, element) in enumerated() {
+            self[index].state = set.contains(element.child) ? .visible : .hiding
         }
-        for (key, index) in diff.insert {
-            insert((key, .visible), at: index)
+    }
+    
+    mutating func hideHidingChildren() {
+        for (index, child) in self.enumerated() {
+            if child.state == .hiding {
+                self[index].state = .hidden
+            }
         }
     }
     

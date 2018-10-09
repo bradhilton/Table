@@ -21,7 +21,6 @@ func ColoredRect(color: UIColor) -> View {
 func Label(text: String) -> View {
     return View { (view: UILabel) in
         view.text = text
-//        view.sizeToFit()
     }
 }
 
@@ -61,67 +60,97 @@ updateView(with:
                 arrangedSubviews: [
                     ArrangedSubview(
                         key: 0,
+                        constraints: [],
+                        spacingAfterView: 0,
+                        view: Label(text: "Hello, world!")
+                    )
+                ]
+            )
+        )
+    ]
+)
+
+updateView(with:
+    [
+        Subview(
+            key: 0,
+            constraints: [
+                .centerX == parent.centerX,
+                .centerY == parent.centerY
+            ],
+            view: StackView(
+                axis: .vertical,
+                //                distribution: .fill,
+                //                alignment: .center,
+                arrangedSubviews: [
+                    ArrangedSubview(
+                        key: 0,
+                        constraints: [],
+                        spacingAfterView: 0,
+                        view: Label(text: "Hello, world!")
+                    ),
+                    ArrangedSubview(
+                        key: 1,
+                        constraints: [],
+                        spacingAfterView: 0,
+                        view: Label(text: "Hello, Brad!")
+                    )
+                ]
+            )
+        )
+    ]
+)
+
+updateView(with:
+    [
+        Subview(
+            key: 0,
+            constraints: [
+                .centerX == parent.centerX,
+                .centerY == parent.centerY
+            ],
+            view: StackView(
+                axis: .vertical,
+                //                distribution: .fill,
+                //                alignment: .center,
+                arrangedSubviews: [
+                    ArrangedSubview(
+                        key: 1,
+                        constraints: [],
+                        spacingAfterView: 0,
+                        view: Label(text: "Hello, Brad!")
+                    ),
+                    ArrangedSubview(
+                        key: 0,
+                        constraints: [],
+                        spacingAfterView: 0,
+                        view: Label(text: "Hello, world!")
+                    )
+                ]
+            )
+        )
+    ]
+)
+
+updateView(with:
+    [
+        Subview(
+            key: 0,
+            constraints: [
+                .centerX == parent.centerX,
+                .centerY == parent.centerY
+            ],
+            view: StackView(
+                axis: .vertical,
+                //                distribution: .fill,
+                //                alignment: .center,
+                arrangedSubviews: [
+                    ArrangedSubview(
+                        key: 1,
                         constraints: [
-                            .width == 100,
                             .height == 100
                         ],
                         spacingAfterView: 0,
-                        view: Label(text: "Hello, world!")
-                    )
-                ]
-            )
-        )
-    ]
-)
-
-updateView(with:
-    [
-        Subview(
-            key: 0,
-            constraints: [
-                .centerX == parent.centerX,
-                .centerY == parent.centerY
-            ],
-            view: StackView(
-                axis: .vertical,
-                //                distribution: .fill,
-                //                alignment: .center,
-                arrangedSubviews: [
-                    ArrangedSubview(
-                        key: 0,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, world!")
-                    ),
-                    ArrangedSubview(
-                        key: 1,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, Brad!")
-                    )
-                ]
-            )
-        )
-    ]
-)
-
-updateView(with:
-    [
-        Subview(
-            key: 0,
-            constraints: [
-                .centerX == parent.centerX,
-                .centerY == parent.centerY
-            ],
-            view: StackView(
-                axis: .vertical,
-                //                distribution: .fill,
-                //                alignment: .center,
-                arrangedSubviews: [
-                    ArrangedSubview(
-                        key: 1,
-                        constraints: [],
-                        spacingAfterView: 0,
                         view: Label(text: "Hello, Brad!")
                     ),
                     ArrangedSubview(
@@ -135,6 +164,8 @@ updateView(with:
         )
     ]
 )
+
+
 
 updateView(with:
     [
@@ -352,7 +383,7 @@ updateView(with:
                     ArrangedSubview(
                         key: 3,
                         constraints: [],
-                        spacingAfterView: 0,
+                        spacingAfterView: 5,
                         view: Label(text: "Hello, Kendra!")
                     ),
                     ArrangedSubview(
@@ -431,19 +462,19 @@ updateView(with:
                     ArrangedSubview(
                         key: 2,
                         constraints: [],
-                        spacingAfterView: 0,
+                        spacingAfterView: 20,
                         view: Label(text: "Hello, Lorraine!")
                     ),
                     ArrangedSubview(
                         key: 3,
                         constraints: [],
-                        spacingAfterView: 0,
+                        spacingAfterView: 5,
                         view: Label(text: "Hello, Kendra!")
                     ),
                     ArrangedSubview(
                         key: 0,
                         constraints: [],
-                        spacingAfterView: 0,
+                        spacingAfterView: -10,
                         view: Label(text: "Hello, world!")
                     ),
                     ArrangedSubview(key: 1, constraints: [], view: Label(text: "Hello, Brad!"))
@@ -486,82 +517,6 @@ updateView(with:
                         view: Label(text: "Hello, Lorraine!")
                     ),
                 ]
-            )
-        )
-    ]
-)
-
-updateView(with:
-    [
-        Subview(
-            key: 0,
-            constraints: [
-                .centerX == parent.centerX,
-                .centerY == parent.centerY
-            ],
-            view: StackView(
-                axis: .vertical,
-                distribution: .fill,
-                alignment: .center,
-                arrangedSubviews: [
-                    ArrangedSubview(key: 1, constraints: [], view: Label(text: "Hello, Brad!")),
-                    ArrangedSubview(
-                        key: 0,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, world!")
-                    ),
-                    ArrangedSubview(
-                        key: 3,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, Kendra!")
-                    ),
-                    ArrangedSubview(
-                        key: 2,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, Lorraine!")
-                    ),
-                    ]
-            )
-        )
-    ]
-)
-
-updateView(with:
-    [
-        Subview(
-            key: 0,
-            constraints: [
-                .centerX == parent.centerX,
-                .centerY == parent.centerY
-            ],
-            view: StackView(
-                axis: .vertical,
-                distribution: .fill,
-                alignment: .center,
-                arrangedSubviews: [
-                    ArrangedSubview(key: 1, constraints: [], view: Label(text: "Hello, Brad!")),
-                    ArrangedSubview(
-                        key: 0,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, world!")
-                    ),
-                    ArrangedSubview(
-                        key: 3,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, Kendra!")
-                    ),
-                    ArrangedSubview(
-                        key: 2,
-                        constraints: [],
-                        spacingAfterView: 0,
-                        view: Label(text: "Hello, Lorraine!")
-                    ),
-                    ]
             )
         )
     ]

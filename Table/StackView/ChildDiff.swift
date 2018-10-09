@@ -12,83 +12,123 @@ enum ChildState {
     case hidden
 }
 
-/*
- First set hidden flag for children at indices
- Then insert new children at indices
- Then remove children at incorrect indices
- Finally re-insert children at correct indices
-*/
-struct ChildDiff {
-    internal private(set) var hidden: [(Int, Bool)] = []
-    internal private(set) var move: [(key: AnyHashable, to: Int, from: Int)] = []
-    internal private(set) var insert: [(key: AnyHashable, at: Int)] = []
+protocol ChildAndStateProtocol {
+    associatedtype Child : Hashable
+    var child: Child { get }
+    var state: ChildState { get set }
+    init(child: Child, state: ChildState)
+}
+
+struct ChildAndState<Child : Hashable> : ChildAndStateProtocol {
+    let child: Child
+    var state: ChildState
+}
+
+extension UIView {
     
-    init(newChildren: [AnyHashable], oldChildren: [(key: AnyHashable, state: ChildState)]) {
-        
-        // Make a mutable copy of the old children
-        var oldChildren = oldChildren
-        oldChildren.reserveCapacity(newChildren.count)
-        
-        // Set hidden flag for children inserted or removed from the set
-        let newChildrenSet = Set(newChildren)
-        for (index, oldChild) in oldChildren.enumerated() {
-            if oldChild.state != .visible && newChildrenSet.contains(oldChild.key) {
-                hidden.append((index, false))
-            } else if oldChild.state == .visible && !newChildrenSet.contains(oldChild.key) {
-                hidden.append((index, true))
-            }
-        }
-        
-        var newIndexLookup = Dictionary(
-            uniqueKeysWithValues: newChildren.enumerated().lazy.map { ($1, $0) }
-        )
-        
-        var previousIndex = 0
-        for child in oldChildren {
-            if let newIndex = newIndexLookup[child.key] {
-                previousIndex = newIndex
-            } else {
-                newIndexLookup[child.key] = previousIndex
-            }
-        }
-        
-        let newIndices = oldChildren.map(state: 0) { previousIndex, child in
-            
-        }
-        
-        func lessThan(_ lhs: (key: AnyHashable, ChildState), _ rhs: (key: AnyHashable, ChildState)) -> Bool {
-            return newIndexLookup[lhs.key]! < newIndexLookup[rhs.key]!
-        }
-        
-        for (index, child) in oldChildren.enumerated() {
-            var insertionIndex = index
-            var aMove: (key: AnyHashable, to: Int, from: Int)?
-            while insertionIndex > 0 && lessThan(oldChildren[insertionIndex], oldChildren[insertionIndex - 1]) {
-                aMove = (child.key, insertionIndex - 1, index)
-                oldChildren.swapAt(insertionIndex - 1, insertionIndex)
-                insertionIndex -= 1
-            }
-            if let aMove = aMove {
-                move.append(aMove)
-            }
-        }
-        
-        // Insert children not found in current children while adjusting indices of existing children
-        let indexLookup = Dictionary(
-            uniqueKeysWithValues: oldChildren.enumerated().lazy.map { ($1.key, $0) }
-        )
-        var insertionIndex = 0
-        for child in newChildren {
-            if let index = indexLookup[child] {
-                insertionIndex = index + insert.count + 1
-            } else {
-                oldChildren.insert((key: child, state: .visible), at: insertionIndex)
-                insert.append((key: child, at: insertionIndex))
-                insertionIndex += 1
-            }
-        }
-        
+    var childState: ChildState {
+        return isVisible
+            ? isHidden || alpha == 0
+            ? .hiding
+            : .visible
+            : .hidden
     }
     
 }
 
+/*
+ First remove listed children
+ Then insert new children
+ Finally move existing children
+ */
+struct ChildDiff<Child : Hashable> {
+    let removeChildren: [Child]
+    let insertNewChildren: [(child: Child, at: Int)]
+    let moveVisibleChildren: [(child: Child, at: Int)]
+    
+    func map<T : Hashable>(_ transform: (Child) -> T) -> ChildDiff<T> {
+        return ChildDiff<T>(
+            removeChildren: removeChildren.map(transform),
+            insertNewChildren: insertNewChildren.map { (child: transform($0.child), at: $0.at) },
+            moveVisibleChildren: moveVisibleChildren.map { (child: transform($0.child), at: $0.at) }
+        )
+    }
+    
+}
+
+extension ChildDiff {
+    
+    init(newChildren: [Child], oldChildren: [ChildAndState<Child>]) {
+        var oldChildren = oldChildren
+        
+        let newChildrenSet = Set(newChildren)
+        let newRanks = Dictionary(uniqueKeysWithValues: zip(newChildren, newChildren.indices))
+        
+        removeChildren = oldChildren.removeToBeInsertedElements(newChildrenSet)
+        insertNewChildren = oldChildren.insert(newChildren)
+        moveVisibleChildren = oldChildren.sort(with: newRanks)
+    }
+    
+}
+
+extension Array where Element : ChildAndStateProtocol {
+    
+    fileprivate mutating func removeToBeInsertedElements(_ newChildren: Set<Element.Child>) -> [Element.Child] {
+        return enumerated().reversed().compactMap { (index, element) in
+            if newChildren.contains(element.child) && element.state == .hidden {
+                remove(at: index)
+                return element.child
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    /// Inserts new children and returns a list of insertions
+    fileprivate mutating func insert(_ newChildren: [Element.Child]) -> [(child: Element.Child, at: Int)] {
+        let indices = Dictionary(uniqueKeysWithValues: enumerated().lazy.map { ($1.child, $0) })
+        var insertions: [(child: Element.Child, at: Int)] = []
+        var insertionIndex = 0
+        for child in newChildren {
+            if let index = indices[child] {
+                insertionIndex = index + insertions.count + 1
+            } else {
+                insert(Element(child: child, state: .visible), at: insertionIndex)
+                insertions.append((child: child, at: insertionIndex))
+                insertionIndex += 1
+            }
+        }
+        return insertions
+    }
+    
+    /// Sorts an array of children and returns a list of insertions
+    fileprivate mutating func sort(
+        with newRanks: [Element.Child: Int]
+        ) -> [(child: Element.Child, at: Int)] {
+        var insertions: [(child: Element.Child, at: Int)] = []
+        for (index, element) in enumerated() {
+            guard let rank = newRanks[element.child] else { continue }
+            var insertionIndex = index - 1
+            var insertion: (child: Element.Child, at: Int)?
+            var previousRank: Int?
+            while insertionIndex >= 0 {
+                previousRank = newRanks[self[insertionIndex].child]
+                if let previousRank = previousRank {
+                    if rank < previousRank {
+                        insertion = (element.child, insertionIndex)
+                    } else {
+                        break
+                    }
+                }
+                insertionIndex -= 1
+            }
+            if let insertion = insertion {
+                remove(at: index)
+                insert(Element(child: insertion.child, state: .visible), at: insertion.at)
+                insertions.append(insertion)
+            }
+        }
+        return insertions
+    }
+    
+}

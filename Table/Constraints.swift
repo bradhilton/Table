@@ -71,6 +71,30 @@ public enum Target : Equatable {
     case sibling(key: AnyHashable)
 }
 
+extension Target {
+    
+    func item(superview: UIView, window: UIWindow, siblings: [AnyHashable: AnyObject]) -> AnyObject {
+        switch self {
+        case .superview: return superview
+        case .superviewSafeArea:
+            if #available(iOS 11.0, *) {
+                return superview.safeAreaLayoutGuide
+            } else {
+                fatalError("Safe area constraints are only supported in iOS 11 and above")
+            }
+        case .superviewMargins: return superview.layoutMarginsGuide
+        case .superviewReadableContent: return superview.readableContentGuide
+        case .keyboard: return window.keyboardLayoutGuide
+        case .sibling(let key):
+            guard let sibling = siblings[key] else {
+                fatalError("Unable to find sibling view or layout guide for key: \(key)")
+            }
+            return sibling
+        }
+    }
+    
+}
+
 public let superview = Target.superview
 public let parent = superview
 public let safeArea = Target.superviewSafeArea

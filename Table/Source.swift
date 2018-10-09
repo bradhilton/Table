@@ -130,17 +130,17 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        var indexLookup: [String: Int] = [:]
+        var indices: [String: Int] = [:]
         for (index, section) in data.sections.enumerated() {
             guard let indexTitle = section.indexTitle else { continue }
             if indexTitle == title {
                 return index
             }
-            indexLookup[indexTitle] = index
+            indices[indexTitle] = index
         }
         let indexTitles = tableView.sectionIndexTitles ?? []
         for title in indexTitles[index..<indexTitles.endIndex] {
-            guard let index = indexLookup[title] else { continue }
+            guard let index = indices[title] else { continue }
             return index
         }
         return max(data.sections.endIndex - 1, 0)
