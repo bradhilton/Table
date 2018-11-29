@@ -34,13 +34,12 @@ private class KeyboardLayoutGuide : UILayoutGuide {
                 let userInfo = notification.userInfo,
                 let frame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
                 let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-                let animationCurve = (userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int)
-                    .flatMap(UIView.AnimationCurve.init)
+                let animationCurve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UIView.AnimationOptions
                 else { return }
             UIView.animate(
                 withDuration: duration,
                 delay: 0,
-                options: [UIView.AnimationOptions(animationCurve: animationCurve)],
+                options: animationCurve,
                 animations: {
                     heightConstraint.constant = window.frame.height - frame.minY
                     window.layoutIfNeeded()
@@ -55,21 +54,3 @@ private class KeyboardLayoutGuide : UILayoutGuide {
     }
     
 }
-
-extension UIView.AnimationOptions {
-    
-    fileprivate init(animationCurve: UIView.AnimationCurve) {
-        switch animationCurve {
-        case .easeInOut:
-            self = .curveEaseInOut
-        case .easeIn:
-            self = .curveEaseIn
-        case .easeOut:
-            self = .curveEaseOut
-        case .linear:
-            self = .curveLinear
-        }
-    }
-    
-}
-

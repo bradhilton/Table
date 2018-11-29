@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 public protocol Axis {
     var layoutAttribute: NSLayoutConstraint.Attribute { get }
 }
@@ -607,6 +608,9 @@ extension Constraint {
         )
     }
     
+    /**
+     - Returns: A dimension constraint equal to a constant
+    */
     public init(
         _ attribute: Dimension,
         equalTo constant: CGFloat,
