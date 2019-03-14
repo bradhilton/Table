@@ -6,11 +6,26 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
+struct SectionKey : Hashable, CustomStringConvertible {
+    let section: Int
+    var description: String {
+        return "Section: \(section)"
+    }
+}
+
+struct RowKey : Hashable, CustomStringConvertible {
+    let sectionKey: AnyHashable
+    let row: Int
+    var description: String {
+        return "\(sectionKey) - Row: \(row)"
+    }
+}
+
 private func setIdentifiers(_ sections: inout [Section]) {
     var sectionNumber = 0
     sections.mutatingEach { (section: inout Section) in
         if section.key == .auto {
-            section.key = "Section: \(sectionNumber)"
+            section.key = SectionKey(section: sectionNumber)
             defer {
                 sectionNumber += 1
             }
@@ -18,7 +33,7 @@ private func setIdentifiers(_ sections: inout [Section]) {
         var rowNumber = 0
         section.rows.mutatingEach { (row: inout Row) in
             if row.key == .auto {
-                row.key = "\(section.key) - Row: \(rowNumber)"
+                row.key = RowKey(sectionKey: section.key, row: rowNumber)
                 rowNumber += 1
             }
         }

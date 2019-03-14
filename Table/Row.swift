@@ -2,7 +2,7 @@
 
 public struct Row {
     
-    public enum Height : ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral {
+    public enum Height : ExpressibleByIntegerLiteral, ExpressibleByFloatLiteral, Equatable {
         case constant(CGFloat)
         case automatic(estimated: CGFloat)
         

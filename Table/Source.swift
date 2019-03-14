@@ -11,6 +11,13 @@ func animationCost(_ delta: SectionsDelta) -> Int {
     return (delta.rowDeletes.count * 13 + delta.rowInserts.count * 3) / 4
 }
 
+func rowHeightsAreEqual(_ first: Data, _ second: Data) -> Bool {
+    return first.sections.elementsEqual(second.sections) { (first, second) in first.rows.elementsEqual(second.rows)  { first, second in
+            first.height == second.height
+        }
+    }
+}
+
 class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
     
 //    var movingRow: Row?
@@ -43,7 +50,7 @@ class Source : NSObject, UITableViewDelegate, UITableViewDataSource {
                     return indexPath
                 }
             }
-        if rowReloads.count > 0 || delta.isEmpty {
+        if rowReloads.count > 0 || (delta.isEmpty && !rowHeightsAreEqual(newValue, data)) {
             tableView.reloadRows(at: rowReloads, with: .fade)
         }
         zip(data.sections, data.sections.indices)

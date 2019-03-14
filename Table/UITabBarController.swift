@@ -116,7 +116,9 @@ extension UITabBarController {
         set {
             guard let index = tabs.index(where: { $0.keyOrTitle == newValue }) else { return }
             if index != selectedIndex {
-                selectedIndex = index
+                UIView.performWithoutAnimation {
+                    selectedIndex = index
+                }
             }
         }
     }

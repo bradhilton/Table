@@ -8,6 +8,12 @@
 
 import yoga
 
+let config: YGConfigRef = {
+    let config = YGConfigNew()
+    YGConfigSetPointScaleFactor(config, Float(UIScreen.main.scale))
+    return config
+}()!
+
 public struct Flex {
     
     public var key: AnyHashable = .auto
@@ -41,7 +47,7 @@ public struct Flex {
     }
     
     func nodeAndViews(with pool: inout [UIView]) -> (YGNodeRef, [FlexState.View]) {
-        let node = YGNodeNew()!
+        let node = YGNodeNewWithConfig(config)!
         direction.map { YGNodeStyleSetFlexDirection(node, $0) }
         layoutDirection.map { YGNodeStyleSetDirection(node, $0) }
         wrap.map { YGNodeStyleSetFlexWrap(node, $0) }

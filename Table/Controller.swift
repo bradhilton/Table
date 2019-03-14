@@ -25,7 +25,6 @@ public struct Controller {
     
     public init<Controller : UIViewController>(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         key: AnyHashable = .auto,
@@ -38,7 +37,7 @@ public struct Controller {
         updateViewLayout: @escaping (Controller) -> () = { _ in },
         updateView: @escaping (Controller) -> () = { _ in }
     ) {
-        self.type = "\(Controller.self):\(file):\(function):\(line):\(column)"
+        self.type = UniqueDeclaration(file: file, line: line, column: column)
         self.key = key
         self.create = instance
         self.configureController = { ($0 as? Controller).map(configureController) }
@@ -80,7 +79,13 @@ public struct Controller {
 extension UIViewController {
     
     public func update(with controller: Controller) {
-        controller.updateController(self)
+        if viewIsVisible {
+            controller.updateController(self)
+        } else {
+            UIView.performWithoutAnimation {
+                controller.updateController(self)
+            }
+        }
         updateViewOnLayout = controller.updateViewOnLayout
         updateView = controller.updateView
     }
@@ -120,9 +125,11 @@ extension UIViewController {
         case (let controller?, nil):
             guard viewHasAppeared else { return }
             let viewController = controller.newViewController()
-            if let popoverPresentationController = viewController.popoverPresentationController,
+            if
+                let popoverPresentationController = viewController.popoverPresentationController,
                 let sourceViewKey = popoverPresentationController.sourceViewKey,
-                let sourceView = firstSubview(key: sourceViewKey) {
+                let sourceView = firstSubview(key: sourceViewKey)
+            {
                 popoverPresentationController.sourceView = sourceView
                 if let sourceRectGetter = popoverPresentationController.sourceRectGetter {
                     popoverPresentationController.sourceRect = sourceRectGetter(sourceView)

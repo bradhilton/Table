@@ -62,30 +62,47 @@ extension NSObjectProtocol where Self : UITextField {
 
 extension UIView {
     
-    var layout: (UIView) -> () {
-        get {
-            return storage[\.layout, default: { _ in }]
+    var breadthFirstSubviews: AnySequence<UIView> {
+        var index = 0
+        var subviews = self.subviews
+        return AnySequence {
+            return AnyIterator {
+                guard index != subviews.endIndex else { return nil }
+                let subview = subviews[index]
+                subviews.append(contentsOf: subview.subviews)
+                index += 1
+                return subview
+            }
         }
-        set {
-            storage[\.layout] = newValue
-            newValue(self)
-        }
-    }
-    
-    @objc func swizzledLayoutSubviews() {
-        swizzledLayoutSubviews()
-        layout(self)
     }
     
     public func firstSubview<T : UIView>(class: T.Type = T.self, key: AnyHashable? = nil) -> T? {
-        for subview in subviews {
-            if let view = subview as? T, key == nil || view.key == key, view.alpha > 0, !view.isHidden {
-                return view
-            } else if let view = subview.firstSubview(class: T.self, key: key) {
-                return view
-            }
+        return breadthFirstSubviews.first { subview in
+            guard
+                let subview = subview as? T,
+                key == nil || subview.key == key,
+                subview.alpha > 0,
+                !subview.isHidden
+            else { return nil }
+            return subview
         }
-        return nil
     }
     
+}
+
+func breadthFirstSubviews(of view: UIView) -> AnySequence<UIView> {
+    return AnySequence(
+        sequence(state: AnySequence(view.subviews)) { (state: inout AnySequence<UIView>) -> AnySequence<UIView>? in
+            guard state.underestimatedCount > 0 || state.makeIterator().next() != nil else { return nil }
+            defer {
+                state = AnySequence(
+                    [
+                        state,
+                        AnySequence(state.lazy.flatMap { $0.subviews })
+                    ].lazy.flatMap { $0 }
+                )
+            }
+            return state
+        }.lazy.flatMap { $0 }
+    )
 }

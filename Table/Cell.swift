@@ -6,23 +6,18 @@
 //  Copyright © 2017 Brad Hilton. All rights reserved.
 //
 
+private var reuseIdentifiers: [UniqueDeclaration: String] = [:]
+
 public struct Cell {
     
-    let file: String
-    let function: String
-    let line: Int
-    let column: Int
+    let uniqueDeclaration: UniqueDeclaration
     let cellClass: UITableViewCell.Type
-    var reuseIdentifier: String {
-        return "\(cellClass):\(file):\(function):\(line):\(column)"
-    }
     let willDisplay: (UITableViewCell) -> ()
     let didEndDisplaying: (UITableViewCell) -> ()
     let update: (UITableViewCell) -> ()
     
     public init<Cell : UITableViewCell>(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         class: Cell.Type = Cell.self,
@@ -30,14 +25,20 @@ public struct Cell {
         didEndDisplaying: @escaping (Cell) -> () = { _ in },
         update: @escaping (Cell) -> () = { _ in }
     ) {
-        self.file = file
-        self.function = function
-        self.line = line
-        self.column = column
+        self.uniqueDeclaration = UniqueDeclaration(file: file, line: line, column: column)
         self.cellClass = `class`
         self.willDisplay = { ($0 as? Cell).map(willDisplay) }
         self.didEndDisplaying = { ($0 as? Cell).map(didEndDisplaying) }
         self.update = { ($0 as? Cell).map(update) }
+    }
+    
+    var reuseIdentifier: String {
+        guard let reuseIdentifier = reuseIdentifiers[uniqueDeclaration] else {
+            let reuseIdentifier = "\(uniqueDeclaration.file):\(uniqueDeclaration.line):\(uniqueDeclaration.column)"
+            reuseIdentifiers[uniqueDeclaration] = reuseIdentifier
+            return reuseIdentifier
+        }
+        return reuseIdentifier
     }
     
     func cell(for indexPath: IndexPath, in tableView: UITableView, with key: AnyHashable) -> UITableViewCell {

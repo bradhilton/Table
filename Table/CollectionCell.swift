@@ -6,35 +6,36 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
+private var reuseIdentifiers: [UniqueDeclaration: String] = [:]
+
 public struct CollectionCell {
     
-    let file: String
-    let function: String
-    let line: Int
-    let column: Int
+    let uniqueDeclaration: UniqueDeclaration
     let cellClass: UICollectionViewCell.Type
-    var reuseIdentifier: String {
-        return "\(cellClass):\(file):\(function):\(line):\(column)"
-    }
     let update: (UICollectionViewCell) -> ()
     
     public init<Cell : UICollectionViewCell>(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         class: Cell.Type = Cell.self,
         update: @escaping (Cell) -> () = { _ in }
     ) {
-        self.file = file
-        self.function = function
-        self.line = line
-        self.column = column
+        self.uniqueDeclaration = UniqueDeclaration(file: file, line: line, column: column)
         self.cellClass = `class`
         self.update = { cell in
             guard let cell = cell as? Cell else { return }
             update(cell)
         }
+    }
+    
+    var reuseIdentifier: String {
+        guard let reuseIdentifier = reuseIdentifiers[uniqueDeclaration] else {
+            let reuseIdentifier = "\(uniqueDeclaration.file):\(uniqueDeclaration.line):\(uniqueDeclaration.column)"
+            reuseIdentifiers[uniqueDeclaration] = reuseIdentifier
+            return reuseIdentifier
+        }
+        return reuseIdentifier
     }
     
     func cell(for indexPath: IndexPath, in collectionView: UICollectionView) -> UICollectionViewCell {

@@ -60,10 +60,6 @@ public struct Reusable<Object : NSObject> : ReuseProtocol {
     
 }
 
-func Type(_ items: Any...) -> String {
-    return items.map(String.init(describing:)).joined(separator: ":")
-}
-
 protocol ReuseProtocol {
     associatedtype Object
     func object(reusing pool: inout [Object]) -> Object
@@ -76,7 +72,6 @@ extension Reusable where Object == UIBarButtonItem {
     
     public init(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         key: AnyHashable = .auto,
@@ -85,7 +80,7 @@ extension Reusable where Object == UIBarButtonItem {
         update: @escaping Update = { _ in }
     ) {
         self.init(
-            type: Type(file, function, line, column),
+            type: UniqueDeclaration(file: file, line: line, column: column),
             key: key,
             create: create,
             configure: configure,
@@ -107,7 +102,6 @@ extension Reusable where Object == UISearchController {
     
     public init(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         searchResultsController: Controller? = nil,
@@ -115,7 +109,7 @@ extension Reusable where Object == UISearchController {
         update: @escaping Update = { _ in }
     ) {
         self.init(
-            type: Type(file, function, line, column, searchResultsController?.type as Any),
+            type: UniqueDeclaration(file: file, line: line, column: column),
             create: { UISearchController(searchResultsController: searchResultsController?.newViewController()) },
             configure: configure,
             update: { searchController in

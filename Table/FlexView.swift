@@ -66,11 +66,14 @@ class FlexState {
                     superview.addSubview(view)
                 }
                 view.alpha = alpha
+                view.setNeedsLayout()
             } else {
                 view.alpha = 1
-                view.frame = node.frame(withOffset: offset)
+                let frame = node.frame(withOffset: offset)
+                if (frame != view.frame) {
+                    view.frame = frame
+                }
             }
-            view.setNeedsLayout()
         }
         
         func updateFrame(withOffset offset: CGPoint) {

@@ -12,7 +12,6 @@ extension Reusable where Object == UIRefreshControl {
     
     public init(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         create: @escaping Create = { Object() },
@@ -20,7 +19,7 @@ extension Reusable where Object == UIRefreshControl {
         update: @escaping Update = { _ in }
     ) {
         self.init(
-            type: Type(file, function, line, column),
+            type: UniqueDeclaration(file: file, line: line, column: column),
             create: create,
             configure: configure,
             update: update
@@ -46,7 +45,10 @@ extension NSObjectProtocol where Self : RefreshControlProtocol {
         set {
             storage[\.refreshControl] = newValue
             if #available(iOS 10.0, *) {
-                refreshControl = newValue?.object(reusing: refreshControl)
+                let newRefreshControl = newValue?.object(reusing: refreshControl)
+                if (newRefreshControl != refreshControl) {
+                    refreshControl = newRefreshControl
+                }
             } else if let viewController = self as? UITableViewController {
                 viewController.refreshControl = newValue?.object(reusing: viewController.refreshControl)
             }

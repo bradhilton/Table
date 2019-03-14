@@ -6,29 +6,31 @@
 //  Copyright © 2018 Brad Hilton. All rights reserved.
 //
 
+struct UniqueDeclaration : Hashable {
+    let file: String
+    let line: Int
+    let column: Int
+}
+
 public struct View {
     
     fileprivate let type: AnyHashable
     private let create: () -> UIView
     private let configure: (UIView) -> ()
-    private let layout: (UIView) -> ()
     private let update: (UIView) -> ()
     
     public init<View : UIView>(
         file: String = #file,
-        function: String = #function,
         line: Int = #line,
         column: Int = #column,
         class: View.Type = View.self,
         create: @escaping () -> View = { View() },
         configure: @escaping (View) -> () = { _ in },
-        layout: @escaping (View) -> () = { _ in },
         update: @escaping (View) -> () = { _ in }
     ) {
-        self.type = "\(View.self):\(file):\(function):\(line):\(column)"
+        self.type = UniqueDeclaration(file: file, line: line, column: column)
         self.create = create
         self.configure = { ($0 as? View).map(configure) }
-        self.layout = { ($0 as? View).map(layout) }
         self.update = { ($0 as? View).map(update) }
     }
     
@@ -48,7 +50,6 @@ public struct View {
     @discardableResult
     func reuse(_ view: UIView) -> UIView {
         update(view)
-        view.layout = layout
         return view
     }
     
@@ -59,7 +60,6 @@ public struct View {
         UIView.performWithoutAnimation {
             configure(view)
             update(view)
-            view.layout = layout
         }
         return view
     }

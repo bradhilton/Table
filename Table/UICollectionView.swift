@@ -251,17 +251,34 @@ private class FlexCollectionDelegate : NSObject, UICollectionViewDelegate, UICol
     
 }
 
+func setIdentifiers(_ items: inout [Item]) {
+    var itemNumber = 0
+    items.mutatingEach { item in
+        if item.key == .auto {
+            item.key = itemNumber
+            itemNumber += 1
+        }
+    }
+}
+
 private class Delegate : NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     fileprivate private(set) var items = [Item]() {
         didSet {
             hasCustomItemSizes = items.first { $0.size != nil } != nil
+            let sizes = items.map { $0.size }
+            sizesChanged = self.sizes.elementsEqual(sizes)
+            self.sizes = sizes
         }
     }
     
     private var hasCustomItemSizes = false
+    private var sizesChanged = false
+    private var sizes: [CGSize?] = []
     
     func setItems(_ items: [Item], with collectionView: UICollectionView) {
+        var items = items
+        setIdentifiers(&items)
         guard UIView.inheritedAnimationDuration > 0 else {
             self.items = items
             return collectionView.reloadData()
@@ -275,7 +292,7 @@ private class Delegate : NSObject, UICollectionViewDataSource, UICollectionViewD
             }.compactMap { indexPath, item in
                 newItems[item.key].map { (indexPath, item, $0) }
             }.compactMap { indexPath, oldItem, newItem in
-                if (oldItem.cell.reuseIdentifier == newItem.cell.reuseIdentifier) {
+                if (oldItem.cell.uniqueDeclaration == newItem.cell.uniqueDeclaration) {
                     collectionView.cellForItem(at: indexPath).map { newItem.cell.update($0) }
                     return nil
                 } else {
@@ -283,7 +300,9 @@ private class Delegate : NSObject, UICollectionViewDataSource, UICollectionViewD
                     return indexPath
                 }
             }
-        collectionView.reloadItems(at: itemReloads)
+        if itemReloads.count > 0 || (!delta.noChanges && sizesChanged) {
+            collectionView.reloadItems(at: itemReloads)
+        }
         self.items = items
         guard !delta.noChanges else { return }
         collectionView.performBatchUpdates({
@@ -322,7 +341,8 @@ private class Delegate : NSObject, UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return items[indexPath.row].size ?? collectionView.flowLayout.itemSize
+        return sizes[indexPath.row] ?? collectionView.flowLayout.itemSize
+//        return items[indexPath.row].size ?? collectionView.flowLayout.itemSize
     }
     
 }

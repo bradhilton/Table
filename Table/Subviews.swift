@@ -107,10 +107,6 @@ extension NSObjectProtocol where Self : UIView {
 
 let swizzleViewMethods: () -> () = {
     method_exchangeImplementations(
-        class_getInstanceMethod(UIView.self, #selector(UIView.swizzledLayoutSubviews))!,
-        class_getInstanceMethod(UIView.self, #selector(UIView.layoutSubviews))!
-    )
-    method_exchangeImplementations(
         class_getInstanceMethod(UIView.self, #selector(UIView.swizzledDidMoveToWindow))!,
         class_getInstanceMethod(UIView.self, #selector(UIView.didMoveToWindow))!
     )

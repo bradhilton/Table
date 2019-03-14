@@ -57,13 +57,17 @@ public class NavigationItem {
         return ContainerController(key: key, childController: controller, presentedController: presentedController)
     }
     
-    func updateItem(for controller: UIViewController) {
+    fileprivate func updateItem(for controller: UIViewController) {
+        let animated = controller.viewIsVisible && UIView.inheritedAnimationDuration > 0
         let item = controller.navigationItem
         let bar = controller.navigationController?.navigationBar
         let editButtonItem = controller.editButtonItem
         editButtonItem.type = editButtonItemType
         editButtonItem.key = editButtonItemKey
-        item.title = title
+        // MARK: Performance equality check
+        if item.title != title {
+            item.title = title
+        }
         if let titleView = titleView?.view(reusing: item.titleView) {
             item.titleView = titleView
         } else {
@@ -72,12 +76,14 @@ public class NavigationItem {
         item.prompt = prompt
         var pool = item.allBarButtonItems + [editButtonItem]
 //        var pool = item.allBarButtonItems + (bar?.topItem?.allBarButtonItems ?? []) + (bar?.backItem?.allBarButtonItems ?? []) + [editButtonItem]
-        item.setRightBarButtonItems(rightBarButtonItems.objects(reusing: &pool), animated: true)
-        item.setLeftBarButtonItems(leftBarButtonItems.objects(reusing: &pool), animated: true)
+        item.setRightBarButtonItems(rightBarButtonItems.objects(reusing: &pool), animated: animated)
+        item.setLeftBarButtonItems(leftBarButtonItems.objects(reusing: &pool), animated: animated)
         item.leftBarButtonItems?.forEach { $0.viewController = bar?.viewController }
         item.rightBarButtonItems?.forEach { $0.viewController = bar?.viewController }
         if #available(iOS 11.0, *) {
-            item.largeTitleDisplayMode = largeTitleDisplayMode
+            if item.largeTitleDisplayMode != largeTitleDisplayMode {
+                item.largeTitleDisplayMode = largeTitleDisplayMode
+            }
             item.searchController = searchController?.object(reusing: item.searchController)
             item.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling
         }
@@ -171,17 +177,28 @@ extension UINavigationController {
     private func viewController(for item: NavigationItem, with pool: inout [UIViewController]) -> UIViewController {
         let viewController = item.containerController.viewController(reusing: &pool)
         viewController.navigationItem.key = item.key
-        if isViewLoaded {
-            // MARK: Immediately update title, do a performance equality check
-            if item.title != viewController.navigationItem.title {
-                viewController.navigationItem.title = item.title
-            }
-            viewController.updateNavigationItem = { viewController in
-                item.updateItem(for: viewController)
-            }
-        } else /* configureController */ {
-            item.updateItem(for: viewController)
+        UIView.performWithoutAnimation {
+            UIView.animate(
+                withDuration: 0,
+                delay: 0,
+                options: [.overrideInheritedCurve, .overrideInheritedOptions, .overrideInheritedDuration],
+                animations: {
+                    item.updateItem(for: viewController)
+                },
+                completion: nil
+            )
         }
+//        if isViewLoaded {
+//            // MARK: Immediately update title, do a performance equality check
+//            if item.title != viewController.navigationItem.title {
+//                viewController.navigationItem.title = item.title
+//            }
+//            viewController.updateNavigationItem = { viewController in
+//                item.updateItem(for: viewController)
+//            }
+//        } else /* configureController */ {
+//            item.updateItem(for: viewController)
+//        }
         return viewController
     }
     

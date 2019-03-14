@@ -17,15 +17,17 @@ struct ItemsDelta {
     
     init(from: [Item], to: [Item]) {
         deletes = [Int]()
-        deletes.reserveCapacity(from.count / 2)
+        deletes.reserveCapacity(from.count)
         inserts = [Int]()
-        inserts.reserveCapacity(to.count / 2)
+        inserts.reserveCapacity(to.count)
         moves = [(Int, Int)]()
-        moves.reserveCapacity(from.count / 2)
+        moves.reserveCapacity(from.count)
+        
         var lookup = [AnyHashable: (sortKey: AnyHashable, index: Int)](minimumCapacity: from.count)
         for (item, index) in zip(from, from.indices) {
             lookup[item.key] = (sortKey: item.sortKey, index: index)
         }
+        
         for to in zip(to, to.indices).map({ (key: $0.key, sortKey: $0.sortKey, index: $1) }) {
             if let from = lookup.removeValue(forKey: to.key) {
                 if to.sortKey != from.sortKey {
@@ -35,9 +37,11 @@ struct ItemsDelta {
                 inserts.append(to.index)
             }
         }
+        
         for (_, index) in lookup.values {
             deletes.append(index)
         }
+        
     }
     
 }
