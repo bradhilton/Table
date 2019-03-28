@@ -32,7 +32,7 @@ public struct Reusable<Object : NSObject> : ReuseProtocol {
 
     
     func object<C : RangeReplaceableCollection>(reusing pool: inout C) -> Object where C.Element == Object {
-        guard let index = pool.index(where: { $0.type == self.type && $0.key == self.key }) else {
+        guard let index = pool.firstIndex(where: { $0.type == self.type && $0.key == self.key }) else {
             return newObject()
         }
         let object = pool.remove(at: index)

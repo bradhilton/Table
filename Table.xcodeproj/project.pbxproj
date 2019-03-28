@@ -39,7 +39,6 @@
 		A266DC28209281C900F524FC /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A266DC27209281C900F524FC /* ContainerView.swift */; };
 		A266DC2C2093B52800F524FC /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A266DC2B2093B52800F524FC /* UIPageViewController.swift */; };
 		A26C77401E3808F5000FB2CF /* TodoListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26C773F1E3808F5000FB2CF /* TodoListController.swift */; };
-		A26C871C2159451E001B4946 /* .swift-version in Resources */ = {isa = PBXBuildFile; fileRef = A26C871B2159451E001B4946 /* .swift-version */; };
 		A272A72B20B35624005EA28D /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A272A72A20B35624005EA28D /* UITableViewCell.swift */; };
 		A2749A8F206552E900BE7A2D /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A8E206552E900BE7A2D /* Weak.swift */; };
 		A2749A912065559400BE7A2D /* ActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2749A902065559400BE7A2D /* ActionSheet.swift */; };
@@ -178,7 +177,6 @@
 		A266DC27209281C900F524FC /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
 		A266DC2B2093B52800F524FC /* UIPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
 		A26C773F1E3808F5000FB2CF /* TodoListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListController.swift; sourceTree = "<group>"; };
-		A26C871B2159451E001B4946 /* .swift-version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 		A272A72A20B35624005EA28D /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		A2749A8E206552E900BE7A2D /* Weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
 		A2749A902065559400BE7A2D /* ActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheet.swift; sourceTree = "<group>"; };
@@ -352,7 +350,6 @@
 		A2BDB5F21DE4A3BB008FE471 = {
 			isa = PBXGroup;
 			children = (
-				A26C871B2159451E001B4946 /* .swift-version */,
 				A2BDB61B1DE4A3E8008FE471 /* Example */,
 				A2BDB6301DE4A3E8008FE471 /* ExampleUITests */,
 				A10F7A766FCDE3CF581626E9 /* Frameworks */,
@@ -490,7 +487,6 @@
 				A224636720CC220F0002CB9A /* Sources */,
 				A224636820CC220F0002CB9A /* Frameworks */,
 				A224636920CC220F0002CB9A /* Resources */,
-				EE08EB03C254066C716B3AE9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -510,7 +506,6 @@
 				A252619820CC346A004DB1C0 /* Sources */,
 				A252619920CC346A004DB1C0 /* Frameworks */,
 				A252619A20CC346A004DB1C0 /* Resources */,
-				2AE7DE68ACC33E672B38C708 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -588,24 +583,25 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = "Brad Hilton";
 				TargetAttributes = {
 					A224636A20CC220F0002CB9A = {
 						CreatedOnToolsVersion = 9.4;
 						DevelopmentTeam = XV8GRWN9U6;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					A252619B20CC346A004DB1C0 = {
 						CreatedOnToolsVersion = 9.4;
 						DevelopmentTeam = XV8GRWN9U6;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					A2BDB5FB1DE4A3BB008FE471 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = 8KK8UBHJUJ;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 					};
 					A2BDB6191DE4A3E8008FE471 = {
@@ -627,6 +623,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -663,7 +660,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A26C871C2159451E001B4946 /* .swift-version in Resources */,
 				A2C9108520221A17001AEF2A /* XTable.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -687,26 +683,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2AE7DE68ACC33E672B38C708 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TablePerformanceTests/Pods-TablePerformanceTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TablePerformanceTests/Pods-TablePerformanceTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		2D291AFE4E4B81D3D999A1A1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -731,7 +707,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
 			);
@@ -742,7 +718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		73EB46C6D9B8C98219206684 /* [CP] Check Pods Manifest.lock */ = {
@@ -815,26 +791,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EE08EB03C254066C716B3AE9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TableTests/Pods-TableTests-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
-				"${BUILT_PRODUCTS_DIR}/Yoga/yoga.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/yoga.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TableTests/Pods-TableTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -997,7 +953,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.TableTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1018,7 +974,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.TableTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1039,7 +995,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.TablePerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1060,7 +1016,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.TablePerformanceTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1069,6 +1025,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1131,6 +1088,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -1200,7 +1158,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1221,7 +1179,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bradhilton.Table;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

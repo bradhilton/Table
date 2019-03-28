@@ -26,9 +26,7 @@ private func setIdentifiers(_ sections: inout [Section]) {
     sections.mutatingEach { (section: inout Section) in
         if section.key == .auto {
             section.key = SectionKey(section: sectionNumber)
-            defer {
-                sectionNumber += 1
-            }
+            sectionNumber += 1
         }
         var rowNumber = 0
         section.rows.mutatingEach { (row: inout Row) in

@@ -34,7 +34,7 @@ class TableTests: XCTestCase {
         XCTAssertEqual(constraint.priority, .required)
         XCTAssertEqual(constraint.priority, nsconstraint.priority)
         
-        let constraints: DictionaryLiteral<Constraint, Constraint> = [
+        let constraints: KeyValuePairs<Constraint, Constraint> = [
             .left == superview.left
                 : Constraint(.left, equalTo: superview.left),
             .left == superview.left + 8

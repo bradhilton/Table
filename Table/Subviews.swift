@@ -231,7 +231,7 @@ extension UIView : ItemProtocol {
                     }
                 }
                 return (uiview, child.constraints, uiview.superview != self || uiview.isRemoved)
-            } else if let layoutGuideIndex = layoutGuidesPool.index(where: { $0.key == child.key }) {
+            } else if let layoutGuideIndex = layoutGuidesPool.firstIndex(where: { $0.key == child.key }) {
                 let layoutGuide = layoutGuidesPool.remove(at: layoutGuideIndex)
                 return (layoutGuide, child.constraints, false)
             } else {

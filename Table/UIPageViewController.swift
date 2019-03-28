@@ -21,7 +21,7 @@ extension UIView {
 private class DefaultDelegate : NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let index = pageViewController.containerViewControllers.index(of: viewController) else { return nil }
+        guard let index = pageViewController.containerViewControllers.firstIndex(of: viewController) else { return nil }
         if index == 0 {
             return pageViewController.cycleControllers ? pageViewController.containerViewControllers.last : nil
         } else {
@@ -30,7 +30,7 @@ private class DefaultDelegate : NSObject, UIPageViewControllerDataSource, UIPage
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let index = pageViewController.containerViewControllers.index(of: viewController) else { return nil }
+        guard let index = pageViewController.containerViewControllers.firstIndex(of: viewController) else { return nil }
         if index == pageViewController.containerViewControllers.endIndex - 1 {
             return pageViewController.cycleControllers ? pageViewController.containerViewControllers.first : nil
         } else {
@@ -40,7 +40,7 @@ private class DefaultDelegate : NSObject, UIPageViewControllerDataSource, UIPage
     
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard let viewController = pageViewController.viewControllers?.first,
-            let index = pageViewController.containerViewControllers.index(of: viewController),
+            let index = pageViewController.containerViewControllers.firstIndex(of: viewController),
             index != pageViewController.selectedIndex
             else { return }
         pageViewController.selectedIndex = index

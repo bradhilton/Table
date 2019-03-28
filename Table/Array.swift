@@ -9,7 +9,7 @@
 extension Array {
     
     mutating func popFirst(where predicate: (Element) throws -> Bool) rethrows -> Element? {
-        guard let index = try index(where: predicate) else {
+        guard let index = try firstIndex(where: predicate) else {
             return nil
         }
         return remove(at: index)

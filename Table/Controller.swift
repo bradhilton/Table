@@ -48,7 +48,7 @@ public struct Controller {
     }
     
     func viewController(reusing pool: inout [UIViewController]) -> UIViewController {
-        guard let index = pool.index(where: { $0.type == type && $0.key == key }) else {
+        guard let index = pool.firstIndex(where: { $0.type == type && $0.key == key }) else {
             return newViewController()
         }
         let viewController = pool.remove(at: index)

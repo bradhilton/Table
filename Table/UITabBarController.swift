@@ -46,7 +46,7 @@ private class TabBarControllerDelegate : NSObject, UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let didSelectTab = didSelectTab,
-            let index = (tabBarController.viewControllers ?? []).index(of: viewController),
+            let index = (tabBarController.viewControllers ?? []).firstIndex(of: viewController),
             tabBarController.tabs.count > index else {
             return true
         }
@@ -94,7 +94,7 @@ extension UITabBarController {
                 return viewController
             }
             setViewControllers(viewControllers, animated: viewIsVisible && UIView.inheritedAnimationDuration > 0)
-            let selectedIndex = tabs.index { $0.keyOrTitle == selectedTab } ?? self.selectedIndex
+            let selectedIndex = tabs.firstIndex { $0.keyOrTitle == selectedTab } ?? self.selectedIndex
             // MARK: Performance equality check
             if selectedIndex != self.selectedIndex {
                 self.selectedIndex = selectedIndex
@@ -114,7 +114,7 @@ extension UITabBarController {
             return tabs[selectedIndex].keyOrTitle
         }
         set {
-            guard let index = tabs.index(where: { $0.keyOrTitle == newValue }) else { return }
+            guard let index = tabs.firstIndex(where: { $0.keyOrTitle == newValue }) else { return }
             if index != selectedIndex {
                 UIView.performWithoutAnimation {
                     selectedIndex = index

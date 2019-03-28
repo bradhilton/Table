@@ -33,15 +33,6 @@ extension YGNodeRef {
 struct FlexKey : Hashable {
     let parent: AnyHashable
     let index: Int
-    
-    var hashValue: Int {
-        return parent.hashValue ^ index
-    }
-    
-    static func ==(lhs: FlexKey, rhs: FlexKey) -> Bool {
-        return lhs.index == rhs.index && lhs.parent == rhs.parent
-    }
-    
 }
 
 class FlexState {
@@ -151,6 +142,8 @@ extension UIView {
             switch effectiveUserInterfaceLayoutDirection {
             case .leftToRight: return .LTR
             case .rightToLeft: return .RTL
+            @unknown default:
+                fatalError("Unexpected interface layout direction: \(effectiveUserInterfaceLayoutDirection)")
             }
         } else {
             return .inherit
